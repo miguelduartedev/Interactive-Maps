@@ -4,8 +4,20 @@ import { createSlice } from "@reduxjs/toolkit";
   value: number
 } */
 
-const initialState = {
+export const initialState = {
   currentColor: "#039606",
+  currentCountry: {
+    name: {
+      common: "Select a country",
+      official: "",
+    },
+    borders: "",
+    capital: "",
+    currencies: {},
+    flags: {},
+    languages: "",
+    timezones: "",
+  },
 };
 
 export const mapState = createSlice({
@@ -19,11 +31,14 @@ export const mapState = createSlice({
       // immutable state based off those changes
       state.currentColor = action.payload;
     },
+    updateCurrentCountry: (state, action) => {
+      state.currentCountry = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateColor, decrement, incrementByAmount } = mapState.actions;
+export const { updateColor, updateCurrentCountry } = mapState.actions;
 export const mapStore = (state) => state.mapState;
 
 export default mapState.reducer;

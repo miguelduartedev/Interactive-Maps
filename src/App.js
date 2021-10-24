@@ -1,8 +1,8 @@
 import React from "react";
-import EuropeMap from "./components/EuropeMap/europeMap";
-import Footer from "./components/Footer/footer";
-import Header from "./components/Header/header";
-import ControlPanel from "./components/ControlPanel/controlPanel";
+import EuropeMap from "./components/organisms/EuropeMap/europeMap";
+import Footer from "./components/atoms/Footer/footer";
+import Header from "./components/atoms/Header/header";
+import ControlPanel from "./components/organisms/ControlPanel/controlPanel";
 
 function App() {
   return (

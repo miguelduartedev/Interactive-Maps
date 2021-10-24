@@ -1,8 +1,7 @@
-import ColorPicker from "../ColorPicker/colorPicker";
-import "./controlPanel.scss";
-import { clearAll, groupPicker, selectAll } from "../EuropeMap/utils/index.js";
-import { mapStore } from "../../redux/mapSlice";
-import { useSelector } from "react-redux";
+import ColorPicker from "../../molecules/ColorPicker/colorPicker";
+import { clearAll, groupPicker, selectAll, titleSetter } from "./utils";
+import { mapStore } from "../../../redux/mapSlice";
+import { useDispatch, useSelector } from "react-redux";
 import {
   nordics,
   benelux,
@@ -14,11 +13,20 @@ import {
   eurozone,
   visegrad,
   baltics,
-} from "./utils";
+  EU_data,
+  Eurozone_data,
+  Nordics_data,
+  Benelux_data,
+  Visegrad_data,
+  Baltic_data,
+} from "./utils/globalVars";
 import { saveSvgAsPng } from "save-svg-as-png";
+import "./styles/controlPanel.scss";
+import "../../atoms/Button/styles/button.scss";
 
 const ControlPanel = () => {
   const mapState = useSelector(mapStore);
+  const dispatch = useDispatch();
   let currentColor = mapState.currentColor;
 
   return (
@@ -26,42 +34,62 @@ const ControlPanel = () => {
       <div className="control-panel">
         <h2 className="control-panel__header--main">Control Panel</h2>
         {ColorPicker()}
+        <h3 className="control-panel__header--second">Map Title</h3>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Enter map title here"
+          maxLength="45"
+          onInput={(e) => titleSetter(e.target.value)}
+        />
         <h3 className="control-panel__header--second">Group Selectors</h3>
         <div className="control-panel__political-unions">
           <p>- Political Unions:</p>
           <button
             className="button"
-            onClick={() => groupPicker(european_union, currentColor)}
+            onClick={() =>
+              groupPicker(european_union, currentColor, dispatch, EU_data)
+            }
           >
             European Union
           </button>
           <button
             className="button"
-            onClick={() => groupPicker(eurozone, currentColor)}
+            onClick={() =>
+              groupPicker(eurozone, currentColor, dispatch, Eurozone_data)
+            }
           >
             Eurozone
           </button>
           <button
             className="button"
-            onClick={() => groupPicker(nordics, currentColor)}
+            onClick={() =>
+              groupPicker(nordics, currentColor, dispatch, Nordics_data)
+            }
           >
             Nordics
           </button>
           <button
             className="button"
-            onClick={() => groupPicker(benelux, currentColor)}
+            onClick={() =>
+              groupPicker(benelux, currentColor, dispatch, Benelux_data)
+            }
           >
             Benelux
           </button>
           <button
             className="button"
-            onClick={() => groupPicker(visegrad, currentColor)}
+            onClick={() =>
+              groupPicker(visegrad, currentColor, dispatch, Visegrad_data)
+            }
           >
             Visegrad
           </button>
           <button
             className="button"
-            onClick={() => groupPicker(baltics, currentColor)}
+            onClick={() =>
+              groupPicker(baltics, currentColor, dispatch, Baltic_data)
+            }
           >
             Baltic Assembly
           </button>
@@ -76,32 +104,35 @@ const ControlPanel = () => {
           </p>
           <button
             className="button"
-            onClick={() => groupPicker(western_europe, currentColor)}
+            onClick={() => groupPicker(western_europe, currentColor, dispatch)}
           >
             Western Europe
           </button>
           <button
             className="button"
-            onClick={() => groupPicker(eastern_europe, currentColor)}
+            onClick={() => groupPicker(eastern_europe, currentColor, dispatch)}
           >
             Eastern Europe
           </button>
           <button
             className="button"
-            onClick={() => groupPicker(northern_europe, currentColor)}
+            onClick={() => groupPicker(northern_europe, currentColor, dispatch)}
           >
             Northern Europe
           </button>
           <button
             className="button"
-            onClick={() => groupPicker(southern_europe, currentColor)}
+            onClick={() => groupPicker(southern_europe, currentColor, dispatch)}
           >
             Southern Europe
           </button>
         </div>
         <div className="control-panel__general-tools">
-          <p>- General Tools:</p>
-          <button className="button -negative" onClick={() => clearAll()}>
+          <p className="control-panel__header--second">General Tools:</p>
+          <button
+            className="button -negative"
+            onClick={() => clearAll(dispatch)}
+          >
             Clear All
           </button>
           <button

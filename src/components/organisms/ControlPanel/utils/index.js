@@ -1,15 +1,22 @@
-export const groupPicker = (group, currentColor) => {
+import { updateCurrentCountry, initialState } from "../../../../redux/mapSlice";
+
+export const groupPicker = (group, currentColor, dispatch, group_data) => {
+  clearAll(dispatch);
   group?.map(
     (countryID) =>
       (document.getElementById(countryID).style.fill = currentColor)
   );
+  if (group_data) {
+    dispatch(updateCurrentCountry(group_data));
+  }
 };
 
-export const clearAll = () => {
+export const clearAll = (dispatch) => {
   const allCountries = document
     ?.getElementById("europe_map")
     ?.querySelectorAll("*[id]");
   [...allCountries].map((countryID) => (countryID.style.fill = "#FFFFFF"));
+  dispatch(updateCurrentCountry(initialState.currentCountry));
 };
 
 export const selectAll = (currentColor) => {
@@ -17,4 +24,8 @@ export const selectAll = (currentColor) => {
     ?.getElementById("europe_map")
     ?.querySelectorAll("*[id]");
   [...allCountries]?.map((countryID) => (countryID.style.fill = currentColor));
+};
+
+export const titleSetter = (text) => {
+  document.getElementById("map_title").innerHTML = text;
 };
