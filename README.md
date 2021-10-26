@@ -6,7 +6,7 @@ Decide what data you want your map to show, select the countries that fit the cr
   - npm install
   - npm start
 
-Version 1.1
+Version 1.3
 
 - Features include:
 

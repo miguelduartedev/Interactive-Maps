@@ -5,7 +5,7 @@ import { createSlice } from "@reduxjs/toolkit";
 } */
 
 export const initialState = {
-  currentColor: "#039606",
+  currentColor: { hex: "#039606" },
   currentCountry: {
     name: {
       common: "Select a country",

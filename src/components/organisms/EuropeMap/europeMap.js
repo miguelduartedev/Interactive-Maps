@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { mapStore } from "../../../redux/mapSlice";
 import CountryProfile from "../../molecules/CountryProfile/countryProfile";
@@ -11,7 +11,7 @@ const EuropeMap = () => {
   let currentColor = mapState.currentColor;
   let currentCountry = mapState.currentCountry;
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.getElementById("europe_map").addEventListener("click", (event) => {
       const selected_country_code = event.path[0].id;
       if (selected_country_code !== "europe_map") {
@@ -21,7 +21,7 @@ const EuropeMap = () => {
     });
   }, [currentColor]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.getElementById("europe_map").addEventListener("click", (event) => {
       const selected_country_code = event.path[0].id;
       if (selected_country_code !== "europe_map") {
@@ -30,25 +30,30 @@ const EuropeMap = () => {
     });
   }, []);
 
-  React.useEffect(() => {
-    document.getElementById("europe_map").addEventListener("mouseover", (event) => {
-      const selected_country_code = event.path[0].id;
-      const isHoveringOutside = selected_country_code === 'europe_map';
-      const previouslyHoveredCountry = document.querySelector(".hovered-country");
-      const currentlyHoveredCountry = document.getElementById(selected_country_code)
-      if (!isHoveringOutside) {
-        if (previouslyHoveredCountry) {
-          previouslyHoveredCountry.classList.remove("hovered-country")
-          currentlyHoveredCountry.classList.add("hovered-country")
+  useEffect(() => {
+    document
+      .getElementById("europe_map")
+      .addEventListener("mouseover", (event) => {
+        const selected_country_code = event.path[0].id;
+        const isHoveringOutside = selected_country_code === "europe_map";
+        const previouslyHoveredCountry =
+          document.querySelector(".hovered-country");
+        const currentlyHoveredCountry = document.getElementById(
+          selected_country_code
+        );
+        if (!isHoveringOutside) {
+          if (previouslyHoveredCountry) {
+            previouslyHoveredCountry.classList.remove("hovered-country");
+            currentlyHoveredCountry.classList.add("hovered-country");
+          } else {
+            currentlyHoveredCountry.classList.add("hovered-country");
+          }
         } else {
-          currentlyHoveredCountry.classList.add("hovered-country")
+          if (previouslyHoveredCountry) {
+            previouslyHoveredCountry.classList.remove("hovered-country");
+          }
         }
-      } else {
-        if (previouslyHoveredCountry) {
-          previouslyHoveredCountry.classList.remove('hovered-country')
-        }
-      }
-    });
+      });
   }, []);
 
   return (

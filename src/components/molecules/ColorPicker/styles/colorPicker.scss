@@ -3,3 +3,23 @@
   margin-bottom: 14px;
   margin-top: 14px;
 }
+
+.circle-picker {
+  justify-content: center;
+  margin: 0 auto !important;
+  margin-bottom: 14px !important;
+  & > span > div {
+    margin: 3px !important;
+    justify-content: center;
+  }
+}
+
+.sketch-picker {
+  position: absolute;
+  z-index: 2;
+  margin: 0;
+  top: 55%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
