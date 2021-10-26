@@ -17,10 +17,39 @@ const EuropeMap = () => {
       if (selected_country_code !== "europe_map") {
         document.getElementById(selected_country_code).style.fill =
           currentColor;
+      }
+    });
+  }, [currentColor]);
+
+  React.useEffect(() => {
+    document.getElementById("europe_map").addEventListener("click", (event) => {
+      const selected_country_code = event.path[0].id;
+      if (selected_country_code !== "europe_map") {
         fetchData(selected_country_code, dispatch);
       }
     });
-  }, [currentColor, dispatch]);
+  }, []);
+
+  React.useEffect(() => {
+    document.getElementById("europe_map").addEventListener("mouseover", (event) => {
+      const selected_country_code = event.path[0].id;
+      const isHoveringOutside = selected_country_code === 'europe_map';
+      const previouslyHoveredCountry = document.querySelector(".hovered-country");
+      const currentlyHoveredCountry = document.getElementById(selected_country_code)
+      if (!isHoveringOutside) {
+        if (previouslyHoveredCountry) {
+          previouslyHoveredCountry.classList.remove("hovered-country")
+          currentlyHoveredCountry.classList.add("hovered-country")
+        } else {
+          currentlyHoveredCountry.classList.add("hovered-country")
+        }
+      } else {
+        if (previouslyHoveredCountry) {
+          previouslyHoveredCountry.classList.remove('hovered-country')
+        }
+      }
+    });
+  }, []);
 
   return (
     <div className="col-12 col-lg-8">
