@@ -6,17 +6,19 @@ Decide what data you want your map to show, select the countries that fit the cr
   - npm install
   - npm start
 
-Version 1.3
+Version 1.4
 
 - Features include:
 
-  - Color Picker (react-colorful)
+  - Color Picker (react-color)
   - Filters for Political Unions and Geographic Positions (UN Definition)
-  - Customizable title/description of your custom map
-  - General tools: Clear All, Select All, Export Map (save-svg-as-png)
+  - Customizable title/description/legend of your custom map
+  - General tools: Color Removal, Clear All, Select All, Export Map (save-svg-as-png)
   - Fetch public API for displaying country data
 
 - Upcoming features:
+  - Font options
+  - File export options (scale, file format, etc.)
   - Customizable background color for the map
   - Selecting between geographic definitions
   - Maps for North America, South America, Asia, Africa, Oceania and the World itself

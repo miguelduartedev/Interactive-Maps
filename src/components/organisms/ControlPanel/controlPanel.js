@@ -23,6 +23,7 @@ import {
 import { saveSvgAsPng } from "save-svg-as-png";
 import "./styles/controlPanel.scss";
 import "../../atoms/Button/styles/button.scss";
+import ColorLegend from "../../molecules/ColorLegend/colorLegend";
 
 const ControlPanel = () => {
   const mapState = useSelector(mapStore);
@@ -33,12 +34,14 @@ const ControlPanel = () => {
     <div className="col-12 mt-4 col-lg-4 mt-lg-0">
       <div className="control-panel">
         <h2 className="control-panel__header--main">Control Panel</h2>
+        <h3 className="control-panel__header--second">Color Picker</h3>
         {ColorPicker()}
+        {ColorLegend(dispatch)}
         <h3 className="control-panel__header--second">Map Title</h3>
         <input
           type="text"
           className="form-control"
-          placeholder="Enter map title here"
+          placeholder="Insert map title"
           maxLength="45"
           onInput={(e) => titleSetter(e.target.value)}
         />
@@ -146,7 +149,8 @@ const ControlPanel = () => {
             onClick={() =>
               saveSvgAsPng(
                 document.getElementById("europe_map"),
-                "interactive_maps.png"
+                "interactive_maps.png",
+                { encoderOptions: 1, scale: 3 }
               )
             }
           >

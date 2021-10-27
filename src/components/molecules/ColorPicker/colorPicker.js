@@ -38,11 +38,11 @@ const ColorPicker = () => {
         onChange={setColor}
         colors={[
           "#C8E6C9",
-          "#81c784",
-          "#4c9f50",
+          "#81C784",
+          "#4C9F50",
           "#388E3C",
-          "#007a31",
-          "#006d2c",
+          "#007A31",
+          "#006F2C",
           "#005924",
 
           "#BBD3FB",
@@ -50,8 +50,8 @@ const ColorPicker = () => {
           "#2196F3",
           "#1976D2",
           "#0D4FA1",
-          "#0a3d7d",
-          "#072b58",
+          "#0A3D7D",
+          "#072B58",
 
           "#FFCDD2",
           "#E57373",
@@ -67,15 +67,15 @@ const ColorPicker = () => {
           "#7B1FA2",
           "#621981",
           "#491260",
-          "#300c3f",
+          "#300C3F",
 
           "#FFF9C4",
           "#FFF176",
           "#FFEB3B",
           "#FBC02D",
-          "#ff9800",
+          "#FF9800",
           "#F57F17",
-          "#db6c09",
+          "#DB6C09",
         ]}
         onClick={colorSetter(color)}
       />

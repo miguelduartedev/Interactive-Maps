@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { mapStore } from "../../../redux/mapSlice";
+import { mapStore, updateUsedColors } from "../../../redux/mapSlice";
+import MapLegend from "../../atoms/MapLegend/mapLegend";
 import CountryProfile from "../../molecules/CountryProfile/countryProfile";
 import "./styles/europeMap.scss";
 import { fetchData } from "./utils";
@@ -8,6 +9,7 @@ import { fetchData } from "./utils";
 const EuropeMap = () => {
   const dispatch = useDispatch();
   const mapState = useSelector(mapStore);
+  const [usedColors, setUsedColors] = useState([]);
   let currentColor = mapState.currentColor;
   let currentCountry = mapState.currentCountry;
 
@@ -17,9 +19,16 @@ const EuropeMap = () => {
       if (selected_country_code !== "europe_map") {
         document.getElementById(selected_country_code).style.fill =
           currentColor;
+        if (!usedColors.includes(currentColor)) {
+          setUsedColors([...usedColors, currentColor]);
+        }
       }
     });
   }, [currentColor]);
+
+  useEffect(() => {
+    dispatch(updateUsedColors(usedColors));
+  }, [usedColors]);
 
   useEffect(() => {
     document.getElementById("europe_map").addEventListener("click", (event) => {
@@ -74,12 +83,18 @@ const EuropeMap = () => {
         >
           <text
             id="map_title"
-            x="100"
+            x="80"
             y="100"
             fill="white"
-            style={{ fontSize: "18px" }}
+            style={{ fontSize: "16px" }}
+            fontVariant="all-petite-caps"
+            textRendering="geometricPrecision"
+            textShadow="0px 4px 3px rgba(0,0,0,0.4),
+              0px 8px 13px rgba(0,0,0,0.1),
+              0px 18px 23px rgba(0,0,0,0.1);"
             font-family="Helvetica, sans-serif"
           ></text>
+          {MapLegend()}
           <path
             fill="#FFFFFF"
             d="M654.7 528.1l0.5 0.4 2 2.9 1.4 0.5 1.9 1.3 1.4 3.2 0.1 2.2-0.5 2.6 0.3 2.1-0.8 0.8 0.7 2 0.2 1.9 1.2 2.2 1.2 1.1 1.3 2.4 1.6-0.2 1.3 1.1 0 1.1 1.1 1.8-0.8 2.6-1.7 0.8-1.2 3.1-0.3 2-0.6 0.5-1.9 0.3-1.7 1.3 1 2.2-0.9 0.7-0.3 1.5-0.7 0.7-2.7-0.9-0.7-2.5-1.7-2.7-4.9-2.6-1.2-1.1 0.4-1.5-0.1-1.4-1.4-2.4 0.3-2.6 0.8-2.2-0.3-2.7 0.1-2.1-0.7-2.9 0.5-2.1 0.9-1.3-0.2-2.2-1.5-1.1-1.6-0.2 0-3.1-0.3-0.6 1.7 0-1.7-2.8 3.2-5.3 1.1 0.3 0.8 2.1 3.4-1.2z"

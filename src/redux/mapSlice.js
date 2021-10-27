@@ -5,7 +5,7 @@ import { createSlice } from "@reduxjs/toolkit";
 } */
 
 export const initialState = {
-  currentColor: { hex: "#039606" },
+  currentColor: { hex: "#388E3C" },
   currentCountry: {
     name: {
       common: "Select a country",
@@ -18,6 +18,8 @@ export const initialState = {
     languages: "",
     timezones: "",
   },
+  usedColors: [],
+  colorLegend: {},
 };
 
 export const mapState = createSlice({
@@ -34,11 +36,22 @@ export const mapState = createSlice({
     updateCurrentCountry: (state, action) => {
       state.currentCountry = action.payload;
     },
+    updateUsedColors: (state, action) => {
+      state.usedColors = action.payload;
+    },
+    updateColorLegend: (state, action) => {
+      state.colorLegend = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateColor, updateCurrentCountry } = mapState.actions;
+export const {
+  updateColor,
+  updateCurrentCountry,
+  updateUsedColors,
+  updateColorLegend,
+} = mapState.actions;
 export const mapStore = (state) => state.mapState;
 
 export default mapState.reducer;
