@@ -55,8 +55,14 @@ export const mapState = createSlice({
         state.counter = omg;
       }
     },
-    decrement: (state, action) => {
-      state.counter = state.counter - 1;
+    resetUsedColors: (state) => {
+      state.usedColors = [];
+    },
+    resetColorLegend: (state) => {
+      state.colorLegend = {};
+    },
+    resetCounter: (state) => {
+      state.counter = {};
     },
   },
 });
@@ -68,7 +74,9 @@ export const {
   updateUsedColors,
   updateColorLegend,
   increment,
-  decrement,
+  resetUsedColors,
+  resetColorLegend,
+  resetCounter,
 } = mapState.actions;
 export const mapStore = (state) => state.mapState;
 

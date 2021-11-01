@@ -18,8 +18,7 @@ const EuropeMap = () => {
   const [usedColors, setUsedColors] = useState([]);
   const currentColor = mapState.currentColor;
   let currentCountry = mapState.currentCountry;
-  let colors = mapState.usedColors;
-  const [fuckyou, setFuckYou] = useState({});
+  let currentCounter = mapState.counter;
 
   useEffect(() => {
     document.getElementById("europe_map").addEventListener("click", (event) => {
@@ -41,6 +40,15 @@ const EuropeMap = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    Object.keys(currentCounter).map((key) => {
+      console.log("key: ", currentCounter[key]);
+      if (currentCounter[key] === 0) {
+        setUsedColors(usedColors.filter((color) => color !== key));
+      }
+    });
+  }, [currentCounter, usedColors]);
 
   useEffect(() => {
     document.getElementById("europe_map").addEventListener("click", (event) => {

@@ -1,4 +1,10 @@
-import { updateCurrentCountry, initialState } from "../../../../redux/mapSlice";
+import {
+  updateCurrentCountry,
+  initialState,
+  resetColorLegend,
+  resetUsedColors,
+  resetCounter,
+} from "../../../../redux/mapSlice";
 
 export const groupPicker = (group, currentColor, dispatch, group_data) => {
   clearAll(dispatch);
@@ -17,6 +23,9 @@ export const clearAll = (dispatch) => {
     ?.querySelectorAll("*[id]");
   [...allCountries].map((countryID) => (countryID.style.fill = "#FFFFFF"));
   dispatch(updateCurrentCountry(initialState.currentCountry));
+  dispatch(resetColorLegend());
+  dispatch(resetUsedColors());
+  dispatch(resetCounter());
 };
 
 export const selectAll = (currentColor) => {
