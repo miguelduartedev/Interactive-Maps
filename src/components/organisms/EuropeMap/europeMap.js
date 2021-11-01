@@ -1,30 +1,110 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { mapStore, updateUsedColors } from "../../../redux/mapSlice";
+import {
+  decrement,
+  increment,
+  mapStore,
+  updateUsedColors,
+} from "../../../redux/mapSlice";
 import MapLegend from "../../atoms/MapLegend/mapLegend";
 import CountryProfile from "../../molecules/CountryProfile/countryProfile";
 import "./styles/europeMap.scss";
 import { fetchData } from "./utils";
+import { store } from "../../../redux/store";
 
 const EuropeMap = () => {
   const dispatch = useDispatch();
   const mapState = useSelector(mapStore);
   const [usedColors, setUsedColors] = useState([]);
-  let currentColor = mapState.currentColor;
+  const currentColor = mapState.currentColor;
   let currentCountry = mapState.currentCountry;
+  let colors = mapState.usedColors;
+  const [fuckyou, setFuckYou] = useState({});
 
   useEffect(() => {
     document.getElementById("europe_map").addEventListener("click", (event) => {
       const selected_country_code = event.path[0].id;
+      const color = store.getState().mapState.currentColor;
       if (selected_country_code !== "europe_map") {
-        document.getElementById(selected_country_code).style.fill =
-          currentColor;
-        if (!usedColors.includes(currentColor)) {
-          setUsedColors([...usedColors, currentColor]);
+        const currentCountry = document.getElementById(selected_country_code);
+        currentCountry.style.fill = color;
+        currentCountry.classList = color;
+        console.log("HAHAHA: ", document.getElementsByClassName(color).length);
+        dispatch(
+          increment({
+            [color]: document.getElementsByClassName(color).length,
+          })
+        );
+        if (!usedColors.includes(color)) {
+          setUsedColors([...usedColors, color]);
         }
       }
     });
+  }, []);
+
+  useEffect(() => {
+    document.getElementById("europe_map").addEventListener("click", (event) => {
+      if (!usedColors.includes(currentColor)) {
+        setUsedColors([...usedColors, currentColor]);
+      }
+    });
   }, [currentColor]);
+
+  /*   useEffect(() => {
+    function componentToHex(c) {
+      c = parseInt(c).toString(16); //Convert to a base16 string
+      return c.length == 1 ? "0" + c.toUpperCase() : c.toUpperCase(); //Add zero if we get only one character
+    }
+
+    function rgbToHex(r, g, b) {
+      return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+
+    document.getElementById("europe_map").addEventListener("click", (event) => {
+      let wtf = document.getElementById(event.path[0].id);
+      console.log(currentColor, event.path[0].id);
+
+      setFuckYou({ ...setFuckYou, [currentColor]: +1 });
+      dispatch(increment());
+    });
+  }, [dispatch, currentColor]); */
+
+  useEffect(() => {
+    function componentToHex(c) {
+      c = parseInt(c).toString(16); //Convert to a base16 string
+      return c.length == 1 ? "0" + c.toUpperCase() : c.toUpperCase(); //Add zero if we get only one character
+    }
+
+    function rgbToHex(r, g, b) {
+      return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+
+    document
+      .getElementById("europe_map")
+      .addEventListener("contextmenu", (event) => {
+        event.preventDefault();
+        document.getElementById(event.path[0].id).classList = "";
+        const deSelected_country_color_rgb = event.path[0].style.fill
+          .split("(")[1]
+          .split(")")[0]
+          .split(",");
+        const deSelected_country_color = rgbToHex(
+          deSelected_country_color_rgb[0],
+          deSelected_country_color_rgb[1],
+          deSelected_country_color_rgb[2]
+        );
+        console.log(deSelected_country_color_rgb);
+        console.log(deSelected_country_color);
+        dispatch(
+          increment({
+            [deSelected_country_color]: document.getElementsByClassName(
+              deSelected_country_color
+            ).length,
+          })
+        );
+        document.getElementById(event.path[0].id).style.fill = "#FFFFFF";
+      });
+  }, []);
 
   useEffect(() => {
     dispatch(updateUsedColors(usedColors));

@@ -18,6 +18,7 @@ export const initialState = {
     languages: "",
     timezones: "",
   },
+  counter: {},
   usedColors: [],
   colorLegend: {},
 };
@@ -42,6 +43,21 @@ export const mapState = createSlice({
     updateColorLegend: (state, action) => {
       state.colorLegend = action.payload;
     },
+    increment: (state, action) => {
+      if (action.payload !== undefined) {
+        const key = Object.keys(action.payload)[0];
+        const value = action.payload[key];
+        console.log("oi miga: ", key, value);
+        const omg = {
+          ...state.counter,
+          [key]: value,
+        };
+        state.counter = omg;
+      }
+    },
+    decrement: (state, action) => {
+      state.counter = state.counter - 1;
+    },
   },
 });
 
@@ -51,6 +67,8 @@ export const {
   updateCurrentCountry,
   updateUsedColors,
   updateColorLegend,
+  increment,
+  decrement,
 } = mapState.actions;
 export const mapStore = (state) => state.mapState;
 

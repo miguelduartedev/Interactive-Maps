@@ -10,7 +10,9 @@ const ColorPicker = () => {
   const [displayPicker, setDisplayPicker] = useState(false);
 
   const colorSetter = (color) => {
-    color.hex ? dispatch(updateColor(color.hex)) : dispatch(updateColor(color));
+    color.hex
+      ? dispatch(updateColor(color.hex.toUpperCase()))
+      : dispatch(updateColor(color.toUpperCase()));
   };
 
   const sketchPickerToggle = () => {
