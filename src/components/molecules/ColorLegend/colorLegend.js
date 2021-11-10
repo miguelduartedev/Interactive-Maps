@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { mapStore, updateColorLegend } from "../../../redux/mapSlice";
+import {
+  mapStore,
+  updateColorLegend,
+  updateUsedColorsLegendV2,
+} from "../../../redux/mapSlice";
 import { exists } from "../../_common";
 import "./styles/colorLegend.scss";
 
@@ -15,6 +19,15 @@ const ColorLegend = (dispatch) => {
       console.log(colorLegend);
     }
   }, [colorLegend]);
+
+  const ColorSetter = (color, e) => {
+    setColorLegend({
+      ...colorLegend,
+      [color]: e.target.value,
+    });
+    dispatch(updateUsedColorsLegendV2({ [color]: e.target.value }));
+  };
+
   return (
     exists(currentUsedColors) && (
       <div className="colorLegend">
@@ -38,12 +51,7 @@ const ColorLegend = (dispatch) => {
                     placeholder="Insert color legend"
                     maxLength="45"
                     defaultValue={colorLegend[color]}
-                    onInput={(e) =>
-                      setColorLegend({
-                        ...colorLegend,
-                        [color]: e.target.value,
-                      })
-                    }
+                    onInput={(e) => ColorSetter(color, e)}
                   />
                 </div>
               </div>

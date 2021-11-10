@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { exists } from "../components/_common";
 
 /* export interface MapState {
   value: number
@@ -21,6 +22,7 @@ export const initialState = {
   counter: {},
   usedColors: [],
   colorLegend: {},
+  usedColorsV2: {},
 };
 
 export const mapState = createSlice({
@@ -43,11 +45,43 @@ export const mapState = createSlice({
     updateColorLegend: (state, action) => {
       state.colorLegend = action.payload;
     },
+    updateUsedColorsV2: (state, action) => {
+      const color = Object.keys(action.payload)[0];
+      if (exists(state.usedColorsV2[color])) {
+        state.usedColorsV2 = {
+          ...state.usedColorsV2,
+          [color]: {
+            legend: action.payload[color].legend,
+            appliesTo: [
+              ...state.usedColorsV2[color].appliesTo,
+              action.payload[color].appliesTo,
+            ],
+          },
+        };
+      } else {
+        state.usedColorsV2 = {
+          ...state.usedColorsV2,
+          [color]: {
+            legend: action.payload[color].legend,
+            appliesTo: [action.payload[color].appliesTo],
+          },
+        };
+      }
+    },
+    updateUsedColorsLegendV2: (state, action) => {
+      const color = Object.keys(action.payload)[0];
+      state.usedColorsV2 = {
+        ...state.usedColorsV2,
+        [color]: {
+          legend: action.payload[color],
+          appliesTo: [...state.usedColorsV2[color].appliesTo],
+        },
+      };
+    },
     increment: (state, action) => {
       if (action.payload !== undefined) {
         const key = Object.keys(action.payload)[0];
         const value = action.payload[key];
-        console.log("oi miga: ", key, value);
         const omg = {
           ...state.counter,
           [key]: value,
@@ -77,6 +111,8 @@ export const {
   resetUsedColors,
   resetColorLegend,
   resetCounter,
+  updateUsedColorsV2,
+  updateUsedColorsLegendV2,
 } = mapState.actions;
 export const mapStore = (state) => state.mapState;
 

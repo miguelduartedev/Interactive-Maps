@@ -5,12 +5,14 @@ import {
   increment,
   mapStore,
   updateUsedColors,
+  updateUsedColorsV2,
 } from "../../../redux/mapSlice";
 import MapLegend from "../../atoms/MapLegend/mapLegend";
 import CountryProfile from "../../molecules/CountryProfile/countryProfile";
 import "./styles/europeMap.scss";
 import { fetchData } from "./utils";
 import { store } from "../../../redux/store";
+import { exists } from "../../_common";
 
 const EuropeMap = () => {
   const dispatch = useDispatch();
@@ -28,7 +30,11 @@ const EuropeMap = () => {
         const currentCountry = document.getElementById(selected_country_code);
         currentCountry.style.fill = color;
         currentCountry.classList = color;
-        console.log("HAHAHA: ", document.getElementsByClassName(color).length);
+        dispatch(
+          updateUsedColorsV2({
+            [color]: { legend: "", appliesTo: selected_country_code },
+          })
+        );
         dispatch(
           increment({
             [color]: document.getElementsByClassName(color).length,
@@ -58,25 +64,6 @@ const EuropeMap = () => {
     });
   }, [currentColor]);
 
-  /*   useEffect(() => {
-    function componentToHex(c) {
-      c = parseInt(c).toString(16); //Convert to a base16 string
-      return c.length == 1 ? "0" + c.toUpperCase() : c.toUpperCase(); //Add zero if we get only one character
-    }
-
-    function rgbToHex(r, g, b) {
-      return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-    }
-
-    document.getElementById("europe_map").addEventListener("click", (event) => {
-      let wtf = document.getElementById(event.path[0].id);
-      console.log(currentColor, event.path[0].id);
-
-      setFuckYou({ ...setFuckYou, [currentColor]: +1 });
-      dispatch(increment());
-    });
-  }, [dispatch, currentColor]); */
-
   useEffect(() => {
     function componentToHex(c) {
       c = parseInt(c).toString(16); //Convert to a base16 string
@@ -92,25 +79,27 @@ const EuropeMap = () => {
       .addEventListener("contextmenu", (event) => {
         event.preventDefault();
         document.getElementById(event.path[0].id).classList = "";
-        const deSelected_country_color_rgb = event.path[0].style.fill
-          .split("(")[1]
-          .split(")")[0]
-          .split(",");
-        const deSelected_country_color = rgbToHex(
-          deSelected_country_color_rgb[0],
-          deSelected_country_color_rgb[1],
-          deSelected_country_color_rgb[2]
-        );
-        console.log(deSelected_country_color_rgb);
-        console.log(deSelected_country_color);
-        dispatch(
-          increment({
-            [deSelected_country_color]: document.getElementsByClassName(
-              deSelected_country_color
-            ).length,
-          })
-        );
-        document.getElementById(event.path[0].id).style.fill = "#FFFFFF";
+        if (exists(event.path[0].style)) {
+          const deSelected_country_color_rgb = event.path[0].style.fill
+            .split("(")[1]
+            .split(")")[0]
+            .split(",");
+          const deSelected_country_color = rgbToHex(
+            deSelected_country_color_rgb[0],
+            deSelected_country_color_rgb[1],
+            deSelected_country_color_rgb[2]
+          );
+          console.log(deSelected_country_color_rgb);
+          console.log(deSelected_country_color);
+          dispatch(
+            increment({
+              [deSelected_country_color]: document.getElementsByClassName(
+                deSelected_country_color
+              ).length,
+            })
+          );
+          document.getElementById(event.path[0].id).style.fill = "#FFFFFF";
+        }
       });
   }, []);
 
