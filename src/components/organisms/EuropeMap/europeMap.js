@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  decrement,
-  increment,
   mapStore,
+  removeCountryFromUsedColors,
   updateUsedColors,
-  updateUsedColorsV2,
 } from "../../../redux/mapSlice";
 import MapLegend from "../../atoms/MapLegend/mapLegend";
 import CountryProfile from "../../molecules/CountryProfile/countryProfile";
@@ -17,103 +15,51 @@ import { exists } from "../../_common";
 const EuropeMap = () => {
   const dispatch = useDispatch();
   const mapState = useSelector(mapStore);
-  const [usedColors, setUsedColors] = useState([]);
-  const currentColor = mapState.currentColor;
-  let currentCountry = mapState.currentCountry;
-  let currentCounter = mapState.counter;
+  const currentCountry = mapState.currentCountry;
 
   useEffect(() => {
     document.getElementById("europe_map").addEventListener("click", (event) => {
       const selected_country_code = event.path[0].id;
       const color = store.getState().mapState.currentColor;
+      const colorLegend = exists(store.getState().mapState.usedColors[color])
+        ? store.getState().mapState.usedColors[color].legend
+        : "";
       if (selected_country_code !== "europe_map") {
+        fetchData(selected_country_code, dispatch);
         const currentCountry = document.getElementById(selected_country_code);
         currentCountry.style.fill = color;
         currentCountry.classList = color;
         dispatch(
-          updateUsedColorsV2({
-            [color]: { legend: "", appliesTo: selected_country_code },
+          updateUsedColors({
+            [color]: {
+              legend: colorLegend,
+              appliesTo: selected_country_code,
+            },
           })
         );
-        dispatch(
-          increment({
-            [color]: document.getElementsByClassName(color).length,
-          })
-        );
-        if (!usedColors.includes(color)) {
-          setUsedColors([...usedColors, color]);
-        }
       }
     });
   }, []);
 
   useEffect(() => {
-    Object.keys(currentCounter).map((key) => {
-      console.log("key: ", currentCounter[key]);
-      if (currentCounter[key] === 0) {
-        setUsedColors(usedColors.filter((color) => color !== key));
-      }
-    });
-  }, [currentCounter, usedColors]);
-
-  useEffect(() => {
-    document.getElementById("europe_map").addEventListener("click", (event) => {
-      if (!usedColors.includes(currentColor)) {
-        setUsedColors([...usedColors, currentColor]);
-      }
-    });
-  }, [currentColor]);
-
-  useEffect(() => {
-    function componentToHex(c) {
-      c = parseInt(c).toString(16); //Convert to a base16 string
-      return c.length == 1 ? "0" + c.toUpperCase() : c.toUpperCase(); //Add zero if we get only one character
-    }
-
-    function rgbToHex(r, g, b) {
-      return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-    }
-
     document
       .getElementById("europe_map")
       .addEventListener("contextmenu", (event) => {
         event.preventDefault();
-        document.getElementById(event.path[0].id).classList = "";
-        if (exists(event.path[0].style)) {
-          const deSelected_country_color_rgb = event.path[0].style.fill
-            .split("(")[1]
-            .split(")")[0]
-            .split(",");
-          const deSelected_country_color = rgbToHex(
-            deSelected_country_color_rgb[0],
-            deSelected_country_color_rgb[1],
-            deSelected_country_color_rgb[2]
-          );
-          console.log(deSelected_country_color_rgb);
-          console.log(deSelected_country_color);
-          dispatch(
-            increment({
-              [deSelected_country_color]: document.getElementsByClassName(
-                deSelected_country_color
-              ).length,
-            })
-          );
-          document.getElementById(event.path[0].id).style.fill = "#FFFFFF";
-        }
+        const countryID = event.path[0].id;
+        const usedColors = store.getState().mapState.usedColors;
+        exists(usedColors) &&
+          Object.keys(usedColors).map((color) => {
+            usedColors[color].appliesTo.includes(countryID) &&
+              dispatch(
+                removeCountryFromUsedColors({
+                  color: color,
+                  country: countryID,
+                })
+              );
+            document.getElementById(event.path[0].id).style.fill = "#FFFFFF";
+          });
       });
-  }, []);
-
-  useEffect(() => {
-    dispatch(updateUsedColors(usedColors));
-  }, [usedColors]);
-
-  useEffect(() => {
-    document.getElementById("europe_map").addEventListener("click", (event) => {
-      const selected_country_code = event.path[0].id;
-      if (selected_country_code !== "europe_map") {
-        fetchData(selected_country_code, dispatch);
-      }
-    });
   }, []);
 
   useEffect(() => {

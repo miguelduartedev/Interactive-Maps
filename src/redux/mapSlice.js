@@ -1,10 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { exists } from "../components/_common";
 
-/* export interface MapState {
-  value: number
-} */
-
 export const initialState = {
   currentColor: { hex: "#388E3C" },
   currentCountry: {
@@ -19,10 +15,7 @@ export const initialState = {
     languages: "",
     timezones: "",
   },
-  counter: {},
-  usedColors: [],
-  colorLegend: {},
-  usedColorsV2: {},
+  usedColors: {},
 };
 
 export const mapState = createSlice({
@@ -40,63 +33,57 @@ export const mapState = createSlice({
       state.currentCountry = action.payload;
     },
     updateUsedColors: (state, action) => {
-      state.usedColors = action.payload;
-    },
-    updateColorLegend: (state, action) => {
-      state.colorLegend = action.payload;
-    },
-    updateUsedColorsV2: (state, action) => {
       const color = Object.keys(action.payload)[0];
-      if (exists(state.usedColorsV2[color])) {
-        state.usedColorsV2 = {
-          ...state.usedColorsV2,
+      if (exists(state.usedColors[color])) {
+        state.usedColors = {
+          ...state.usedColors,
           [color]: {
             legend: action.payload[color].legend,
             appliesTo: [
-              ...state.usedColorsV2[color].appliesTo,
+              ...state.usedColors[color].appliesTo,
               action.payload[color].appliesTo,
             ],
           },
         };
       } else {
-        state.usedColorsV2 = {
-          ...state.usedColorsV2,
+        state.usedColors = {
+          ...state.usedColors,
           [color]: {
             legend: action.payload[color].legend,
-            appliesTo: [action.payload[color].appliesTo],
+            appliesTo: Array.isArray(action.payload[color].appliesTo)
+              ? action.payload[color].appliesTo
+              : [action.payload[color].appliesTo],
           },
         };
       }
     },
-    updateUsedColorsLegendV2: (state, action) => {
+    updateUsedColorsLegend: (state, action) => {
       const color = Object.keys(action.payload)[0];
-      state.usedColorsV2 = {
-        ...state.usedColorsV2,
+      state.usedColors = {
+        ...state.usedColors,
         [color]: {
           legend: action.payload[color],
-          appliesTo: [...state.usedColorsV2[color].appliesTo],
+          appliesTo: [...state.usedColors[color].appliesTo],
         },
       };
     },
-    increment: (state, action) => {
-      if (action.payload !== undefined) {
-        const key = Object.keys(action.payload)[0];
-        const value = action.payload[key];
-        const omg = {
-          ...state.counter,
-          [key]: value,
-        };
-        state.counter = omg;
-      }
+    removeCountryFromUsedColors: (state, action) => {
+      const countryToRemove = action.payload.country;
+      const color = action.payload.color;
+      state.usedColors = {
+        ...state.usedColors,
+        [color]: {
+          legend: state.usedColors[color].legend,
+          appliesTo: [
+            ...state.usedColors[color].appliesTo.filter(
+              (country) => country !== countryToRemove
+            ),
+          ],
+        },
+      };
     },
     resetUsedColors: (state) => {
-      state.usedColors = [];
-    },
-    resetColorLegend: (state) => {
-      state.colorLegend = {};
-    },
-    resetCounter: (state) => {
-      state.counter = {};
+      state.usedColors = {};
     },
   },
 });
@@ -105,14 +92,10 @@ export const mapState = createSlice({
 export const {
   updateColor,
   updateCurrentCountry,
-  updateUsedColors,
-  updateColorLegend,
-  increment,
   resetUsedColors,
-  resetColorLegend,
-  resetCounter,
-  updateUsedColorsV2,
-  updateUsedColorsLegendV2,
+  updateUsedColors,
+  updateUsedColorsLegend,
+  removeCountryFromUsedColors,
 } = mapState.actions;
 export const mapStore = (state) => state.mapState;
 

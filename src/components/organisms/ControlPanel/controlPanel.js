@@ -142,7 +142,7 @@ const ControlPanel = () => {
           </button>
           <button
             className="button -positive"
-            onClick={() => selectAll(currentColor)}
+            onClick={() => selectAll(currentColor, dispatch)}
           >
             Select All
           </button>
