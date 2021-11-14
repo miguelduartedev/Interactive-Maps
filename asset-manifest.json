@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/Interactive-Maps/static/css/main.40b3b26f.chunk.css",
+    "main.js": "/Interactive-Maps/static/js/main.5dffb8b2.chunk.js",
+    "main.js.map": "/Interactive-Maps/static/js/main.5dffb8b2.chunk.js.map",
+    "runtime-main.js": "/Interactive-Maps/static/js/runtime-main.0f437ce3.js",
+    "runtime-main.js.map": "/Interactive-Maps/static/js/runtime-main.0f437ce3.js.map",
+    "static/css/2.0a9ec390.chunk.css": "/Interactive-Maps/static/css/2.0a9ec390.chunk.css",
+    "static/js/2.caf9d96b.chunk.js": "/Interactive-Maps/static/js/2.caf9d96b.chunk.js",
+    "static/js/2.caf9d96b.chunk.js.map": "/Interactive-Maps/static/js/2.caf9d96b.chunk.js.map",
+    "static/js/3.7da3d4df.chunk.js": "/Interactive-Maps/static/js/3.7da3d4df.chunk.js",
+    "static/js/3.7da3d4df.chunk.js.map": "/Interactive-Maps/static/js/3.7da3d4df.chunk.js.map",
+    "index.html": "/Interactive-Maps/index.html",
+    "static/css/2.0a9ec390.chunk.css.map": "/Interactive-Maps/static/css/2.0a9ec390.chunk.css.map",
+    "static/css/main.40b3b26f.chunk.css.map": "/Interactive-Maps/static/css/main.40b3b26f.chunk.css.map",
+    "static/js/2.caf9d96b.chunk.js.LICENSE.txt": "/Interactive-Maps/static/js/2.caf9d96b.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0f437ce3.js",
+    "static/css/2.0a9ec390.chunk.css",
+    "static/js/2.caf9d96b.chunk.js",
+    "static/css/main.40b3b26f.chunk.css",
+    "static/js/main.5dffb8b2.chunk.js"
+  ]
+}
