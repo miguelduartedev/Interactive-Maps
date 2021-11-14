@@ -12,13 +12,13 @@ const ColorLegend = (dispatch) => {
   };
 
   return (
-    exists(currentUsedColors) && (
-      <div className="colorLegend">
-        <h3 className="control-panel__header--second">Map Legend</h3>
-        <div className="colorLegend__colors">
-          {currentUsedColors.map((color) => {
+    <div className="colorLegend">
+      <h3 className="control-panel__header--second">Color Legend</h3>
+      <div className="colorLegend__colors">
+        {exists(currentUsedColors) ? (
+          currentUsedColors.map((color, index) => {
             return (
-              <div className="row colorLegend__colors__row">
+              <div key={index} className="row colorLegend__colors__row">
                 <div className="col-2 position-relative p-0 m-0">
                   <div
                     className="colorLegend__colors__circle"
@@ -39,10 +39,27 @@ const ColorLegend = (dispatch) => {
                 </div>
               </div>
             );
-          })}
-        </div>
+          })
+        ) : (
+          <div className="row colorLegend__colors__row">
+            <div className="col-2 position-relative p-0 m-0">
+              <div className="colorLegend__colors__circle -disabled"></div>
+            </div>
+
+            <div className="col-10 p-0 m-0">
+              <input
+                id="#000000"
+                type="text"
+                className="form-control -legend -disabled"
+                placeholder="Select a country"
+                maxLength="45"
+                disabled={true}
+              />
+            </div>
+          </div>
+        )}
       </div>
-    )
+    </div>
   );
 };
 

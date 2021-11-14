@@ -67,22 +67,25 @@ const EuropeMap = () => {
       .getElementById("europe_map")
       .addEventListener("mouseover", (event) => {
         const selected_country_code = event.path[0].id;
-        const isHoveringOutside = selected_country_code === "europe_map";
-        const previouslyHoveredCountry =
-          document.querySelector(".hovered-country");
-        const currentlyHoveredCountry = document.getElementById(
-          selected_country_code
-        );
-        if (!isHoveringOutside) {
-          if (previouslyHoveredCountry) {
-            previouslyHoveredCountry.classList.remove("hovered-country");
-            currentlyHoveredCountry.classList.add("hovered-country");
+        if (!selected_country_code.startsWith("map_")) {
+          const isHoveringOutside = selected_country_code === "europe_map";
+          const previouslyHoveredCountry =
+            document.querySelector(".hovered-country");
+          const currentlyHoveredCountry = document.getElementById(
+            selected_country_code
+          );
+          selected_country_code.startsWith("path");
+          if (!isHoveringOutside) {
+            if (previouslyHoveredCountry) {
+              previouslyHoveredCountry.classList.remove("hovered-country");
+              currentlyHoveredCountry.classList.add("hovered-country");
+            } else {
+              currentlyHoveredCountry.classList.add("hovered-country");
+            }
           } else {
-            currentlyHoveredCountry.classList.add("hovered-country");
-          }
-        } else {
-          if (previouslyHoveredCountry) {
-            previouslyHoveredCountry.classList.remove("hovered-country");
+            if (previouslyHoveredCountry) {
+              previouslyHoveredCountry.classList.remove("hovered-country");
+            }
           }
         }
       });
@@ -106,6 +109,7 @@ const EuropeMap = () => {
         >
           <text
             id="map_title"
+            className="mapLegend__title"
             x="80"
             y="100"
             fill="white"

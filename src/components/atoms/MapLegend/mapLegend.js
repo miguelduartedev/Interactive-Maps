@@ -24,7 +24,7 @@ const MapLegend = () => {
                   y={280 + index * 30}
                 />
                 <text
-                  id="path1133"
+                  id={`map_legend + ${index}`}
                   className="mapLegend__text"
                   style={{ fontSize: "16px" }}
                   font-family="Helvetica, sans-serif"

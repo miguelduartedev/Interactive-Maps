@@ -217,3 +217,20 @@ export const Baltic_data = {
     EU: "Estonian, Latvian and Lithuanian",
   },
 };
+
+export const no_data = (group_name) => {
+  const no_data_group = {
+    name: {
+      common: group_name,
+      official: "",
+    },
+    borders: "",
+    capital: "",
+    currencies: {},
+    flags: {},
+    languages: "",
+    timezones: "",
+  };
+
+  return no_data_group;
+};

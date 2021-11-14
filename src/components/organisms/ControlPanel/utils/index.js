@@ -4,6 +4,7 @@ import {
   resetUsedColors,
   updateUsedColors,
 } from "../../../../redux/mapSlice";
+import * as global_vars from "../utils/globalVars";
 
 export const groupPicker = (group, currentColor, dispatch, group_data) => {
   clearAll(dispatch);
@@ -11,9 +12,15 @@ export const groupPicker = (group, currentColor, dispatch, group_data) => {
     (countryID) =>
       (document.getElementById(countryID).style.fill = currentColor)
   );
-  if (group_data) {
-    dispatch(updateCurrentCountry(group_data));
-  }
+  dispatch(
+    updateUsedColors({
+      [currentColor]: {
+        legend: "",
+        appliesTo: [...group],
+      },
+    })
+  );
+  group_data && dispatch(updateCurrentCountry(group_data));
 };
 
 export const clearAll = (dispatch) => {
@@ -21,6 +28,7 @@ export const clearAll = (dispatch) => {
     ?.getElementById("europe_map")
     ?.querySelectorAll("*[id]");
   [...allCountries].map((countryID) => (countryID.style.fill = "#FFFFFF"));
+  document.getElementById("control-panel--map-title").value = "";
   dispatch(updateCurrentCountry(initialState.currentCountry));
   dispatch(resetUsedColors());
 };

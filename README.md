@@ -6,7 +6,11 @@ Decide what data you want your map to show, select the countries that fit the cr
   - npm install
   - npm start
 
-Version 1.4
+Version 1.5
+
+- You can now access this tool through:
+
+  - https://luisconceicaodev.github.io/Interactive-Maps/
 
 - Features include:
 

@@ -13,6 +13,7 @@ export const initialState = {
     currencies: {},
     flags: {},
     languages: "",
+    population: "",
     timezones: "",
   },
   usedColors: {},

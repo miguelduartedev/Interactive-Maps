@@ -26,11 +26,12 @@
     }
   }
 
-  &__political-unions {
+  &__political-unions,
+  &__geographic-positions,
+  &__general-tools {
     margin-top: 14px;
-  }
-
-  &__geographic-positions {
-    margin-top: 14px;
+    .disclaimer {
+      font-size: 12px;
+    }
   }
 }
