@@ -35,7 +35,6 @@ const ControlPanel = () => {
   return (
     <div className="col-12 mt-4 col-lg-4 mt-lg-0">
       <div className="control-panel">
-        <h2 className="control-panel__header--main">Control Panel</h2>
         <h3 className="control-panel__header--second text-center">
           Color Picker
         </h3>

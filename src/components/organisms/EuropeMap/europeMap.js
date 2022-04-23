@@ -102,7 +102,7 @@ const EuropeMap = () => {
           /* height="584" */ stroke="black"
           stroke-linecap="round"
           stroke-linejoin="round"
-          stroke-width=".1"
+          stroke-width=".2"
           version="1.2"
           viewBox="0 0 1000 684"
           /* width="700" */ xmlns="http://www.w3.org/2000/svg"
