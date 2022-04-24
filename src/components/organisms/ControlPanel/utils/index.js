@@ -4,7 +4,6 @@ import {
   resetUsedColors,
   updateUsedColors,
 } from "../../../../redux/mapSlice";
-import * as global_vars from "../utils/globalVars";
 
 export const groupPicker = (group, currentColor, dispatch, group_data) => {
   clearAll(dispatch);
