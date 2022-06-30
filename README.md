@@ -8,12 +8,13 @@ Decide what data you want your map to show, select the countries that fit the cr
 
 Version 1.5
 
-- You can now access this tool through:
+- You can now access a demo of this tool through:
 
   - https://luisconceicaodev.github.io/Interactive-Maps/
 
 - Features include:
 
+  - Customizable maps for The World, Europe, North America, South America, Africa and Asia
   - Color Picker (react-color)
   - Filters for Political Unions and Geographic Positions (UN Definition)
   - Customizable title/description/legend of your custom map
@@ -21,12 +22,16 @@ Version 1.5
   - Fetch public API for displaying country data
 
 - Upcoming features:
+
   - Font options
   - File export options (scale, file format, etc.)
   - Customizable background color for the map
-  - Selecting between geographic definitions
-  - Maps for North America, South America, Asia, Africa, Oceania and the World itself
+  - Group Selectors for North America, South America, Asia and Africa
 
 Using public API "REST Countries":
 
 - https://restcountries.com/
+
+Using SVG maps from "simplemaps" (maps slightly altered through Inkscape and by changing the SVG code by hand)
+
+- https://simplemaps.com/

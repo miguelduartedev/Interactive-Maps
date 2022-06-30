@@ -24,7 +24,7 @@ export const groupPicker = (group, currentColor, dispatch, group_data) => {
 
 export const clearAll = (dispatch) => {
   const allCountries = document
-    ?.getElementById("europe_map")
+    ?.getElementById("europe")
     ?.querySelectorAll("*[id]");
   [...allCountries].map((countryID) => (countryID.style.fill = "#FFFFFF"));
   document.getElementById("control-panel--map-title").value = "";
@@ -35,7 +35,7 @@ export const clearAll = (dispatch) => {
 export const selectAll = (currentColor, dispatch) => {
   const allCountryCodes = [];
   const allCountries = document
-    ?.getElementById("europe_map")
+    ?.getElementById("europe")
     ?.querySelectorAll("*[id]");
   [...allCountries]?.map((countryID) => {
     if (countryID.id !== "map_title") {

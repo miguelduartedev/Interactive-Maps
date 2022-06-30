@@ -10,6 +10,8 @@ const Header = () => {
             <img
               className="logo"
               src="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/public/logo.svg"
+              width="400"
+              height="100"
               alt="Interactive Maps logo"
             />
           </Link>

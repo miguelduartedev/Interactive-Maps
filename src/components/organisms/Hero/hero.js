@@ -13,7 +13,7 @@ const Hero = () => {
       <div className="col-12 col-lg-6 column-right">
         <div className="text-container">
           <h1>Interactive Maps</h1>
-          <h4>Showcase your data through a custom map</h4>
+          <h4>Showcase your data through custom maps</h4>
           <p className="pt-4">
             Maps are a great tool to display a multitude of country/region
             related data, such as election results, GDP data and much more.

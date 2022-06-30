@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { exists } from "../components/_common";
 
 export const initialState = {
+  currentMap: "",
   currentColor: { hex: "#388E3C" },
   currentCountry: {
     name: {
@@ -23,6 +24,9 @@ export const mapState = createSlice({
   name: "mapState",
   initialState,
   reducers: {
+    updateCurrentMap: (state, action) => {
+      return { ...state, ...initialState, currentMap: action.payload };
+    },
     updateColor: (state, action) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
@@ -91,6 +95,7 @@ export const mapState = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
+  updateCurrentMap,
   updateColor,
   updateCurrentCountry,
   resetUsedColors,
