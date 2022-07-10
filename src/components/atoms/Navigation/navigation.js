@@ -6,8 +6,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import "./styles/navigation.scss";
+import { updateCurrentMap } from "../../../redux/mapSlice";
+import { useDispatch } from "react-redux";
 
 const Navigation = () => {
+  const dispatch = useDispatch();
   // TODO instead of manipulating DOM use the store/state
   const mobileMenuHandler = () => {
     const mobileNav = document.querySelector(".mobile-nav");
@@ -21,36 +24,58 @@ const Navigation = () => {
         <div className="logo">
           <img
             className="logo-img"
-            src="https://luisconceicaodev.github.io/Interactive-Maps/logo.svg"
+            src="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/public/logo.svg"
             alt="logo"
           />
         </div>
         <div className="nav">
           <div className="nav-item">
-            <Link to="/Interactive-Maps/europe">
+            <Link
+              to="/Interactive-Maps/world"
+              onClick={() => dispatch(updateCurrentMap("world"))}
+            >
+              <p>The World</p>
+            </Link>
+          </div>
+          <div className="nav-item">
+            <Link
+              to="/europe"
+              onClick={() => dispatch(updateCurrentMap("europe"))}
+            >
               <p>Europe</p>
             </Link>
           </div>
           <div className="nav-item">
-            <a href="#">
-              <p>The Americas</p>
-            </a>
+            <Link
+              to="/Interactive-Maps/north-america"
+              onClick={() => dispatch(updateCurrentMap("north-america"))}
+            >
+              <p>North America</p>
+            </Link>
           </div>
           <div className="nav-item">
-            <a href="#">
+            <Link
+              to="/Interactive-Maps/south-america"
+              onClick={() => dispatch(updateCurrentMap("south-america"))}
+            >
+              <p>South America</p>
+            </Link>
+          </div>
+          <div className="nav-item">
+            <Link
+              to="/Interactive-Maps/africa"
+              onClick={() => dispatch(updateCurrentMap("africa"))}
+            >
               <p>Africa</p>
-            </a>
+            </Link>
           </div>
           <div className="nav-item">
-            <a href="#">
+            <Link
+              to="/Interactive-Maps/asia"
+              onClick={() => dispatch(updateCurrentMap("asia"))}
+            >
               <p>Asia</p>
-            </a>
-          </div>
-          <div className="nav-item">
-            <a href="#">
-              {" "}
-              <p>Oceania</p>
-            </a>
+            </Link>
           </div>
           <a href="#" className="nav-bars" onClick={() => mobileMenuHandler()}>
             <FontAwesomeIcon icon={faBars} />
@@ -66,7 +91,24 @@ const Navigation = () => {
           />
         </a>
         <div className="mobile-nav-item">
-          <Link to="/Interactive-Maps/europe">
+          <Link
+            to="/Interactive-Maps/world"
+            onClick={() => dispatch(updateCurrentMap("world"))}
+          >
+            <p>
+              The World
+              <FontAwesomeIcon
+                className="mobile-nav-icon-arrow-right"
+                icon={faAngleRight}
+              />
+            </p>
+          </Link>
+        </div>
+        <div className="mobile-nav-item">
+          <Link
+            to="/Interactive-Maps/europe"
+            onClick={() => dispatch(updateCurrentMap("europe"))}
+          >
             <p>
               Europe
               <FontAwesomeIcon
@@ -77,19 +119,38 @@ const Navigation = () => {
           </Link>
         </div>
         <div className="mobile-nav-item">
-          <a href="#">
+          <Link
+            to="/Interactive-Maps/north-america"
+            onClick={() => dispatch(updateCurrentMap("north-america"))}
+          >
             <p>
-              The Americas
+              North America
               <FontAwesomeIcon
                 className="mobile-nav-icon-arrow-right"
                 icon={faAngleRight}
               />
             </p>
-          </a>
+          </Link>
         </div>
         <div className="mobile-nav-item">
-          <a href="#">
-            {" "}
+          <Link
+            to="/Interactive-Maps/south-america"
+            onClick={() => dispatch(updateCurrentMap("south-america"))}
+          >
+            <p>
+              South America
+              <FontAwesomeIcon
+                className="mobile-nav-icon-arrow-right"
+                icon={faAngleRight}
+              />
+            </p>
+          </Link>
+        </div>
+        <div className="mobile-nav-item">
+          <Link
+            to="/Interactive-Maps/africa"
+            onClick={() => dispatch(updateCurrentMap("africa"))}
+          >
             <p>
               Africa
               <FontAwesomeIcon
@@ -97,10 +158,13 @@ const Navigation = () => {
                 icon={faAngleRight}
               />
             </p>
-          </a>
+          </Link>
         </div>
-        <div class="mobile-nav-item">
-          <a href="#">
+        <div className="mobile-nav-item">
+          <Link
+            to="/Interactive-Maps/asia"
+            onClick={() => dispatch(updateCurrentMap("asia"))}
+          >
             <p>
               Asia
               <FontAwesomeIcon
@@ -108,18 +172,7 @@ const Navigation = () => {
                 icon={faAngleRight}
               />
             </p>
-          </a>
-        </div>
-        <div class="mobile-nav-item">
-          <a href="#">
-            <p>
-              Oceania
-              <FontAwesomeIcon
-                className="mobile-nav-icon-arrow-right"
-                icon={faAngleRight}
-              />
-            </p>
-          </a>
+          </Link>
         </div>
       </div>
     </>

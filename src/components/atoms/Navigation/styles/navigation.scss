@@ -33,14 +33,29 @@
       align-self: center;
       &:hover {
         p {
-          color: #f9f7f7e3;
-          font-weight: 400;
+          &::before {
+            content: "";
+            position: absolute;
+            width: calc(100% + 25px);
+            height: calc(100% + 15px);
+            background-color: #356f9930;
+            border-radius: 8px;
+            z-index: -1;
+            margin: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
         }
       }
       p {
         color: white;
         margin-bottom: 0;
         font-weight: 100;
+        position: relative;
+        &::before {
+          content: "";
+        }
       }
     }
     &-bars {
