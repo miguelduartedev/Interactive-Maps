@@ -17,3 +17,8 @@ export const exists = (obj) => {
   }
   return true;
 };
+
+export const mapContainsID = (countryID) =>
+  exists(document.getElementById(countryID));
+
+export const eventContainsID = (event) => exists(event?.path[0]?.id);

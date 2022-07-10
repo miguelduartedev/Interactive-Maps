@@ -1,5 +1,5 @@
 import { numberWithCommas } from "./utils";
-import "./styles/countryProfile.scss";
+
 import { exists } from "../../_common";
 
 const CountryProfile = (currentCountry) => {
@@ -9,7 +9,7 @@ const CountryProfile = (currentCountry) => {
         <div className="row">
           <div className="col-8">
             <p>
-              <span className="country__profile--category">Country:</span>{" "}
+              <span className="country__profile--category">Selected:</span>{" "}
               {currentCountry?.name?.common}
             </p>
             <p>
@@ -69,9 +69,40 @@ const CountryProfile = (currentCountry) => {
           </div>
         </div>
       ) : (
-        <h2 className="country__profile--header">
-          {currentCountry?.name?.common}
-        </h2>
+        <>
+          <h2 className="country__profile--header">
+            Create your own custom map!
+          </h2>
+          <p>
+            Now that you have your map selected, here are your customization
+            options:
+          </p>
+          <ul>
+            <li>
+              Select your desired color(s) through our <b>Color Picker</b>
+            </li>
+            <li>Click on the countries that you want to apply the color to</li>
+            <li>
+              Or alternatively select a <b>Political Block</b> or a{" "}
+              <b>Geographic Region</b>
+            </li>
+            <li>
+              You can remove the color that has been assigned to a country by
+              right clicking on the country
+            </li>
+            <li>
+              You can zoom with the mouse wheel and drag the map to change it's
+              position
+            </li>
+            <li>
+              Once you're done color coding, you can fill in the{" "}
+              <b>Map Title</b> and <b>Color Legend</b>
+            </li>
+            <li>
+              Once you're finished, you can proceed and <b>Export the Map</b>{" "}
+            </li>
+          </ul>
+        </>
       )}
     </div>
   );

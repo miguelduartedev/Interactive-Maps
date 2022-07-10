@@ -1,4 +1,7 @@
-import { updateCurrentCountry } from "../../../../redux/mapSlice";
+import {
+  removeUsedColor,
+  updateCurrentCountry,
+} from "../../../../redux/mapSlice";
 import { exists } from "../../../_common";
 
 export const fetchData = (countryCODE, dispatch) => {
@@ -74,14 +77,15 @@ export const IDClickHandler = (
   currentMap,
   store,
   dispatch,
-  updateUsedColors
+  updateUsedColors,
+  requiresFetch = true
 ) => {
   const color = store.getState().mapState.currentColor;
   const colorLegend = exists(store.getState().mapState.usedColors[color])
     ? store.getState().mapState.usedColors[color].legend
     : "";
   if (selected_country_code !== currentMap) {
-    fetchData(selected_country_code, dispatch);
+    requiresFetch && fetchData(selected_country_code, dispatch);
     const currentCountry = document.getElementById(selected_country_code);
     currentCountry.style.fill = color;
     currentCountry.classList = color;
@@ -101,7 +105,8 @@ export const ClassClickHandler = (
   currentMap,
   store,
   dispatch,
-  updateUsedColors
+  updateUsedColors,
+  requiresFetch = true
 ) => {
   const color = store.getState().mapState.currentColor;
   const colorLegend = exists(store.getState().mapState.usedColors[color])
@@ -109,7 +114,7 @@ export const ClassClickHandler = (
     : "";
 
   if (selected_country_code !== currentMap) {
-    fetchData(selected_country_code, dispatch);
+    requiresFetch && fetchData(selected_country_code, dispatch);
     const currentCountry = [
       ...document.querySelectorAll(`.${selected_country_code}`),
     ];
@@ -123,5 +128,66 @@ export const ClassClickHandler = (
         },
       })
     );
+  }
+};
+
+export const IDContextHandler = (
+  selected_country_code,
+  store,
+  dispatch,
+  removeCountryFromUsedColors
+) => {
+  const usedColors = store.getState().mapState.usedColors;
+  exists(usedColors) &&
+    Object.keys(usedColors).map((color) => {
+      usedColors[color].appliesTo.includes(selected_country_code) &&
+        dispatch(
+          removeCountryFromUsedColors({
+            color: color,
+            country: selected_country_code,
+          })
+        );
+
+      isColorStillInUse(usedColors, color, selected_country_code, dispatch);
+      document.getElementById(selected_country_code).style.fill = "#FFFFFF";
+    });
+};
+
+export const ClassContextHandler = (
+  selected_country_code,
+  store,
+  dispatch,
+  removeCountryFromUsedColors
+) => {
+  const currentCountry = [
+    ...document.querySelectorAll(`.${selected_country_code}`),
+  ];
+  const usedColors = store.getState().mapState.usedColors;
+  exists(usedColors) &&
+    Object.keys(usedColors).map((color) => {
+      usedColors[color].appliesTo.includes(selected_country_code) &&
+        dispatch(
+          removeCountryFromUsedColors({
+            color: color,
+            country: selected_country_code,
+          })
+        );
+
+      isColorStillInUse(usedColors, color, selected_country_code, dispatch);
+      currentCountry.map((territories) => (territories.style.fill = "#FFFFFF"));
+    });
+};
+
+const isColorStillInUse = (
+  usedColors,
+  color,
+  selected_country_code,
+  dispatch
+) => {
+  if (
+    JSON.stringify(usedColors[color].appliesTo) ==
+    JSON.stringify([selected_country_code])
+  ) {
+    dispatch(removeUsedColor(color));
   }
 };

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateColor } from "../../../redux/mapSlice";
 import { CirclePicker, SketchPicker } from "react-color";
-import "./styles/colorPicker.scss";
 
 const ColorPicker = () => {
   const dispatch = useDispatch();
