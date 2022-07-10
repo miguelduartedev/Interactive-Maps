@@ -6,7 +6,11 @@ Decide what data you want your map to show, select the countries that fit the cr
   - npm install
   - npm start
 
-Version 1.5
+- How to deploy on Git Pages:
+  - npm run build
+  - npm run deploy
+  
+Version 1.6
 
 - You can now access a demo of this tool through:
 
