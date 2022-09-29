@@ -4,9 +4,9 @@ import { mapStore } from "../../../redux/mapSlice";
 import ColorPicker from "../../molecules/ColorPicker/colorPicker";
 import { clearAll, selectAll, titleSetter } from "./utils";
 
-import GroupSelectors from "components/molecules/GroupSelectors/groupSelectors";
 import { useEffect } from "react";
 import ColorLegend from "../../molecules/ColorLegend/colorLegend";
+import GroupSelectors from "../../molecules/GroupSelectors/groupSelectors";
 
 const ControlPanel = () => {
   const mapState = useSelector(mapStore);

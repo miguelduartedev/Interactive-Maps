@@ -1,8 +1,8 @@
-import OptionsGrid from "components/organisms/OptionsGrid/OptionsGrid";
-import Panel from "components/organisms/Panel/panel";
 import Head from "next/head";
 import { Fragment } from "react";
 import Hero from "../components/organisms/Hero/hero";
+import OptionsGrid from "../components/organisms/OptionsGrid/OptionsGrid";
+import Panel from "../components/organisms/Panel/panel";
 
 const HomePage = () => {
   return (

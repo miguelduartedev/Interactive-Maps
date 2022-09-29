@@ -1,7 +1,7 @@
-import Navigation from "components/atoms/Navigation/navigation";
 import Head from "next/head";
 import { Fragment } from "react";
 import Footer from "../components/atoms/Footer/footer";
+import Navigation from "../components/atoms/Navigation/navigation";
 import ControlPanel from "../components/organisms/ControlPanel/controlPanel";
 import SVGMap from "../components/organisms/SVGMap/svgMap";
 

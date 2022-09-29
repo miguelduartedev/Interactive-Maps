@@ -2,7 +2,7 @@ import { faArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
-import { updateCurrentMap } from "redux/mapSlice";
+import { updateCurrentMap } from "../../../redux/mapSlice";
 
 const Hero = () => {
   const dispatch = useDispatch();
