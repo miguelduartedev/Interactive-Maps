@@ -1,10 +1,13 @@
 import {
+  updateCurrentCountry,
+  updateUsedColors,
+} from "../../../../redux/mapSlice";
+import { store } from "../../../../redux/store";
+import {
   ClassClickHandler,
   IDClickHandler,
-} from "components/organisms/SVGMap/utils";
-import { mapContainsID } from "components/_common";
-import { updateCurrentCountry, updateUsedColors } from "redux/mapSlice";
-import { store } from "redux/store";
+} from "../../../organisms/SVGMap/utils";
+import { mapContainsID } from "../../../_common";
 
 export const groupPicker = (currentMap, group, dispatch, group_data) => {
   group?.map((countryID) => {

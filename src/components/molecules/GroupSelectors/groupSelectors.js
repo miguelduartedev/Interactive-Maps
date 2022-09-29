@@ -1,7 +1,7 @@
 import {
   geographicGroupings,
   politicalGroupings,
-} from "components/organisms/ControlPanel/utils/globalVars";
+} from "../../organisms/ControlPanel/utils/globalVars";
 import { groupPicker } from "./utils";
 
 const GroupSelectors = ({ currentMap, dispatch }) => {
