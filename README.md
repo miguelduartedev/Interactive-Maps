@@ -2,9 +2,14 @@
 
 Decide what data you want your map to show, select the countries that fit the criteria, color code the countries and give your map a descriptive label. Once you're finished you can download the SVG Map as a PNG
 
+TO DO:
+
+- Acessing maps directly through URL should get the current map through the path instead of the store
+- All NextJS links need to have the pointer cursor
+
 - How to run:
   - npm install
-  - npm start
+  - npm run dev
 
 - How to deploy on Git Pages:
   - npm run build
@@ -20,6 +25,7 @@ Version 1.6
 
   - Customizable maps for The World, Europe, North America, South America, Africa and Asia
   - Color Picker (react-color)
+  - SVG Map zoom and drag
   - Filters for Political Unions and Geographic Positions (UN Definition)
   - Customizable title/description/legend of your custom map
   - General tools: Color Removal, Clear All, Select All, Export Map (save-svg-as-png)
@@ -30,7 +36,7 @@ Version 1.6
   - Font options
   - File export options (scale, file format, etc.)
   - Customizable background color for the map
-  - Group Selectors for North America, South America, Asia and Africa
+  - Button that resets the zoom and the position of the map
 
 Using public API "REST Countries":
 

@@ -1,0 +1,19 @@
+.panel {
+  color: white;
+  &__image {
+    img {
+      width: 100%;
+      border-radius: 8px;
+    }
+    .caption {
+      font-size: 12px;
+      margin-top: 6px;
+    }
+  }
+  &__text {
+    color: white;
+    li:not(:last-child) {
+      margin-bottom: 6px;
+    }
+  }
+}

@@ -1,0 +1,80 @@
+.options-grid > * {
+  @media screen and (max-width: 992px) {
+    margin-bottom: 48px;
+  }
+}
+
+.group {
+  &-title {
+    color: #ffffff;
+    margin-top: 16px;
+    transition: text-shadow ease-in 200ms;
+    text-align: center;
+  }
+
+  &:hover {
+    cursor: pointer;
+    .group-map {
+      box-shadow: rgba(0, 123, 255, 0.8) 0px 8px 24px;
+    }
+    .group-title {
+      text-shadow: rgba(0, 123, 255, 0.8) 0px 0px 20px;
+    }
+  }
+
+  &-map {
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    box-shadow: rgb(149 157 165 / 50%) 0px 8px 24px;
+    transition: box-shadow ease-in 200ms;
+
+    &.europe {
+      background: url(http://localhost:5000/earth_colors.svg);
+      background-repeat: no-repeat;
+      background-color: #2288c3;
+      background-size: 1175px;
+      background-position: 50% 5%;
+    }
+
+    &.world {
+      background: url(http://localhost:5000/earth_colors.svg);
+      background-repeat: no-repeat;
+      background-color: #2288c3;
+      background-size: 525px;
+      background-position: 34% 5%;
+    }
+
+    &.africa {
+      background: url(http://localhost:5000/earth_colors.svg);
+      background-repeat: no-repeat;
+      background-color: #2288c3;
+      background-size: 718px;
+      background-position: 53% 45%;
+    }
+
+    &.north-america {
+      background: url(http://localhost:5000/earth_colors.svg);
+      background-repeat: no-repeat;
+      background-color: #2288c3;
+      background-size: 777px;
+      background-position: 13% -5%;
+    }
+
+    &.south-america {
+      background: url(http://localhost:5000/earth_colors.svg);
+      background-repeat: no-repeat;
+      background-color: #2288c3;
+      background-size: 777px;
+      background-position: 23.5% 74%;
+    }
+
+    &.asia {
+      background: url(http://localhost:5000/earth_colors.svg);
+      background-repeat: no-repeat;
+      background-color: #2288c3;
+      background-size: 659px;
+      background-position: 80% 0%;
+    }
+  }
+}

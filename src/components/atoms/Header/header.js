@@ -1,12 +1,11 @@
-import { Link } from "react-router-dom";
-import "./styles/header.scss";
+import Link from "next/link";
 
 const Header = () => {
   return (
     <div className="container">
       <div className="row">
         <div className="col-12">
-          <Link to="/Interactive-Maps">
+          <Link href="/">
             <img
               className="logo"
               src="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/public/logo.svg"

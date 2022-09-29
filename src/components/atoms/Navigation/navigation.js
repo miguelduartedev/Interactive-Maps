@@ -1,80 +1,97 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleRight,
-  faCircleXmark,
   faBars,
+  faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
-import "./styles/navigation.scss";
-import { updateCurrentMap } from "../../../redux/mapSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 import { useDispatch } from "react-redux";
+import { updateCurrentMap } from "../../../redux/mapSlice";
 
 const Navigation = () => {
   const dispatch = useDispatch();
   // TODO instead of manipulating DOM use the store/state
   const mobileMenuHandler = () => {
     const mobileNav = document.querySelector(".mobile-nav");
-    mobileNav.className === "mobile-nav"
-      ? (mobileNav.className += " -active")
-      : (mobileNav.className = "mobile-nav");
+    if (mobileNav.className === "mobile-nav") {
+      mobileNav.className += " -active";
+      document.body.classList.add("overflow-hidden");
+    } else {
+      mobileNav.className = "mobile-nav";
+      document.body.classList.remove("overflow-hidden");
+    }
   };
   return (
     <>
       <div className="top_bar">
-        <div className="logo">
-          <img
-            className="logo-img"
-            src="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/public/logo.svg"
-            alt="logo"
-          />
-        </div>
+        <Link href="/">
+          <div className="logo">
+            <img
+              className="logo-img"
+              src="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/public/logo.svg"
+              alt="logo"
+            />
+          </div>
+        </Link>
         <div className="nav">
           <div className="nav-item">
-            <Link
-              to="/Interactive-Maps/world"
-              onClick={() => dispatch(updateCurrentMap("world"))}
-            >
-              <p>The World</p>
+            <Link href="/world">
+              <p
+                className="nav-link"
+                onClick={() => dispatch(updateCurrentMap("world"))}
+              >
+                The World
+              </p>
             </Link>
           </div>
           <div className="nav-item">
-            <Link
-              to="/europe"
-              onClick={() => dispatch(updateCurrentMap("europe"))}
-            >
-              <p>Europe</p>
+            <Link href="/europe">
+              <p
+                className="nav-link"
+                onClick={() => dispatch(updateCurrentMap("europe"))}
+              >
+                Europe
+              </p>
             </Link>
           </div>
           <div className="nav-item">
-            <Link
-              to="/Interactive-Maps/north-america"
-              onClick={() => dispatch(updateCurrentMap("north-america"))}
-            >
-              <p>North America</p>
+            <Link href="/north-america">
+              <p
+                className="nav-link"
+                onClick={() => dispatch(updateCurrentMap("north-america"))}
+              >
+                North America
+              </p>
             </Link>
           </div>
           <div className="nav-item">
-            <Link
-              to="/Interactive-Maps/south-america"
-              onClick={() => dispatch(updateCurrentMap("south-america"))}
-            >
-              <p>South America</p>
+            <Link href="/south-america">
+              <p
+                className="nav-link"
+                onClick={() => dispatch(updateCurrentMap("south-america"))}
+              >
+                South America
+              </p>
             </Link>
           </div>
           <div className="nav-item">
-            <Link
-              to="/Interactive-Maps/africa"
-              onClick={() => dispatch(updateCurrentMap("africa"))}
-            >
-              <p>Africa</p>
+            <Link href="/africa">
+              <p
+                className="nav-link"
+                onClick={() => dispatch(updateCurrentMap("africa"))}
+              >
+                Africa
+              </p>
             </Link>
           </div>
           <div className="nav-item">
-            <Link
-              to="/Interactive-Maps/asia"
-              onClick={() => dispatch(updateCurrentMap("asia"))}
-            >
-              <p>Asia</p>
+            <Link href="/asia">
+              <p
+                className="nav-link"
+                onClick={() => dispatch(updateCurrentMap("asia"))}
+              >
+                Asia
+              </p>
             </Link>
           </div>
           <a href="#" className="nav-bars" onClick={() => mobileMenuHandler()}>
@@ -91,11 +108,11 @@ const Navigation = () => {
           />
         </a>
         <div className="mobile-nav-item">
-          <Link
-            to="/Interactive-Maps/world"
-            onClick={() => dispatch(updateCurrentMap("world"))}
-          >
-            <p>
+          <Link href="/world">
+            <p
+              className="nav-link"
+              onClick={() => dispatch(updateCurrentMap("world"))}
+            >
               The World
               <FontAwesomeIcon
                 className="mobile-nav-icon-arrow-right"
@@ -105,11 +122,11 @@ const Navigation = () => {
           </Link>
         </div>
         <div className="mobile-nav-item">
-          <Link
-            to="/Interactive-Maps/europe"
-            onClick={() => dispatch(updateCurrentMap("europe"))}
-          >
-            <p>
+          <Link href="/europe">
+            <p
+              className="nav-link"
+              onClick={() => dispatch(updateCurrentMap("europe"))}
+            >
               Europe
               <FontAwesomeIcon
                 className="mobile-nav-icon-arrow-right"
@@ -119,11 +136,11 @@ const Navigation = () => {
           </Link>
         </div>
         <div className="mobile-nav-item">
-          <Link
-            to="/Interactive-Maps/north-america"
-            onClick={() => dispatch(updateCurrentMap("north-america"))}
-          >
-            <p>
+          <Link href="/north-america">
+            <p
+              className="nav-link"
+              onClick={() => dispatch(updateCurrentMap("north-america"))}
+            >
               North America
               <FontAwesomeIcon
                 className="mobile-nav-icon-arrow-right"
@@ -133,11 +150,11 @@ const Navigation = () => {
           </Link>
         </div>
         <div className="mobile-nav-item">
-          <Link
-            to="/Interactive-Maps/south-america"
-            onClick={() => dispatch(updateCurrentMap("south-america"))}
-          >
-            <p>
+          <Link href="/south-america">
+            <p
+              className="nav-link"
+              onClick={() => dispatch(updateCurrentMap("south-america"))}
+            >
               South America
               <FontAwesomeIcon
                 className="mobile-nav-icon-arrow-right"
@@ -147,11 +164,11 @@ const Navigation = () => {
           </Link>
         </div>
         <div className="mobile-nav-item">
-          <Link
-            to="/Interactive-Maps/africa"
-            onClick={() => dispatch(updateCurrentMap("africa"))}
-          >
-            <p>
+          <Link href="/africa">
+            <p
+              className="nav-link"
+              onClick={() => dispatch(updateCurrentMap("africa"))}
+            >
               Africa
               <FontAwesomeIcon
                 className="mobile-nav-icon-arrow-right"
@@ -161,11 +178,11 @@ const Navigation = () => {
           </Link>
         </div>
         <div className="mobile-nav-item">
-          <Link
-            to="/Interactive-Maps/asia"
-            onClick={() => dispatch(updateCurrentMap("asia"))}
-          >
-            <p>
+          <Link href="/asia">
+            <p
+              className="nav-link"
+              onClick={() => dispatch(updateCurrentMap("asia"))}
+            >
               Asia
               <FontAwesomeIcon
                 className="mobile-nav-icon-arrow-right"

@@ -1,37 +1,47 @@
+import { useRouter } from "next/router";
+import panzoom from "panzoom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   mapStore,
   removeCountryFromUsedColors,
+  updateCurrentMap,
   updateUsedColors,
 } from "../../../redux/mapSlice";
-import CountryProfile from "../../molecules/CountryProfile/countryProfile";
-import "./styles/europeMap.scss";
-import {
-  ClassClickHandler,
-  ClassHoverHandler,
-  IDClickHandler,
-  IDHoverHandler,
-} from "./utils";
 import { store } from "../../../redux/store";
-import { exists } from "../../_common";
-import EuropeSVG from "./EuropeSVG";
+import CountryProfile from "../../molecules/CountryProfile/countryProfile";
+import { eventContainsID, exists } from "../../_common";
 import AfricaSVG from "./AfricaSVG";
 import AsiaSVG from "./AsiaSVG";
-import WorldSVG from "./WorldSVG";
+import EuropeSVG from "./EuropeSVG";
 import NorthAmericaSVG from "./NorthAmericaSVG";
 import SouthAmericaSVG from "./SouthAmericaSVG";
+import {
+  ClassClickHandler,
+  ClassContextHandler,
+  ClassHoverHandler,
+  IDClickHandler,
+  IDContextHandler,
+  IDHoverHandler,
+} from "./utils";
+import WorldSVG from "./WorldSVG";
 
 const SVGMap = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const mapState = useSelector(mapStore);
-  const currentMap = mapState.currentMap;
+  !exists(mapState.currentMap) &&
+    dispatch(updateCurrentMap(router.query?.mapPath));
+  const currentMap = exists(mapState.currentMap)
+    ? mapState.currentMap
+    : router.query?.mapPath;
+
   const currentCountry = mapState.currentCountry;
 
   useEffect(() => {
-    document.getElementById(currentMap).addEventListener("click", (event) => {
-      const isID = exists(event.path[0].id);
-      isID
+    // Handles the right click (paint action)
+    document.getElementById(currentMap)?.addEventListener("click", (event) => {
+      eventContainsID(event)
         ? IDClickHandler(
             event.path[0].id,
             currentMap,
@@ -47,43 +57,41 @@ const SVGMap = () => {
             updateUsedColors
           );
     });
-  }, [currentMap]);
-
-  useEffect(() => {
+    // Handles the left click (clean action)
     document
       .getElementById(currentMap)
-      .addEventListener("contextmenu", (event) => {
+      ?.addEventListener("contextmenu", (event) => {
         event.preventDefault();
-        const countryID = event.path[0].id;
-        const usedColors = store.getState().mapState.usedColors;
-        exists(usedColors) &&
-          Object.keys(usedColors).map((color) => {
-            usedColors[color].appliesTo.includes(countryID) &&
-              dispatch(
-                removeCountryFromUsedColors({
-                  color: color,
-                  country: countryID,
-                })
-              );
-            document.getElementById(event.path[0].id).style.fill = "#FFFFFF";
-          });
+        eventContainsID(event)
+          ? IDContextHandler(
+              event.path[0].id,
+              store,
+              dispatch,
+              removeCountryFromUsedColors
+            )
+          : ClassContextHandler(
+              event.path[0].classList[0],
+              store,
+              dispatch,
+              removeCountryFromUsedColors
+            );
       });
-  }, []);
-
-  useEffect(() => {
+    // Handles the hover (country borders highlight)
     document
       .getElementById(currentMap)
-      .addEventListener("mouseover", (event) => {
-        const isID = exists(event.path[0].id);
-        isID
+      ?.addEventListener("mouseover", (event) => {
+        eventContainsID(event)
           ? IDHoverHandler(event.path[0].id, currentMap)
           : ClassHoverHandler(event.path[0].classList, currentMap);
       });
-  }, []);
+    // Handles the drag and scroll (map position and axis)
+    var element = document.querySelector(".interactive-map");
+    panzoom(element, { step: 0.05 });
+  }, [currentMap]);
 
   return (
     <div className="col-12 col-lg-8">
-      <div className="svg-container">
+      <div className="svg-container overflow-hidden">
         {currentMap === "africa" && <AfricaSVG />}
         {currentMap === "asia" && <AsiaSVG />}
         {currentMap === "europe" && <EuropeSVG />}

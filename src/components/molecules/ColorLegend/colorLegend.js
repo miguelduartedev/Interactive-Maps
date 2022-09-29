@@ -1,9 +1,8 @@
 import { useSelector } from "react-redux";
 import { mapStore, updateUsedColorsLegend } from "../../../redux/mapSlice";
 import { exists } from "../../_common";
-import "./styles/colorLegend.scss";
 
-const ColorLegend = (dispatch) => {
+const ColorLegend = ({ dispatch }) => {
   const mapState = useSelector(mapStore);
   let currentUsedColors = Object.keys(mapState.usedColors);
 

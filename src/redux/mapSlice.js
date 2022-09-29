@@ -72,6 +72,10 @@ export const mapState = createSlice({
         },
       };
     },
+    removeUsedColor: (state, action) => {
+      const colorToRemove = action.payload;
+      delete state.usedColors[colorToRemove];
+    },
     removeCountryFromUsedColors: (state, action) => {
       const countryToRemove = action.payload.country;
       const color = action.payload.color;
@@ -102,6 +106,7 @@ export const {
   updateUsedColors,
   updateUsedColorsLegend,
   removeCountryFromUsedColors,
+  removeUsedColor,
 } = mapState.actions;
 export const mapStore = (state) => state.mapState;
 
