@@ -15,7 +15,7 @@
 
   .logo {
     width: fit-content;
-    height: 100%;
+    height: inherit;
     display: flex;
     justify-content: flex-start;
     &-img {
