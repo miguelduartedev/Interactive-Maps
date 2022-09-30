@@ -41,12 +41,12 @@ const Hero = () => {
               >
                 <img
                   className="earth-cloud1"
-                  src="http://localhost:5000/simple_cloud.svg"
+                  src="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/dfa31cb1242ce1152ce9fe561fc97354a8658214/src/public/used_assets/simple_cloud.svg"
                   alt="An image of a cloud"
                 />
                 <img
                   className="earth-cloud2"
-                  src="http://localhost:5000/simple_cloud.svg"
+                  src="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/dfa31cb1242ce1152ce9fe561fc97354a8658214/src/public/used_assets/simple_cloud.svg"
                   alt="An image of a cloud"
                 />
               </div>

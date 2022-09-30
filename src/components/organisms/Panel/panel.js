@@ -4,7 +4,7 @@ const Panel = () => {
       <div className="row">
         <div className="col-12 col-lg panel__image">
           <img
-            src="http://localhost:5000/ai_art.png"
+            src="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/src/public/used_assets/ai_art_blur.webp"
             alt="Artwork generated through Midjourney A.I."
           />
           <p className="caption">Artwork generated through Midjourney A.I.</p>
