@@ -117,12 +117,18 @@
   height: 100vh;
 }
 
+.hero-alignment {
+  align-self: center;
+  @media screen and (max-width: 768px) {
+    align-self: flex-start;
+  }
+}
+
 .text-container {
   font-family: "Sora";
   color: white;
   border-radius: 8px;
   text-align: center;
-  /*  height: 100vh; */
 
   .title {
     font-size: 48px;
@@ -182,14 +188,16 @@
   right: 3rem;
   bottom: 3rem;
   background-color: #ffffff;
+  color: black;
   border-radius: 100%;
   width: 32px;
   height: 32px;
   border: none;
   transition: background-color 450ms;
 
-  @media screen and (max-width: 992px) {
-    right: 1rem;
+  @supports (-webkit-touch-callout: none) {
+    /* CSS specific to iOS devices */
+    display: none;
   }
 
   &:hover {

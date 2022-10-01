@@ -8,8 +8,8 @@ const Hero = () => {
   const dispatch = useDispatch();
   return (
     <div className="hero row">
-      <div className="col-12 align-self-center">
-        <div className="text-container d-flex flex-column justify-content-center align-items-center">
+      <div className="col-12 hero-alignment">
+        <div className="text-container d-flex flex-column justify-content-center">
           <h1 className="title">Interactive Maps</h1>
           <div className="subtitle">
             <h2>Showcase your data through custom maps 🗺️</h2>
