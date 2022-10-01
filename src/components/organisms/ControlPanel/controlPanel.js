@@ -1,34 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { saveSvgAsPng } from "save-svg-as-png";
 import { mapStore } from "../../../redux/mapSlice";
-import ColorPicker from "../../molecules/ColorPicker/colorPicker";
-import { clearAll, selectAll, titleSetter } from "./utils";
-
-import { useEffect } from "react";
 import ColorLegend from "../../molecules/ColorLegend/colorLegend";
+import ColorPicker from "../../molecules/ColorPicker/colorPicker";
 import GroupSelectors from "../../molecules/GroupSelectors/groupSelectors";
+import { clearAll, selectAll, titleSetter } from "./utils";
 
 const ControlPanel = () => {
   const mapState = useSelector(mapStore);
   const dispatch = useDispatch();
   const { currentColor, currentMap } = mapState;
-
-  useEffect(() => {
-    document
-      .getElementById("groups-accordion")
-      .addEventListener("click", (e) => {
-        const toOpen = e.target.dataset.bsTarget;
-        if (e.target.className.includes("accordion-button")) {
-          if (e.target.className.includes("collapsed")) {
-            e.target.classList.remove("collapsed");
-            document.querySelector(toOpen).classList.add("show");
-          } else {
-            e.target.classList.add("collapsed");
-            document.querySelector(toOpen).classList.remove("show");
-          }
-        }
-      });
-  }, []);
 
   return (
     <div className="col-12 mt-4 col-lg-4 mt-lg-0">

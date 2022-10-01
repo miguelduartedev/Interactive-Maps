@@ -23,11 +23,11 @@ const Panel = () => {
             </li>
             <li>
               You can remove the color that has been assigned to a country by
-              right clicking on the country;
+              right clicking on the country or by doing a long press on mobile;
             </li>
             <li>
-              You can zoom with the mouse wheel and drag the map to change it's
-              position;
+              You can zoom through the use of a mouse wheel or through gestures
+              and you can drag the map to change it's position;
             </li>
             <li>
               Once you're done color coding, you can fill in the{" "}

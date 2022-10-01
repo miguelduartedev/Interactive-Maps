@@ -15,11 +15,7 @@
 }
 
 .sketch-picker {
-  position: absolute;
+  position: sticky;
   z-index: 2;
   margin: 0;
-  top: 55%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
 }

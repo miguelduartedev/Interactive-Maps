@@ -87,13 +87,10 @@ const CountryProfile = (currentCountry) => {
               <b>Geographic Region</b>
             </li>
             <li>
-              You can remove the color that has been assigned to a country by
-              right clicking on the country
+              Right click or do a long press on mobile to remove an assigned
+              color
             </li>
-            <li>
-              You can zoom with the mouse wheel and drag the map to change it's
-              position
-            </li>
+            <li>Zoom and drag the map to change it's position</li>
             <li>
               Once you're done color coding, you can fill in the{" "}
               <b>Map Title</b> and <b>Color Legend</b>

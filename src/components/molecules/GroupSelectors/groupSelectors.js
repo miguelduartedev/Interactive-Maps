@@ -1,3 +1,5 @@
+import clsx from "clsx";
+import { useState } from "react";
 import {
   geographicGroupings,
   politicalGroupings,
@@ -5,12 +7,19 @@ import {
 import { groupPicker } from "./utils";
 
 const GroupSelectors = ({ currentMap, dispatch }) => {
+  const [accordionOneOpen, setAccordionOneOpen] = useState(false);
+  const [accordionTwoOpen, setAccordionTwoOpen] = useState(false);
+
   return (
     <div className="accordion" id="groups-accordion">
       <div className="accordion-item">
         <h2 className="accordion-header" id="headingOne">
           <button
-            className="accordion-button collapsed"
+            className={clsx(
+              "accordion-button",
+              accordionOneOpen ? "show" : "collapsed"
+            )}
+            onClick={() => setAccordionOneOpen(!accordionOneOpen)}
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#collapseOne"
@@ -22,7 +31,10 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
         </h2>
         <div
           id="collapseOne"
-          className="accordion-collapse collapse"
+          className={clsx(
+            "accordion-collapse collapse",
+            accordionOneOpen && "show"
+          )}
           aria-labelledby="headingOne"
           data-bs-parent="#accordionExample"
         >
@@ -46,7 +58,11 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
       <div className="accordion-item">
         <h2 className="accordion-header" id="headingTwo">
           <button
-            className="accordion-button collapsed"
+            className={clsx(
+              "accordion-button",
+              accordionTwoOpen ? "show" : "collapsed"
+            )}
+            onClick={() => setAccordionTwoOpen(!accordionTwoOpen)}
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#collapseTwo"
@@ -58,7 +74,10 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
         </h2>
         <div
           id="collapseTwo"
-          className="accordion-collapse collapse"
+          className={clsx(
+            "accordion-collapse collapse",
+            accordionTwoOpen && "show"
+          )}
           aria-labelledby="headingTwo"
           data-bs-parent="#accordionExample"
         >

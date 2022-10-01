@@ -21,4 +21,4 @@ export const exists = (obj) => {
 export const mapContainsID = (countryID) =>
   exists(document.getElementById(countryID));
 
-export const eventContainsID = (event) => exists(event?.path[0]?.id);
+export const eventContainsID = (event) => exists(event.target.id);

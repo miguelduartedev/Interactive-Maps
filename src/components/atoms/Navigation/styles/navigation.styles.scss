@@ -15,7 +15,6 @@
 
   .logo {
     width: fit-content;
-    height: 100%;
     display: flex;
     justify-content: flex-start;
     margin-left: 1%;
@@ -145,7 +144,6 @@
 
 @media screen and (max-width: 992px) {
   .top_bar {
-    position: unset;
     &.responsive {
       .nav-item {
         float: none;

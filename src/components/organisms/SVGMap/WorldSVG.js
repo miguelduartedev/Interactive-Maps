@@ -1,20 +1,68 @@
+import panzoom from "panzoom";
+import { createRef, useEffect, useRef, useState } from "react";
 import MapLegend from "../../atoms/MapLegend/mapLegend";
+import useClick from "./hooks/useClick";
+import useContextMenu from "./hooks/useContextMenu";
+import useMouseOver from "./hooks/useMouseOver";
+import useTouchEnd from "./hooks/useTouchEnd";
 
-const WorldSVG = () => {
+const WorldSVG = ({
+  currentMap,
+  store,
+  dispatch,
+  updateUsedColors,
+  removeCountryFromUsedColors,
+}) => {
+  const [action, setAction] = useState("");
+  const timerRef = useRef;
+  const mapRef = createRef();
+  useEffect(() => {
+    panzoom(mapRef.current, {
+      onTouch: function () {
+        return false; // tells the library to not preventDefault.
+      },
+    });
+  }, []);
+
   return (
     <svg
       id="world"
       className="interactive-map"
       baseProfile="tiny"
-      /* fill="#rgb(45, 190, 47)" */
       fill="#ececec"
-      /* height="584" */ stroke="black"
+      stroke="black"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth=".2"
       version="1.2"
       viewBox="0 0 1300 684"
-      /* width="700" */ xmlns="http://www.w3.org/2000/svg"
+      xmlns="http://www.w3.org/2000/svg"
+      onClick={(event) =>
+        useClick(event, currentMap, store, dispatch, updateUsedColors)
+      }
+      onContextMenu={(event) =>
+        useContextMenu(event, store, dispatch, removeCountryFromUsedColors)
+      }
+      onMouseOver={(event) => useMouseOver(event, currentMap)}
+      onTouchStart={() => {
+        setAction("touch");
+        timerRef.current = setTimeout(() => {
+          setAction("longpress");
+        }, 500);
+      }}
+      onTouchEnd={(event) => {
+        clearTimeout(timerRef.current);
+        useTouchEnd(
+          action,
+          event,
+          currentMap,
+          store,
+          dispatch,
+          updateUsedColors,
+          removeCountryFromUsedColors
+        );
+      }}
+      ref={mapRef}
     >
       {<MapLegend />}
       <path
