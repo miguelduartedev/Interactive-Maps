@@ -2,7 +2,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Provider } from "react-redux";
 import "../components/atoms/Button/styles/button.styles.scss";
 import "../components/atoms/Footer/styles/footer.styles.scss";
-import "../components/atoms/Header/styles/header.styles.scss";
 import "../components/atoms/MapLegend/styles/mapLegend.styles.scss";
 import "../components/atoms/Navigation/styles/navigation.styles.scss";
 import "../components/molecules/ColorLegend/styles/colorLegend.styles.scss";

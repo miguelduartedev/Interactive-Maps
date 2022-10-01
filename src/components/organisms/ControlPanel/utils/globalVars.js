@@ -45,6 +45,7 @@ export const northern_europe = [
   "EE",
   "LV",
   "LT",
+  "UK",
 ];
 export const european_union = [
   "BE",
@@ -497,6 +498,8 @@ const CIS_data = {
   },
 };
 
+const oceania = ["AU", "NZ", "PG", "NC", "SB", "VU", "FJ"];
+
 export const politicalGroupings = (currentMap) => {
   switch (currentMap) {
     case "world":
@@ -522,11 +525,9 @@ export const politicalGroupings = (currentMap) => {
           countries: pacific_alliance,
           data: Pacific_data,
         },
-        {
-          name: "PROSUR",
-          countries: prosur,
-          data: PROSUR_data,
-        },
+        { name: "EAF", countries: EAC, data: EAC_data },
+        { name: "ASEAN", countries: ASEAN, data: ASEAN_data },
+        { name: "CIS", countries: CIS, data: CIS_data },
       ];
     case "europe":
       return [
@@ -622,9 +623,9 @@ export const geographicGroupings = (currentMap) => {
           data: no_data("Southern Europe"),
         },
         {
-          name: "Southern Cone",
-          countries: southern_cone,
-          data: no_data("Southern Cone"),
+          name: "Northern America",
+          countries: northern_america,
+          data: no_data("Northern America"),
         },
         {
           name: "Caribbean",
@@ -632,9 +633,14 @@ export const geographicGroupings = (currentMap) => {
           data: no_data("Caribbean"),
         },
         {
-          name: "Northern America",
-          countries: northern_america,
-          data: no_data("Northern America"),
+          name: "Central America",
+          countries: central_america,
+          data: no_data("Central America"),
+        },
+        {
+          name: "Southern Cone",
+          countries: southern_cone,
+          data: no_data("Southern Cone"),
         },
         {
           name: "Guyanas",
@@ -666,6 +672,33 @@ export const geographicGroupings = (currentMap) => {
           countries: middle_africa,
           data: no_data("Middle Africa"),
         },
+        {
+          name: "Western Asia",
+          countries: western_asia,
+          data: no_data("Western Asia"),
+        },
+        {
+          name: "East Asia",
+          countries: east_asia,
+          data: no_data("East Asia"),
+        },
+        {
+          name: "South Asia",
+          countries: south_asia,
+          data: no_data("South Asia"),
+        },
+        {
+          name: "Southeast Asia",
+          countries: south_east_asia,
+          data: no_data("Southeast Asoa"),
+        },
+
+        {
+          name: "Central Asia",
+          countries: central_asia,
+          data: no_data("Central Asia"),
+        },
+        { name: "Oceania", countries: oceania, data: no_data("Oceania") },
       ];
     case "europe":
       return [

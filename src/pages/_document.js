@@ -6,24 +6,24 @@ export default function Document() {
       <Head>
         <link
           rel="shortcut icon"
-          href="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/public/favicon.ico"
+          href="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/src/public/icons/favicon.ico"
         />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/public/apple-touch-icon.png"
+          href="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/src/public/icons/apple-touch-icon.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/public/favicon-32x32.png"
+          href="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/src/public/icons/favicon-32x32.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/public/favicon-16x16.png"
+          href="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/src/public/icons/favicon-16x16.png"
         />
       </Head>
       <meta charSet="utf-8" />
