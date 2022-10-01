@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { CirclePicker, SketchPicker } from "react-color";
 import { useDispatch } from "react-redux";
 import { updateColor } from "../../../redux/mapSlice";
-import { CirclePicker, SketchPicker } from "react-color";
 
 const ColorPicker = () => {
   const dispatch = useDispatch();
@@ -21,16 +21,6 @@ const ColorPicker = () => {
       setDisplayPicker(false);
     }
   };
-
-  useEffect(() => {
-    if (displayPicker === true) {
-      document.addEventListener("click", (e) => {
-        if (e.target.contains(document.querySelector(".sketch-picker"))) {
-          setDisplayPicker(false);
-        }
-      });
-    }
-  }, [displayPicker]);
 
   return (
     <>

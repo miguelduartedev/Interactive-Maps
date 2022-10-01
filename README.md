@@ -1,25 +1,16 @@
-[Interactive Maps](https://github.com/luisconceicaodev/Interactive-Maps) is a tool for creating custom maps
+[Interactive Maps](https://interactive-maps.vercel.app/) is a tool for creating custom maps
 
-Decide what data you want your map to show, select the countries that fit the criteria, color code the countries and give your map a descriptive label. Once you're finished you can download the SVG Map as a PNG
-
-TO DO:
-
-- Acessing maps directly through URL should get the current map through the path instead of the store
-- All NextJS links need to have the pointer cursor
+Decide what data you want your map to show, select the countries that fit the criteria, color code the countries and give your map a descriptive label. Once you're finished you can download the SVG Map as a PNG.
 
 - How to run:
   - npm install
-  - npm run dev
+  - npm run next
 
-- How to deploy on Git Pages:
-  - npm run build
-  - npm run deploy
-  
-Version 1.6
+Version 2.1
 
 - You can now access a demo of this tool through:
 
-  - https://luisconceicaodev.github.io/Interactive-Maps/
+  - https://interactive-maps.vercel.app/
 
 - Features include:
 
@@ -33,7 +24,7 @@ Version 1.6
 
 - Upcoming features:
 
-  - Font options
+  - Map Title and Legend Font customization options
   - File export options (scale, file format, etc.)
   - Customizable background color for the map
   - Button that resets the zoom and the position of the map
@@ -42,6 +33,6 @@ Using public API "REST Countries":
 
 - https://restcountries.com/
 
-Using SVG maps from "simplemaps" (maps slightly altered through Inkscape and by changing the SVG code by hand)
+Using SVG maps from "simplemaps" (maps were slightly altered through the use of Inkscape and by changing the SVG code by hand)
 
 - https://simplemaps.com/

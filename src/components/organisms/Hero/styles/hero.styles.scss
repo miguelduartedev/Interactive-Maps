@@ -44,6 +44,14 @@
     }
   }
 
+  @media screen and (max-width: 768px) {
+    .earth {
+      width: 200px;
+      height: 200px;
+      background-size: 420px;
+    }
+  }
+
   @keyframes jump {
     0% {
       transform: translateY(5px);
@@ -56,14 +64,27 @@
     }
   }
 
-  @keyframes rotate {
-    0% {
-      background-position: 0 0;
-    }
-    100% {
-      background-position: 630px 0;
+  @media screen and (max-width: 768px) {
+    @keyframes rotate {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 420px 0;
+      }
     }
   }
+  @media screen and (min-width: 769px) {
+    @keyframes rotate {
+      0% {
+        background-position: 0 0;
+      }
+      100% {
+        background-position: 630px 0;
+      }
+    }
+  }
+
   @keyframes cloudOne {
     0% {
       opacity: 0;
@@ -151,16 +172,6 @@
 }
 
 @media screen and (max-width: 992px) {
-  .earth-container,
-  .text-container {
-    transform: unset;
-    position: unset;
-    #earth {
-      width: 250px;
-      height: 250px;
-    }
-  }
-
   .text-container {
     padding: 35px;
   }

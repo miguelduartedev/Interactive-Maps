@@ -4,23 +4,16 @@ import {
   faCircleXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import clsx from "clsx";
 import Link from "next/link";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateCurrentMap } from "../../../redux/mapSlice";
 
 const Navigation = () => {
   const dispatch = useDispatch();
-  // TODO instead of manipulating DOM use the store/state
-  const mobileMenuHandler = () => {
-    const mobileNav = document.querySelector(".mobile-nav");
-    if (mobileNav.className === "mobile-nav") {
-      mobileNav.className += " -active";
-      document.body.classList.add("overflow-hidden");
-    } else {
-      mobileNav.className = "mobile-nav";
-      document.body.classList.remove("overflow-hidden");
-    }
-  };
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <>
       <div className="top_bar">
@@ -94,24 +87,27 @@ const Navigation = () => {
               </p>
             </Link>
           </div>
-          <a href="#" className="nav-bars" onClick={() => mobileMenuHandler()}>
+          <a href="#" className="nav-bars" onClick={() => setMenuOpen(true)}>
             <FontAwesomeIcon icon={faBars} />
           </a>
         </div>
       </div>
-      <div className="mobile-nav">
+      <div className={clsx("mobile-nav", menuOpen && "-active")}>
         <a href="#">
           <FontAwesomeIcon
             className="mobile-nav-close"
             icon={faCircleXmark}
-            onClick={() => mobileMenuHandler()}
+            onClick={() => setMenuOpen(false)}
           />
         </a>
         <div className="mobile-nav-item">
           <Link href="/world">
             <p
               className="nav-link"
-              onClick={() => dispatch(updateCurrentMap("world"))}
+              onClick={() => {
+                dispatch(updateCurrentMap("world"));
+                setMenuOpen(false);
+              }}
             >
               The World
               <FontAwesomeIcon
@@ -125,7 +121,10 @@ const Navigation = () => {
           <Link href="/europe">
             <p
               className="nav-link"
-              onClick={() => dispatch(updateCurrentMap("europe"))}
+              onClick={() => {
+                dispatch(updateCurrentMap("europe"));
+                setMenuOpen(false);
+              }}
             >
               Europe
               <FontAwesomeIcon
@@ -139,7 +138,10 @@ const Navigation = () => {
           <Link href="/north-america">
             <p
               className="nav-link"
-              onClick={() => dispatch(updateCurrentMap("north-america"))}
+              onClick={() => {
+                dispatch(updateCurrentMap("north-america"));
+                setMenuOpen(false);
+              }}
             >
               North America
               <FontAwesomeIcon
@@ -153,7 +155,10 @@ const Navigation = () => {
           <Link href="/south-america">
             <p
               className="nav-link"
-              onClick={() => dispatch(updateCurrentMap("south-america"))}
+              onClick={() => {
+                dispatch(updateCurrentMap("south-america"));
+                setMenuOpen(false);
+              }}
             >
               South America
               <FontAwesomeIcon
@@ -167,7 +172,10 @@ const Navigation = () => {
           <Link href="/africa">
             <p
               className="nav-link"
-              onClick={() => dispatch(updateCurrentMap("africa"))}
+              onClick={() => {
+                dispatch(updateCurrentMap("africa"));
+                setMenuOpen(false);
+              }}
             >
               Africa
               <FontAwesomeIcon
@@ -181,7 +189,10 @@ const Navigation = () => {
           <Link href="/asia">
             <p
               className="nav-link"
-              onClick={() => dispatch(updateCurrentMap("asia"))}
+              onClick={() => {
+                dispatch(updateCurrentMap("asia"));
+                setMenuOpen(false);
+              }}
             >
               Asia
               <FontAwesomeIcon
