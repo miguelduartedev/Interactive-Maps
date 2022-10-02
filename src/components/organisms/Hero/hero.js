@@ -15,10 +15,11 @@ const Hero = () => {
             <h2>Showcase your data through custom maps 🗺️</h2>
             <p className="pt-4">
               Maps are a great tool to display a multitude of country related
-              data, such as election results, GDP data and much more.
+              data such as GDP, HDI, Gini and much more.
             </p>
             <p>
-              Or instead you can just show off all the countries you've been to!
+              Alternatively, you can use this tool to show us all the countries
+              you've been to! 🧭
             </p>
             <p className="hero__credits">
               <span className="hero__credits--main">

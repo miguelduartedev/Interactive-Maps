@@ -92,8 +92,8 @@ const CountryProfile = (currentCountry) => {
             </li>
             <li>Zoom and drag the map to change it's position</li>
             <li>
-              Once you're done color coding, you can fill in the{" "}
-              <b>Map Title</b> and <b>Color Legend</b>
+              Fill the <b>Map Title</b> and <b>Color Legend</b> fields in a way
+              that describes your data
             </li>
             <li>
               Once you're finished, you can proceed and <b>Export the Map</b>{" "}
