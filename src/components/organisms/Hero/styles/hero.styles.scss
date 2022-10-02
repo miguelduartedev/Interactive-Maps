@@ -13,14 +13,14 @@
     border-radius: 50%;
     background-size: 630px;
     opacity: 0;
-    animation: opacityIntro 3s ease-out forwards, rotate 10s linear infinite,
+    animation: opacityIntro 5s ease-out forwards, rotate 10s linear infinite,
       jump 3.5s linear infinite;
     transition: transform 200ms linear, scale 200ms ease-in-out;
     transform-style: preserve-3d;
     //box-shadow: inset 10px 0 40px 6px rgb(255 255 255);
     color: #000;
     box-shadow: 5px 10px #196794;
-    animation-delay: 325ms;
+    animation-delay: 500ms;
 
     &-cloud1 {
       filter: drop-shadow(5px 5px 8px rgb(0 0 0 / 0.4));
@@ -146,7 +146,7 @@
   .title,
   .subtitle {
     opacity: 0;
-    animation: opacityIntro 325ms ease-in forwards;
+    animation: opacityIntro 1s ease-in forwards;
   }
 
   .hero__credits {
@@ -194,6 +194,34 @@
   height: 32px;
   border: none;
   transition: background-color 450ms;
+  opacity: 0;
+  animation: opacityIntro 1s ease-out forwards;
+  animation-delay: 1s;
+
+  &--tutorial {
+    bottom: 6rem;
+    &--label {
+      color: white;
+      font-size: 16px;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      transform: translate(-155%, -50%);
+      transition: color 450ms;
+    }
+  }
+
+  &--maps {
+    &--label {
+      color: white;
+      font-size: 16px;
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      transform: translate(-180%, -50%);
+      transition: color 450ms;
+    }
+  }
 
   @supports (-webkit-touch-callout: none) {
     /* CSS specific to iOS devices */
@@ -201,6 +229,12 @@
   }
 
   &:hover {
-    background-color: #ffe900;
+    background-color: #7ceaff;
+    .scroller {
+      &--tutorial--label,
+      &--maps--label {
+        color: #7ceaff;
+      }
+    }
   }
 }
