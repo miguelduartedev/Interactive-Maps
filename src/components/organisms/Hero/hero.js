@@ -53,7 +53,22 @@ const Hero = () => {
             </Link>
           </div>
           <button
-            className="scroller"
+            className="scroller scroller--tutorial"
+            onClick={() =>
+              document.querySelector(".panel").scrollIntoView({
+                behavior: "smooth",
+              })
+            }
+          >
+            <FontAwesomeIcon
+              className="fa-solid fa-arrow-down-to-line"
+              icon={faArrowDown}
+            />
+            <span className="scroller--tutorial--label">Tutorial</span>
+          </button>
+
+          <button
+            className="scroller scroller--maps"
             onClick={() =>
               document.querySelector(".options-grid").scrollIntoView({
                 behavior: "smooth",
@@ -64,6 +79,7 @@ const Hero = () => {
               className="fa-solid fa-arrow-down-to-line"
               icon={faArrowDown}
             />
+            <span className="scroller--maps--label">Maps</span>
           </button>
         </div>
       </div>
