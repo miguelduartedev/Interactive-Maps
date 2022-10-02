@@ -27,14 +27,14 @@
       width: 26%;
       position: absolute;
       top: 6%;
-      animation: cloudOne 6s linear infinite, jump 6s linear infinite;
+      animation: cloud 6s linear infinite, jump 6s linear infinite;
     }
     &-cloud2 {
       filter: drop-shadow(5px 5px 8px rgb(0 0 0 / 0.4));
       width: 26%;
       position: absolute;
       top: 48%;
-      animation: cloudOne 6s linear infinite, jump 6s linear infinite;
+      animation: cloud 6s linear infinite, jump 6s linear infinite;
       opacity: 0;
       animation-delay: 3s;
     }
@@ -44,7 +44,7 @@
     }
   }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 767px) {
     .earth {
       width: 200px;
       height: 200px;
@@ -85,7 +85,7 @@
     }
   }
 
-  @keyframes cloudOne {
+  @keyframes cloud {
     0% {
       opacity: 0;
       left: -15%;
@@ -119,7 +119,7 @@
 
 .hero-alignment {
   align-self: center;
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 767px) {
     align-self: flex-start;
   }
 }
@@ -198,6 +198,10 @@
   animation: opacityIntro 1s ease-out forwards;
   animation-delay: 1s;
 
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
+
   &--tutorial {
     bottom: 6rem;
     &--label {
@@ -221,11 +225,6 @@
       transform: translate(-180%, -50%);
       transition: color 450ms;
     }
-  }
-
-  @supports (-webkit-touch-callout: none) {
-    /* CSS specific to iOS devices */
-    display: none;
   }
 
   &:hover {
