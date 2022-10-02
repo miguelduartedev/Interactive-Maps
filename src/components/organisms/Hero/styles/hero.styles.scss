@@ -12,7 +12,7 @@
       0 0 repeat;
     border-radius: 50%;
     background-size: 630px;
-    opacity: 0;
+    opacity: 0%;
     animation: opacityIntro 5s ease-out forwards, rotate 10s linear infinite,
       jump 3.5s linear infinite;
     transition: transform 200ms linear, scale 200ms ease-in-out;
@@ -20,23 +20,23 @@
     //box-shadow: inset 10px 0 40px 6px rgb(255 255 255);
     color: #000;
     box-shadow: 5px 10px #196794;
-    animation-delay: 500ms;
 
     &-cloud1 {
       filter: drop-shadow(5px 5px 8px rgb(0 0 0 / 0.4));
       width: 26%;
       position: absolute;
       top: 6%;
-      animation: cloudOne 6s linear infinite, jump 6s linear infinite;
+      animation: cloud 6s linear infinite, cloud-opacity 6s linear infinite,
+        jump 6s linear infinite;
     }
     &-cloud2 {
       filter: drop-shadow(5px 5px 8px rgb(0 0 0 / 0.4));
       width: 26%;
       position: absolute;
       top: 48%;
-      animation: cloudOne 6s linear infinite, jump 6s linear infinite;
-      opacity: 0;
-      animation-delay: 3s;
+      animation: cloud 6s linear infinite, cloud-opacity 6s linear infinite,
+        jump 6s linear infinite;
+      opacity: 0%;
     }
 
     &:hover {
@@ -44,7 +44,7 @@
     }
   }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 767px) {
     .earth {
       width: 200px;
       height: 200px;
@@ -85,30 +85,68 @@
     }
   }
 
-  @keyframes cloudOne {
+  @keyframes cloud {
     0% {
-      opacity: 0;
+      opacity: 0%;
       left: -15%;
     }
     50% {
-      opacity: 0.8;
+      opacity: 80%;
       left: 35%;
     }
     100% {
-      opacity: 0;
+      opacity: 0%;
       left: 85%;
     }
   }
+}
 
-  @keyframes cloudTwo {
+@media screen and (max-width: 769px) {
+  @keyframes cloud {
     0% {
-      top: 50%;
+      left: 0px;
     }
     50% {
-      top: 55%;
+      left: 20px;
     }
     100% {
-      top: 50%;
+      left: 40px;
+    }
+  }
+  @-webkit-keyframes cloud-opacity {
+    0% {
+      left: 0px;
+    }
+    50% {
+      left: 20px;
+    }
+    100% {
+      left: 40px;
+    }
+  }
+}
+
+@media screen and (max-width: 769px) {
+  @keyframes cloud-opacity {
+    0% {
+      opacity: 80%;
+    }
+    50% {
+      opacity: 0%;
+    }
+    100% {
+      opacity: 80%;
+    }
+  }
+  @-webkit-keyframes cloud-opacity {
+    0% {
+      opacity: 80%;
+    }
+    50% {
+      opacity: 0%;
+    }
+    100% {
+      opacity: 80%;
     }
   }
 }
@@ -119,7 +157,7 @@
 
 .hero-alignment {
   align-self: center;
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 767px) {
     align-self: flex-start;
   }
 }
@@ -145,7 +183,7 @@
 
   .title,
   .subtitle {
-    opacity: 0;
+    opacity: 0%;
     animation: opacityIntro 1s ease-in forwards;
   }
 
@@ -163,10 +201,10 @@
 
 @keyframes opacityIntro {
   0% {
-    opacity: 0;
+    opacity: 0%;
   }
   100% {
-    opacity: 1;
+    opacity: 100%;
   }
 }
 
@@ -194,9 +232,13 @@
   height: 32px;
   border: none;
   transition: background-color 450ms;
-  opacity: 0;
+  opacity: 0%;
   animation: opacityIntro 1s ease-out forwards;
   animation-delay: 1s;
+
+  @media screen and (max-width: 480px) {
+    display: none;
+  }
 
   &--tutorial {
     bottom: 6rem;
@@ -221,11 +263,6 @@
       transform: translate(-180%, -50%);
       transition: color 450ms;
     }
-  }
-
-  @supports (-webkit-touch-callout: none) {
-    /* CSS specific to iOS devices */
-    display: none;
   }
 
   &:hover {
