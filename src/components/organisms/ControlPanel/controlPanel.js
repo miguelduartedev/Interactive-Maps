@@ -56,7 +56,17 @@ const ControlPanel = () => {
               saveSvgAsPng(
                 document.querySelector(".interactive-map"),
                 "interactive_maps.png",
-                { encoderOptions: 1, scale: 3 }
+                {
+                  encoderOptions: 1,
+                  scale: 3,
+                  backgroundColor: "#102946",
+                  /* 
+                  This ensures that the exported PNG doesn't have the 
+                  inline styles that the panzoom package injected on the SVG 
+                  */
+                  modifyCss: () =>
+                    ".interactive-map {transform: unset !important}",
+                }
               )
             }
           >
