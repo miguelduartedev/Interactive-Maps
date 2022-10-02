@@ -1,6 +1,14 @@
 .svg-container {
   border-radius: 25px;
   background-color: #102946;
+  /* 
+  On touchscreens the following proprieties avoid 
+  the zooming and dragging gestures to be interpreted 
+  as default browser gestures and avoids the long press
+  from being interpreted as text selection
+  */
+  touch-action: none;
+  user-select: none;
 }
 
 #europe,
