@@ -1,4 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import Script from "next/script";
 import { Provider } from "react-redux";
 import "../components/atoms/Button/styles/button.styles.scss";
 import "../components/atoms/Footer/styles/footer.styles.scss";
@@ -15,13 +16,28 @@ import "../components/organisms/SVGMap/styles/europeMap.styles.scss";
 import "../components/_common/global.styles.scss";
 import { store } from "../redux/store";
 
-// component will be the page content of our pages
-// we can wrap component with our "sections" / "layouts"
 const MyApp = ({ Component, pageProps }) => {
   return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
+    <>
+      <Script
+        strategy="lazyOnload"
+        src={`https://www.googletagmanager.com/gtag/js?id=G-52R14XBQ18`}
+      />
+
+      <Script strategy="lazyOnload">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-52R14XBQ18', {
+          page_path: window.location.pathname,
+          });
+        `}
+      </Script>
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
+    </>
   );
 };
 
