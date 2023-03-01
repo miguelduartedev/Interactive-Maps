@@ -7,7 +7,7 @@ const Footer = () => {
         </span>
         <a
           className="footer__text--anchor"
-          href="https://www.linkedin.com/in/lu%C3%ADs-c-619364108/"
+          href="https://www.linkedin.com/in/luis-miguel-duarte-conceicao/"
         >
           Luís Conceição
         </a>
