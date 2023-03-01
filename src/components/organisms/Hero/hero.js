@@ -27,9 +27,9 @@ const Hero = () => {
               </span>
               <a
                 className="hero__credits--anchor"
-                href="https://www.linkedin.com/in/lu%C3%ADs-miguel-d-619364108/"
+                href="https://www.linkedin.com/in/luis-miguel-duarte-conceicao/"
               >
-                Luís Miguel
+                Miguel Duarte
               </a>
             </p>
           </div>
