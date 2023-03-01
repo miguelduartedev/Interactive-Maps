@@ -1,10 +1,10 @@
-import panzoom from "panzoom";
-import { createRef, useEffect, useRef, useState } from "react";
-import MapLegend from "../../atoms/MapLegend/mapLegend";
-import useClick from "./hooks/useClick";
-import useContextMenu from "./hooks/useContextMenu";
-import useMouseOver from "./hooks/useMouseOver";
-import useTouchEnd from "./hooks/useTouchEnd";
+import panzoom from "panzoom"
+import { createRef, useEffect, useRef, useState } from "react"
+import MapLegend from "../../../atoms/MapLegend/mapLegend"
+import useClick from "../hooks/useClick"
+import useContextMenu from "../hooks/useContextMenu"
+import useMouseOver from "../hooks/useMouseOver"
+import useTouchEnd from "../hooks/useTouchEnd"
 
 const AfricaSVG = ({
   currentMap,
@@ -12,17 +12,18 @@ const AfricaSVG = ({
   dispatch,
   updateUsedColors,
   removeCountryFromUsedColors,
+  setCountryID,
 }) => {
-  const [action, setAction] = useState("");
-  const timerRef = useRef;
-  const mapRef = createRef();
+  const [action, setAction] = useState("")
+  const timerRef = useRef
+  const mapRef = createRef()
   useEffect(() => {
     panzoom(mapRef.current, {
       onTouch: function () {
-        return false; // tells the library to not preventDefault.
+        return false // tells the library to not preventDefault.
       },
-    });
-  }, []);
+    })
+  }, [])
 
   return (
     <svg
@@ -38,20 +39,27 @@ const AfricaSVG = ({
       viewBox="0 0 1000 684"
       xmlns="http://www.w3.org/2000/svg"
       onClick={(event) =>
-        useClick(event, currentMap, store, dispatch, updateUsedColors)
+        useClick(
+          event,
+          currentMap,
+          store,
+          dispatch,
+          updateUsedColors,
+          setCountryID
+        )
       }
       onContextMenu={(event) =>
         useContextMenu(event, store, dispatch, removeCountryFromUsedColors)
       }
       onMouseOver={(event) => useMouseOver(event, currentMap)}
       onTouchStart={() => {
-        setAction("touch");
+        setAction("touch")
         timerRef.current = setTimeout(() => {
-          setAction("longpress");
-        }, 500);
+          setAction("longpress")
+        }, 500)
       }}
       onTouchEnd={(event) => {
-        clearTimeout(timerRef.current);
+        clearTimeout(timerRef.current)
         useTouchEnd(
           action,
           event,
@@ -60,7 +68,7 @@ const AfricaSVG = ({
           dispatch,
           updateUsedColors,
           removeCountryFromUsedColors
-        );
+        )
       }}
       ref={mapRef}
     >
@@ -477,7 +485,7 @@ const AfricaSVG = ({
         name="Reunion"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default AfricaSVG;
+export default AfricaSVG

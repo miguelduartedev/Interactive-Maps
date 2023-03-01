@@ -1,10 +1,10 @@
-import panzoom from "panzoom";
-import { createRef, useEffect, useRef, useState } from "react";
-import MapLegend from "../../atoms/MapLegend/mapLegend";
-import useClick from "./hooks/useClick";
-import useContextMenu from "./hooks/useContextMenu";
-import useMouseOver from "./hooks/useMouseOver";
-import useTouchEnd from "./hooks/useTouchEnd";
+import panzoom from "panzoom"
+import { createRef, useEffect, useRef, useState } from "react"
+import MapLegend from "../../../atoms/MapLegend/mapLegend"
+import useClick from "../hooks/useClick"
+import useContextMenu from "../hooks/useContextMenu"
+import useMouseOver from "../hooks/useMouseOver"
+import useTouchEnd from "../hooks/useTouchEnd"
 
 const SouthAmericaSVG = ({
   currentMap,
@@ -12,17 +12,18 @@ const SouthAmericaSVG = ({
   dispatch,
   updateUsedColors,
   removeCountryFromUsedColors,
+  setCountryID,
 }) => {
-  const [action, setAction] = useState("");
-  const timerRef = useRef;
-  const mapRef = createRef();
+  const [action, setAction] = useState("")
+  const timerRef = useRef
+  const mapRef = createRef()
   useEffect(() => {
     panzoom(mapRef.current, {
       onTouch: function () {
-        return false; // tells the library to not preventDefault.
+        return false // tells the library to not preventDefault.
       },
-    });
-  }, []);
+    })
+  }, [])
 
   return (
     <svg
@@ -38,20 +39,27 @@ const SouthAmericaSVG = ({
       viewBox="0 0 1000 684"
       xmlns="http://www.w3.org/2000/svg"
       onClick={(event) =>
-        useClick(event, currentMap, store, dispatch, updateUsedColors)
+        useClick(
+          event,
+          currentMap,
+          store,
+          dispatch,
+          updateUsedColors,
+          setCountryID
+        )
       }
       onContextMenu={(event) =>
         useContextMenu(event, store, dispatch, removeCountryFromUsedColors)
       }
       onMouseOver={(event) => useMouseOver(event, currentMap)}
       onTouchStart={() => {
-        setAction("touch");
+        setAction("touch")
         timerRef.current = setTimeout(() => {
-          setAction("longpress");
-        }, 500);
+          setAction("longpress")
+        }, 500)
       }}
       onTouchEnd={(event) => {
-        clearTimeout(timerRef.current);
+        clearTimeout(timerRef.current)
         useTouchEnd(
           action,
           event,
@@ -60,7 +68,7 @@ const SouthAmericaSVG = ({
           dispatch,
           updateUsedColors,
           removeCountryFromUsedColors
-        );
+        )
       }}
       ref={mapRef}
     >
@@ -240,13 +248,8 @@ const SouthAmericaSVG = ({
         id="BQBO"
         name="Netherlands"
       />
-      <path
-        fill="#FFFFFF"
-        className="ES"
-        d="M 888.8 316.7 889.1 316.6 889.3 316.9 889.5 317.4 889.3 317.7 889.4 318.1 888.8 319.1 888.7 319 888.6 318.6 888.2 317.7 888.1 317.4 888 317.2 888.2 316.8 888.5 316.6 888.8 316.7 Z"
-      />
     </svg>
-  );
-};
+  )
+}
 
-export default SouthAmericaSVG;
+export default SouthAmericaSVG

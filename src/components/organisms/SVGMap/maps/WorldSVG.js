@@ -1,10 +1,10 @@
-import panzoom from "panzoom";
-import { createRef, useEffect, useRef, useState } from "react";
-import MapLegend from "../../atoms/MapLegend/mapLegend";
-import useClick from "./hooks/useClick";
-import useContextMenu from "./hooks/useContextMenu";
-import useMouseOver from "./hooks/useMouseOver";
-import useTouchEnd from "./hooks/useTouchEnd";
+import panzoom from "panzoom"
+import { createRef, useEffect, useRef, useState } from "react"
+import MapLegend from "../../../atoms/MapLegend/mapLegend"
+import useClick from "../hooks/useClick"
+import useContextMenu from "../hooks/useContextMenu"
+import useMouseOver from "../hooks/useMouseOver"
+import useTouchEnd from "../hooks/useTouchEnd"
 
 const WorldSVG = ({
   currentMap,
@@ -12,17 +12,18 @@ const WorldSVG = ({
   dispatch,
   updateUsedColors,
   removeCountryFromUsedColors,
+  setCountryID,
 }) => {
-  const [action, setAction] = useState("");
-  const timerRef = useRef;
-  const mapRef = createRef();
+  const [action, setAction] = useState("")
+  const timerRef = useRef
+  const mapRef = createRef()
   useEffect(() => {
     panzoom(mapRef.current, {
       onTouch: function () {
-        return false; // tells the library to not preventDefault.
+        return false // tells the library to not preventDefault.
       },
-    });
-  }, []);
+    })
+  }, [])
 
   return (
     <svg
@@ -38,20 +39,27 @@ const WorldSVG = ({
       viewBox="0 0 1300 684"
       xmlns="http://www.w3.org/2000/svg"
       onClick={(event) =>
-        useClick(event, currentMap, store, dispatch, updateUsedColors)
+        useClick(
+          event,
+          currentMap,
+          store,
+          dispatch,
+          updateUsedColors,
+          setCountryID
+        )
       }
       onContextMenu={(event) =>
         useContextMenu(event, store, dispatch, removeCountryFromUsedColors)
       }
       onMouseOver={(event) => useMouseOver(event, currentMap)}
       onTouchStart={() => {
-        setAction("touch");
+        setAction("touch")
         timerRef.current = setTimeout(() => {
-          setAction("longpress");
-        }, 500);
+          setAction("longpress")
+        }, 500)
       }}
       onTouchEnd={(event) => {
-        clearTimeout(timerRef.current);
+        clearTimeout(timerRef.current)
         useTouchEnd(
           action,
           event,
@@ -60,7 +68,7 @@ const WorldSVG = ({
           dispatch,
           updateUsedColors,
           removeCountryFromUsedColors
-        );
+        )
       }}
       ref={mapRef}
     >
@@ -2470,7 +2478,7 @@ const WorldSVG = ({
         d="m 1281.4302,456.72393 -0.2606,0.26057 -0.5213,0.71659 -0.1952,0.0651 -0.4562,0.26059 -0.1301,0.39087 -0.2606,0.13029 -0.1304,0.19544 -0.065,0.13027 0.1953,0.0651 0.3909,-0.19544 0.065,-0.0651 0.1952,-0.19542 0.1304,-0.19544 0.391,-0.19543 0.1953,-0.19544 0.3909,-0.19543 v 0.19543 l -0.3257,0.45602 -0.1303,0.0651 0.064,0.39087 -0.1956,0.19544 -0.1953,-0.19544 h -0.2606 l -0.3258,0.0651 -0.2606,0.19545 -0.4559,0.0652 h -0.6514 l 0.3255,-0.32571 -0.2605,-0.13029 -0.3908,0.13029 -0.2606,0.13029 v 0.13028 l -0.1955,0.0651 -0.1302,0.0652 -0.064,0.26056 -0.1305,0.19545 -0.1953,-0.0651 v -0.13031 l -0.2606,-0.0652 -0.2606,0.13029 -0.1304,0.32573 -0.1953,0.13029 h -0.1955 v -0.19544 -0.26058 l -0.1303,-0.26058 0.064,-0.1303 -0.064,-0.0652 -0.3908,0.13029 v -0.26058 l 0.2607,-0.19544 h 0.065 l -0.065,-0.32571 0.1953,-0.0652 0.3259,0.19544 0.3909,-0.26059 h 0.1301 l 0.1954,-0.19542 h 0.1304 l 0.1953,-0.19543 v -0.1303 l 0.5212,-0.0651 0.5864,-0.19542 0.1954,-0.0651 0.2605,0.0651 0.3258,-0.1303 0.1304,-0.26059 h 0.1301 l 0.1305,-0.26056 0.2606,0.0652 0.064,-0.13029 0.1303,0.0652 0.6515,-0.32573 0.065,0.19545 0.1302,-0.0651 0.1303,0.0651 0.1955,-0.19545 0.3257,-0.13029 0.065,0.0652 -0.3256,0.26058 z"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default WorldSVG;
+export default WorldSVG

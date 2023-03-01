@@ -1,26 +1,33 @@
-import { useState } from "react";
-import { CirclePicker, SketchPicker } from "react-color";
-import { useDispatch } from "react-redux";
-import { updateColor } from "../../../redux/mapSlice";
+import { useState } from "react"
+import { CirclePicker, SketchPicker } from "react-color"
+import { useDispatch, useSelector } from "react-redux"
+import { mapStore, updateColor } from "../../../redux/mapSlice"
+import { exists } from "../../_common"
 
 const ColorPicker = () => {
-  const dispatch = useDispatch();
-  const [color, setColor] = useState("#039606");
-  const [displayPicker, setDisplayPicker] = useState(false);
+  const dispatch = useDispatch()
+  const [color, setColor] = useState("#039606")
+  const [displayPicker, setDisplayPicker] = useState(false)
+  const mapState = useSelector(mapStore)
+  const currentColor = mapState.currentColor
 
   const colorSetter = (color) => {
-    color.hex
-      ? dispatch(updateColor(color.hex.toUpperCase()))
-      : dispatch(updateColor(color.toUpperCase()));
-  };
+    if (exists(color.hex)) {
+      currentColor !== color.hex &&
+        dispatch(updateColor(color.hex.toUpperCase()))
+    } else {
+      currentColor !== color.toUpperCase() &&
+        dispatch(updateColor(color.toUpperCase()))
+    }
+  }
 
   const sketchPickerToggle = () => {
     if (!displayPicker) {
-      setDisplayPicker(true);
+      setDisplayPicker(true)
     } else {
-      setDisplayPicker(false);
+      setDisplayPicker(false)
     }
-  };
+  }
 
   return (
     <>
@@ -74,7 +81,7 @@ const ColorPicker = () => {
         <button
           className="button"
           onClick={() => {
-            sketchPickerToggle();
+            sketchPickerToggle()
           }}
         >
           {displayPicker === false ? "More Colors" : "Close Picker"}
@@ -89,7 +96,7 @@ const ColorPicker = () => {
         />
       )}
     </>
-  );
-};
+  )
+}
 
-export default ColorPicker;
+export default ColorPicker

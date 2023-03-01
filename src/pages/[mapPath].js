@@ -1,11 +1,20 @@
-import Head from "next/head";
-import { Fragment } from "react";
-import Footer from "../components/atoms/Footer/footer";
-import Navigation from "../components/atoms/Navigation/navigation";
-import ControlPanel from "../components/organisms/ControlPanel/controlPanel";
-import SVGMap from "../components/organisms/SVGMap/svgMap";
+import Head from "next/head"
+import { useRouter } from "next/router"
+import { Fragment } from "react"
+import { useDispatch } from "react-redux"
+import Footer from "../components/atoms/Footer/footer"
+import Navigation from "../components/atoms/Navigation/navigation"
+import ControlPanel from "../components/organisms/ControlPanel/controlPanel"
+import SVGMap from "../components/organisms/SVGMap/svgMap"
+import { updateCurrentMap } from "../redux/mapSlice"
 
-const mapPath = ({ mapPath }) => {
+const mapPath = () => {
+  const router = useRouter()
+  const currentMap = router.query.mapPath
+  const dispatch = useDispatch()
+
+  dispatch(updateCurrentMap(currentMap))
+
   return (
     <Fragment>
       <Head>
@@ -26,8 +35,8 @@ const mapPath = ({ mapPath }) => {
         <Footer />
       </div>
     </Fragment>
-  );
-};
+  )
+}
 
 // If the file was named [...mapPath] getStaticPaths would require mapPath to be an array
 
@@ -42,14 +51,14 @@ export async function getStaticPaths() {
       { params: { mapPath: "south-america" } },
     ],
     fallback: false,
-  };
+  }
 }
 
 export const getStaticProps = async () => {
   return {
     props: {},
     revalidate: 3600,
-  };
-};
+  }
+}
 
-export default mapPath;
+export default mapPath
