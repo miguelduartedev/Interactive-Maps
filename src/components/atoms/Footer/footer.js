@@ -9,11 +9,11 @@ const Footer = () => {
           className="footer__text--anchor"
           href="https://www.linkedin.com/in/luis-miguel-duarte-conceicao/"
         >
-          Luís Conceição
+          Miguel Duarte
         </a>
       </p>
     </div>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

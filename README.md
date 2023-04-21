@@ -4,9 +4,9 @@ Decide what data you want your map to show, select the countries that fit the cr
 
 - How to run:
   - npm install
-  - npm run next
+  - npm run dev
 
-Version 2.1
+Version 2.1.1
 
 - You can now access a demo of this tool through:
 
@@ -27,7 +27,7 @@ Version 2.1
   - Map Title and Legend Font customization options
   - File export options (scale, file format, etc.)
   - Customizable background color for the map
-  - Button that resets the zoom and the position of the map
+  - Button that turns on/off the ability to zoom the map with the mousepad gestures/mouse scroll weel
 
 Using public API "REST Countries":
 
