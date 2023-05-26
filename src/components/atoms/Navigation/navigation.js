@@ -35,8 +35,8 @@ const Navigation = () => {
           </div>
         </Link>
         <div className="nav">
-          {navData.map((nav) => (
-            <div className="nav-item">
+          {navData.map((nav, index) => (
+            <div key={index} className="nav-item">
               <Link href={nav.route}>
                 <p
                   className="nav-link"
@@ -62,8 +62,8 @@ const Navigation = () => {
             onClick={() => setMenuOpen(false)}
           />
         </a>
-        {navData.map((nav) => (
-          <div className="mobile-nav-item">
+        {navData.map((nav, index) => (
+          <div key={index} className="mobile-nav-item">
             <Link href={nav.route}>
               <p
                 className="nav-link"
