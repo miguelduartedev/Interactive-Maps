@@ -5,6 +5,7 @@ import useClick from "../hooks/useClick"
 import useContextMenu from "../hooks/useContextMenu"
 import useMouseOver from "../hooks/useMouseOver"
 import useTouchEnd from "../hooks/useTouchEnd"
+import { isBrowser } from "react-device-detect"
 
 function EuropeSVG({
   currentMap,
@@ -20,9 +21,18 @@ function EuropeSVG({
 
   useEffect(() => {
     panzoom(mapRef.current, {
-      onTouch() {
+      onTouch: function () {
         return false // tells the library to not preventDefault.
       },
+      beforeWheel: function (e) {
+        if (isBrowser) {
+          // allow wheel-zoom only if altKey is pressed. Otherwise - ignore
+          const shouldIgnore = !e.altKey
+          return shouldIgnore
+        }
+      },
+      // disables double click zoom
+      zoomDoubleClickSpeed: 1,
     })
   }, [])
 
@@ -46,7 +56,7 @@ function EuropeSVG({
           store,
           dispatch,
           updateUsedColors,
-          setCountryID
+          setCountryID,
         )
       }
       onContextMenu={(event) =>
@@ -68,7 +78,7 @@ function EuropeSVG({
           store,
           dispatch,
           updateUsedColors,
-          removeCountryFromUsedColors
+          removeCountryFromUsedColors,
         )
       }}
       ref={mapRef}

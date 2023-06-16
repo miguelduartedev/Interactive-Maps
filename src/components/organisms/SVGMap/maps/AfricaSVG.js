@@ -5,6 +5,7 @@ import useClick from "../hooks/useClick"
 import useContextMenu from "../hooks/useContextMenu"
 import useMouseOver from "../hooks/useMouseOver"
 import useTouchEnd from "../hooks/useTouchEnd"
+import { isBrowser } from "react-device-detect"
 
 const AfricaSVG = ({
   currentMap,
@@ -17,11 +18,21 @@ const AfricaSVG = ({
   const [action, setAction] = useState("")
   const timerRef = useRef
   const mapRef = createRef()
+
   useEffect(() => {
     panzoom(mapRef.current, {
       onTouch: function () {
         return false // tells the library to not preventDefault.
       },
+      beforeWheel: function (e) {
+        if (isBrowser) {
+          // allow wheel-zoom only if altKey is pressed. Otherwise - ignore
+          const shouldIgnore = !e.altKey
+          return shouldIgnore
+        }
+      },
+      // disables double click zoom
+      zoomDoubleClickSpeed: 1,
     })
   }, [])
 
@@ -45,7 +56,7 @@ const AfricaSVG = ({
           store,
           dispatch,
           updateUsedColors,
-          setCountryID
+          setCountryID,
         )
       }
       onContextMenu={(event) =>
@@ -67,7 +78,7 @@ const AfricaSVG = ({
           store,
           dispatch,
           updateUsedColors,
-          removeCountryFromUsedColors
+          removeCountryFromUsedColors,
         )
       }}
       ref={mapRef}

@@ -5,6 +5,8 @@ import useClick from "../hooks/useClick"
 import useContextMenu from "../hooks/useContextMenu"
 import useMouseOver from "../hooks/useMouseOver"
 import useTouchEnd from "../hooks/useTouchEnd"
+import { useSelector } from "react-redux"
+import { isBrowser } from "react-device-detect"
 
 function AsiaSVG({
   currentMap,
@@ -17,11 +19,21 @@ function AsiaSVG({
   const [action, setAction] = useState("")
   const timerRef = useRef
   const mapRef = createRef()
+
   useEffect(() => {
     panzoom(mapRef.current, {
-      onTouch() {
+      onTouch: function () {
         return false // tells the library to not preventDefault.
       },
+      beforeWheel: function (e) {
+        if (isBrowser) {
+          // allow wheel-zoom only if altKey is pressed. Otherwise - ignore
+          const shouldIgnore = !e.altKey
+          return shouldIgnore
+        }
+      },
+      // disables double click zoom
+      zoomDoubleClickSpeed: 1,
     })
   }, [])
 
@@ -45,7 +57,7 @@ function AsiaSVG({
           store,
           dispatch,
           updateUsedColors,
-          setCountryID
+          setCountryID,
         )
       }
       onContextMenu={(event) =>
@@ -67,7 +79,7 @@ function AsiaSVG({
           store,
           dispatch,
           updateUsedColors,
-          removeCountryFromUsedColors
+          removeCountryFromUsedColors,
         )
       }}
       ref={mapRef}
