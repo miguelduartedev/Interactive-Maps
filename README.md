@@ -14,7 +14,7 @@ Version 2.1.1
 
 - Features include:
 
-  - Customizable maps for The World, Europe, North America, South America, Africa and Asia
+  - Customizable maps for World, Europe, North America, South America, Africa and Asia
   - Color Picker (react-color)
   - SVG Map zoom and drag
   - Filters for Political Unions and Geographic Positions (UN Definition)
