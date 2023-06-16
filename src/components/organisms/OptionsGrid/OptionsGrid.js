@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { useDispatch } from "react-redux";
-import { updateCurrentMap } from "../../../redux/mapSlice";
+import Link from 'next/link';
+import { useDispatch } from 'react-redux';
+import { updateCurrentMap } from '../../../redux/mapSlice';
 
 const OptionsGrid = () => {
   const dispatch = useDispatch();
@@ -13,10 +13,10 @@ const OptionsGrid = () => {
         <Link href="/world">
           <div
             className="group container d-flex flex-column justify-content-center align-items-center"
-            onClick={() => dispatch(updateCurrentMap("world"))}
+            onClick={() => dispatch(updateCurrentMap('world'))}
           >
             <div className="group-map world"></div>
-            <h2 className="group-title">The World</h2>
+            <h2 className="group-title">World</h2>
           </div>
         </Link>
       </div>
@@ -24,7 +24,7 @@ const OptionsGrid = () => {
         <Link href="/europe">
           <div
             className="group container d-flex flex-column justify-content-center align-items-center"
-            onClick={() => dispatch(updateCurrentMap("europe"))}
+            onClick={() => dispatch(updateCurrentMap('europe'))}
           >
             <div className="group-map europe"></div>
             <h2 className="group-title">Europe</h2>
@@ -35,7 +35,7 @@ const OptionsGrid = () => {
         <Link href="/north-america">
           <div
             className="group container d-flex flex-column justify-content-center align-items-center"
-            onClick={() => dispatch(updateCurrentMap("north-america"))}
+            onClick={() => dispatch(updateCurrentMap('north-america'))}
           >
             <div className="group-map north-america"></div>
             <h2 className="group-title">North America</h2>
@@ -46,7 +46,7 @@ const OptionsGrid = () => {
         <Link href="/south-america">
           <div
             className="group container d-flex flex-column justify-content-center align-items-center"
-            onClick={() => dispatch(updateCurrentMap("south-america"))}
+            onClick={() => dispatch(updateCurrentMap('south-america'))}
           >
             <div className="group-map south-america"></div>
             <h2 className="group-title">South America</h2>
@@ -57,7 +57,7 @@ const OptionsGrid = () => {
         <Link href="/africa">
           <div
             className="group container d-flex flex-column justify-content-center align-items-center"
-            onClick={() => dispatch(updateCurrentMap("africa"))}
+            onClick={() => dispatch(updateCurrentMap('africa'))}
           >
             <div className="group-map africa"></div>
             <h2 className="group-title">Africa</h2>
@@ -68,7 +68,7 @@ const OptionsGrid = () => {
         <Link href="/asia">
           <div
             className="group container d-flex flex-column justify-content-center align-items-center"
-            onClick={() => dispatch(updateCurrentMap("asia"))}
+            onClick={() => dispatch(updateCurrentMap('asia'))}
           >
             <div className="group-map asia"></div>
             <h2 className="group-title">Asia</h2>
