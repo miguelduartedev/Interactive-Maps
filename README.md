@@ -6,7 +6,7 @@ Decide what data you want your map to show, select the countries that fit the cr
   - npm install
   - npm run dev
 
-Version 2.1.1
+Version 2.2
 
 - You can now access a demo of this tool through:
 
@@ -16,7 +16,7 @@ Version 2.1.1
 
   - Customizable maps for the World, Europe, North America, South America, Africa and Asia
   - Color Picker (react-color)
-  - SVG Map zoom and drag
+  - SVG Map zoom and drag (requires holding Alt or Option on Desktop)
   - Filters for Political Unions and Geographic Positions (UN Definition)
   - Customizable title/description/legend of your custom map
   - General tools: Color Removal, Clear All, Select All, Export Map (save-svg-as-png)
@@ -27,7 +27,6 @@ Version 2.1.1
   - Map Title and Legend Font customization options
   - File export options (scale, file format, etc.)
   - Customizable background color for the map
-  - Button that turns on/off the ability to zoom the map with the mousepad gestures/mouse scroll weel
 
 Using public API "REST Countries":
 

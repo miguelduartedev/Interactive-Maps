@@ -1,3 +1,5 @@
+import { BrowserView, MobileView } from "react-device-detect"
+
 const Panel = () => {
   return (
     <div className="panel container d-flex justify-content-center align-items-center">
@@ -21,14 +23,25 @@ const Panel = () => {
               Alternatively select a <b>Political Block</b> or a{" "}
               <b>Geographic Region</b>;
             </li>
+            <BrowserView>
+              <li>
+                In order to <b>Zoom</b> and/or <b>Drag</b> the map, press and
+                hold the <i>Alt</i> (Windows) or <i>Option</i> (Mac) key and
+                simultaneously use your mouse/trackpad to scroll and drag.
+                Alternatively, you can click on the map and use the + and - keys
+                to zoom and the arrow keys to change the map position;
+              </li>
+            </BrowserView>
             <li>
               You can remove the color that has been assigned to a country by
               right clicking on the country or by doing a long press on mobile;
             </li>
-            <li>
-              You can zoom through the use of a mouse wheel or through gestures
-              and you can drag the map to change it's position;
-            </li>
+            <MobileView>
+              <li>
+                And you can <b>Zoom</b> and <b>Drag</b> the map through
+                touchscreen gestures like pinching and tapping;
+              </li>
+            </MobileView>
             <li>
               Fill the <b>Map Title</b> and <b>Color Legend</b> fields in a way
               that describes the data you're showcasing;
@@ -41,7 +54,7 @@ const Panel = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Panel;
+export default Panel

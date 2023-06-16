@@ -1,15 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
-import { saveSvgAsPng } from "save-svg-as-png";
-import { mapStore } from "../../../redux/mapSlice";
-import ColorLegend from "../../molecules/ColorLegend/colorLegend";
-import ColorPicker from "../../molecules/ColorPicker/colorPicker";
-import GroupSelectors from "../../molecules/GroupSelectors/groupSelectors";
-import { clearAll, selectAll, titleSetter } from "./utils";
+import { useDispatch, useSelector } from "react-redux"
+import { saveSvgAsPng } from "save-svg-as-png"
+import { mapStore } from "../../../redux/mapSlice"
+import ColorLegend from "../../molecules/ColorLegend/colorLegend"
+import ColorPicker from "../../molecules/ColorPicker/colorPicker"
+import GroupSelectors from "../../molecules/GroupSelectors/groupSelectors"
+import { clearAll, selectAll, titleSetter } from "./utils"
+import { BrowserView } from "react-device-detect"
 
 const ControlPanel = () => {
-  const mapState = useSelector(mapStore);
-  const dispatch = useDispatch();
-  const { currentColor, currentMap } = mapState;
+  const mapState = useSelector(mapStore)
+  const dispatch = useDispatch()
+  const { currentColor, currentMap } = mapState
 
   return (
     <div className="col-12 mt-4 col-lg-4 mt-lg-0">
@@ -66,7 +67,7 @@ const ControlPanel = () => {
                   */
                   modifyCss: () =>
                     ".interactive-map {transform: unset !important}",
-                }
+                },
               )
             }
           >
@@ -75,7 +76,7 @@ const ControlPanel = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ControlPanel;
+export default ControlPanel

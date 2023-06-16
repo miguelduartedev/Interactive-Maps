@@ -46,7 +46,7 @@ function SVGMap() {
       enabled: false,
       staleTime: Infinity,
       cacheTime: Infinity,
-    }
+    },
   )
 
   useEffect(() => {

@@ -1,25 +1,27 @@
-import clsx from "clsx";
-import { useState } from "react";
-import Checkbox from "../../atoms/Checkbox/checkbox";
+import clsx from "clsx"
+import { useState } from "react"
 import {
   geographicGroupings,
   politicalGroupings,
-} from "../../organisms/ControlPanel/utils/globalVars";
-import { groupPicker } from "./utils";
+} from "../../organisms/ControlPanel/utils/globalVars"
+import { groupPicker } from "./utils"
+import Switch from "@mui/material/Switch"
+import { FormGroup } from "react-bootstrap"
+import { FormControlLabel } from "@mui/material"
 
 const GroupSelectors = ({ currentMap, dispatch }) => {
-  const [accordionOneOpen, setAccordionOneOpen] = useState(false);
-  const [accordionTwoOpen, setAccordionTwoOpen] = useState(false);
-  const [aggregateGroups, setAggregateGroups] = useState(false);
+  const [accordionOneOpen, setAccordionOneOpen] = useState(false)
+  const [accordionTwoOpen, setAccordionTwoOpen] = useState(false)
+  const [aggregateGroups, setAggregateGroups] = useState(false)
   return (
     <>
-      <div className="accordion" id="groups-accordion">
+      <div className="accordion mb-2" id="groups-accordion">
         <div className="accordion-item">
           <h2 className="accordion-header" id="headingOne">
             <button
               className={clsx(
                 "accordion-button",
-                accordionOneOpen ? "show" : "collapsed"
+                accordionOneOpen ? "show" : "collapsed",
               )}
               onClick={() => setAccordionOneOpen(!accordionOneOpen)}
               type="button"
@@ -30,7 +32,7 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
           <div
             className={clsx(
               "accordion-collapse collapse",
-              accordionOneOpen && "show"
+              accordionOneOpen && "show",
             )}
           >
             <div className="accordion-body text-center">
@@ -45,13 +47,13 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
                         countries,
                         dispatch,
                         data,
-                        aggregateGroups
+                        aggregateGroups,
                       )
                     }
                   >
                     {name}
                   </button>
-                )
+                ),
               )}
             </div>
           </div>
@@ -61,7 +63,7 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
             <button
               className={clsx(
                 "accordion-button",
-                accordionTwoOpen ? "show" : "collapsed"
+                accordionTwoOpen ? "show" : "collapsed",
               )}
               onClick={() => setAccordionTwoOpen(!accordionTwoOpen)}
               type="button"
@@ -73,7 +75,7 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
             id="collapseTwo"
             className={clsx(
               "accordion-collapse collapse",
-              accordionTwoOpen && "show"
+              accordionTwoOpen && "show",
             )}
           >
             <div className="accordion-body text-center">
@@ -88,13 +90,13 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
                         countries,
                         dispatch,
                         data,
-                        aggregateGroups
+                        aggregateGroups,
                       )
                     }
                   >
                     {name}
                   </button>
-                )
+                ),
               )}
 
               <p className="disclaimer text-center">
@@ -109,14 +111,17 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
           </div>
         </div>
       </div>
-      <Checkbox
-        {...{
-          check: aggregateGroups,
-          setChecker: setAggregateGroups,
-        }}
-      />
-    </>
-  );
-};
 
-export default GroupSelectors;
+      <FormGroup>
+        <FormControlLabel
+          control={
+            <Switch onChange={() => setAggregateGroups(!aggregateGroups)} />
+          }
+          label="Combine Groups"
+        />
+      </FormGroup>
+    </>
+  )
+}
+
+export default GroupSelectors
