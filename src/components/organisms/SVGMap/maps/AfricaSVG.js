@@ -5,7 +5,7 @@ import useClick from "../hooks/useClick"
 import useContextMenu from "../hooks/useContextMenu"
 import useMouseOver from "../hooks/useMouseOver"
 import useTouchEnd from "../hooks/useTouchEnd"
-import { isBrowser } from "react-device-detect"
+import clsx from "clsx"
 
 const AfricaSVG = ({
   currentMap,
@@ -18,6 +18,7 @@ const AfricaSVG = ({
   const [action, setAction] = useState("")
   const timerRef = useRef
   const mapRef = createRef()
+  const isMobile = store.getState().deviceState.isMobile
 
   useEffect(() => {
     panzoom(mapRef.current, {
@@ -25,14 +26,14 @@ const AfricaSVG = ({
         return false // tells the library to not preventDefault.
       },
       beforeWheel: function (e) {
-        if (isBrowser) {
+        if (!isMobile) {
           // allow wheel-zoom only if altKey is pressed. Otherwise - ignore
           const shouldIgnore = !e.altKey
           return shouldIgnore
         }
       },
       // disables double click zoom
-      zoomDoubleClickSpeed: 1,
+      zoomDoubleClickSpeed: !isMobile && 1,
     })
   }, [])
 
@@ -40,7 +41,9 @@ const AfricaSVG = ({
     <svg
       id="africa"
       baseProfile="tiny"
-      className="interactive-map"
+      className={clsx(
+        isMobile ? "interactive-map -mobile-version" : "interactive-map",
+      )}
       fill="#ececec"
       stroke="black"
       strokeLinecap="round"

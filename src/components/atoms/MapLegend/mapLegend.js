@@ -1,10 +1,10 @@
-import { useSelector } from "react-redux";
-import { mapStore } from "../../../redux/mapSlice";
-import { exists } from "../../_common";
+import { useSelector } from "react-redux"
+import { mapStore } from "../../../redux/mapSlice"
+import { exists } from "../../_common"
+import { useEffect } from "react"
 
 const MapLegend = () => {
-  const mapState = useSelector(mapStore);
-  const usedColors = mapState.usedColors;
+  const { usedColors, mapTitle, currentMap } = useSelector(mapStore)
   const europeMapConfig = {
     titleYAxis: 85,
     titleXAxis: 51,
@@ -13,7 +13,7 @@ const MapLegend = () => {
     legendFontSize: 16,
     legendCircleSize: 9,
     legendGap: 30,
-  };
+  }
   const africaMapConfig = {
     titleYAxis: 345,
     titleXAxis: 51,
@@ -22,7 +22,7 @@ const MapLegend = () => {
     legendFontSize: 16,
     legendCircleSize: 9,
     legendGap: 30,
-  };
+  }
   const worldMapConfig = {
     titleYAxis: 380,
     titleXAxis: 50,
@@ -31,7 +31,7 @@ const MapLegend = () => {
     legendFontSize: 16,
     legendCircleSize: 9,
     legendGap: 30,
-  };
+  }
   const northAmericaMapConfig = {
     titleYAxis: 280,
     titleXAxis: 41,
@@ -40,7 +40,7 @@ const MapLegend = () => {
     legendFontSize: 16,
     legendCircleSize: 9,
     legendGap: 30,
-  };
+  }
   const southAmericaMapConfig = {
     titleYAxis: 280,
     titleXAxis: 40,
@@ -49,7 +49,7 @@ const MapLegend = () => {
     legendFontSize: 16,
     legendCircleSize: 9,
     legendGap: 30,
-  };
+  }
   const asiaMapConfig = {
     titleYAxis: 425,
     titleXAxis: 40,
@@ -58,34 +58,34 @@ const MapLegend = () => {
     legendFontSize: 16,
     legendCircleSize: 9,
     legendGap: 30,
-  };
-  let mapLegendConfig;
-  const currentMap = mapState.currentMap;
+  }
+  let mapLegendConfig
   switch (currentMap) {
     case "europe":
-      mapLegendConfig = europeMapConfig;
-      break;
+      mapLegendConfig = europeMapConfig
+      break
     case "africa":
-      mapLegendConfig = africaMapConfig;
-      break;
+      mapLegendConfig = africaMapConfig
+      break
     case "world":
-      mapLegendConfig = worldMapConfig;
-      break;
+      mapLegendConfig = worldMapConfig
+      break
     case "north-america": {
-      mapLegendConfig = northAmericaMapConfig;
-      break;
+      mapLegendConfig = northAmericaMapConfig
+      break
     }
     case "south-america": {
-      mapLegendConfig = southAmericaMapConfig;
-      break;
+      mapLegendConfig = southAmericaMapConfig
+      break
     }
     case "asia": {
-      mapLegendConfig = asiaMapConfig;
-      break;
+      mapLegendConfig = asiaMapConfig
+      break
     }
     default:
-      break;
+      break
   }
+
   return (
     <>
       <text
@@ -101,7 +101,9 @@ const MapLegend = () => {
       0px 8px 13px rgba(0,0,0,0.1),
       0px 18px 23px rgba(0,0,0,0.1);"
         fontFamily="Helvetica, sans-serif"
-      ></text>
+      >
+        {mapTitle}
+      </text>
       {exists(usedColors) &&
         Object.keys(usedColors).map(
           (color, index) =>
@@ -143,10 +145,10 @@ const MapLegend = () => {
                   {usedColors[color].legend}
                 </text>
               </g>
-            )
+            ),
         )}
     </>
-  );
-};
+  )
+}
 
-export default MapLegend;
+export default MapLegend

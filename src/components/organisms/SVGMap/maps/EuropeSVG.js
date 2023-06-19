@@ -5,7 +5,12 @@ import useClick from "../hooks/useClick"
 import useContextMenu from "../hooks/useContextMenu"
 import useMouseOver from "../hooks/useMouseOver"
 import useTouchEnd from "../hooks/useTouchEnd"
-import { isBrowser } from "react-device-detect"
+import {
+  useWindowSize,
+  useWindowWidth,
+  useWindowHeight,
+} from "@react-hook/window-size"
+import clsx from "clsx"
 
 function EuropeSVG({
   currentMap,
@@ -18,6 +23,7 @@ function EuropeSVG({
   const [action, setAction] = useState("")
   const timerRef = useRef
   const mapRef = createRef()
+  const isMobile = store.getState().deviceState.isMobile
 
   useEffect(() => {
     panzoom(mapRef.current, {
@@ -25,21 +31,23 @@ function EuropeSVG({
         return false // tells the library to not preventDefault.
       },
       beforeWheel: function (e) {
-        if (isBrowser) {
+        if (!isMobile) {
           // allow wheel-zoom only if altKey is pressed. Otherwise - ignore
           const shouldIgnore = !e.altKey
           return shouldIgnore
         }
       },
       // disables double click zoom
-      zoomDoubleClickSpeed: 1,
+      zoomDoubleClickSpeed: !isMobile && 1,
     })
   }, [])
 
   return (
     <svg
       id="europe"
-      className="interactive-map"
+      className={clsx(
+        isMobile ? "interactive-map -mobile-version" : "interactive-map",
+      )}
       baseProfile="tiny"
       fill="#ececec"
       stroke="black"

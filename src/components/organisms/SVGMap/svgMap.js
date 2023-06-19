@@ -19,11 +19,14 @@ import NorthAmericaSVG from "./maps/NorthAmericaSVG"
 import SouthAmericaSVG from "./maps/SouthAmericaSVG"
 import WorldSVG from "./maps/WorldSVG"
 import { fetchData } from "./utils"
+import clsx from "clsx"
+import { deviceStore } from "../../../redux/deviceSlice"
 
 function SVGMap() {
   const dispatch = useDispatch()
   const router = useRouter()
   const mapState = useSelector(mapStore)
+  const { isMobile } = useSelector(deviceStore)
   const [countryID, setCountryID] = useState("")
   const currentMap = exists(mapState.currentMap)
     ? mapState.currentMap
@@ -64,8 +67,13 @@ function SVGMap() {
   }
 
   return (
-    <div className="col-12 col-lg-8">
-      <div className="svg-container overflow-hidden">
+    <div className={clsx(!isMobile ? "col-12 p-0 col-lg-8" : "col p-0")}>
+      <div
+        className={clsx(
+          "svg-container overflow-hidden",
+          isMobile && "-mobile-version",
+        )}
+      >
         {currentMap === "africa" && <AfricaSVG {...SVGProps} />}
         {currentMap === "asia" && <AsiaSVG {...SVGProps} />}
         {currentMap === "europe" && <EuropeSVG {...SVGProps} />}

@@ -13,12 +13,16 @@ const useClick = (
   store,
   dispatch,
   updateUsedColors,
-  setCountryID
+  setCountryID,
 ) => {
   const identifier = eventContainsID(event)
     ? event.target.id
     : event.target.classList[0]
-  setCountryID(identifier)
+  try {
+    setCountryID(identifier)
+  } catch (e) {
+    console.log("Error: ", e)
+  }
 
   const usedColors = Object.keys(store.getState().mapState.usedColors)
   usedColors.map((color) => {
@@ -28,7 +32,7 @@ const useClick = (
     // If so, removes the country from it's previous color
     if (usedColorAppliesTo.includes(identifier)) {
       dispatch(
-        removeCountryFromUsedColors({ color: color, country: identifier })
+        removeCountryFromUsedColors({ color: color, country: identifier }),
       )
     }
   })
@@ -40,7 +44,7 @@ const useClick = (
         currentMap,
         store,
         dispatch,
-        updateUsedColors
+        updateUsedColors,
       )
 }
 
