@@ -74,11 +74,11 @@ const CountryProfile = (currentCountry) => {
           <h2 className="country__profile--header">
             Create your own custom map!
           </h2>
-          <p>
+          <p className="country__profile--body">
             Now that you have your map selected, here are your customization
             options:
           </p>
-          <ul>
+          <ul className="country__profile--body">
             <li>
               Select your desired color(s) through our <b>Color Picker</b>;
             </li>

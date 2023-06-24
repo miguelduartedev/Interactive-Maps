@@ -6,7 +6,7 @@ import useContextMenu from "../hooks/useContextMenu"
 import useMouseOver from "../hooks/useMouseOver"
 import useTouchEnd from "../hooks/useTouchEnd"
 import { useSelector } from "react-redux"
-import { isBrowser } from "react-device-detect"
+import clsx from "clsx"
 
 function AsiaSVG({
   currentMap,
@@ -19,6 +19,7 @@ function AsiaSVG({
   const [action, setAction] = useState("")
   const timerRef = useRef
   const mapRef = createRef()
+  const isMobile = store.getState().deviceState.isMobile
 
   useEffect(() => {
     panzoom(mapRef.current, {
@@ -26,21 +27,23 @@ function AsiaSVG({
         return false // tells the library to not preventDefault.
       },
       beforeWheel: function (e) {
-        if (isBrowser) {
+        if (!isMobile) {
           // allow wheel-zoom only if altKey is pressed. Otherwise - ignore
           const shouldIgnore = !e.altKey
           return shouldIgnore
         }
       },
       // disables double click zoom
-      zoomDoubleClickSpeed: 1,
+      zoomDoubleClickSpeed: !isMobile && 1,
     })
   }, [])
 
   return (
     <svg
       id="asia"
-      className="interactive-map"
+      className={clsx(
+        isMobile ? "interactive-map -mobile-version" : "interactive-map",
+      )}
       baseProfile="tiny"
       fill="#ececec"
       stroke="black"

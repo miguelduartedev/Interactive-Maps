@@ -2,24 +2,25 @@ import {
   faAngleRight,
   faBars,
   faCircleXmark,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import clsx from 'clsx';
-import Link from 'next/link';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { initialState, updateCurrentCountry } from '../../../redux/mapSlice';
+} from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import clsx from "clsx"
+import Link from "next/link"
+import { useState } from "react"
+import { useDispatch } from "react-redux"
+import { initialState, updateCurrentCountry } from "../../../redux/mapSlice"
 
-const Navigation = ({ menuOpen, setMenuOpen }) => {
-  const dispatch = useDispatch();
+const Navigation = () => {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const dispatch = useDispatch()
   const navData = [
-    { route: '/world', label: 'World' },
-    { route: '/europe', label: 'Europe' },
-    { route: '/north-america', label: 'North America' },
-    { route: '/south-america', label: 'South America' },
-    { route: '/africa', label: 'Africa' },
-    { route: '/asia', label: 'Asia' },
-  ];
+    { route: "/world", label: "World" },
+    { route: "/europe", label: "Europe" },
+    { route: "/north-america", label: "North America" },
+    { route: "/south-america", label: "South America" },
+    { route: "/africa", label: "Africa" },
+    { route: "/asia", label: "Asia" },
+  ]
 
   return (
     <>
@@ -54,26 +55,26 @@ const Navigation = ({ menuOpen, setMenuOpen }) => {
             onClick={() => setMenuOpen(!menuOpen)}
           >
             <span
-              className={clsx('burguer-menu line-one', menuOpen && '-close')}
+              className={clsx("burguer-menu line-one", menuOpen && "-close")}
             ></span>
             <span
-              className={clsx('burguer-menu line-two', menuOpen && '-close')}
+              className={clsx("burguer-menu line-two", menuOpen && "-close")}
             ></span>
             <span
-              className={clsx('burguer-menu line-three', menuOpen && '-close')}
+              className={clsx("burguer-menu line-three", menuOpen && "-close")}
             ></span>
           </a>
         </div>
       </div>
-      <div className={clsx('mobile-nav', menuOpen && '-active')}>
+      <div className={clsx("mobile-nav", menuOpen && "-active")}>
         {navData.map((nav, index) => (
           <div key={index} className="mobile-nav-item">
             <Link href={nav.route}>
               <p
                 className="nav-link"
                 onClick={() => {
-                  dispatch(updateCurrentCountry(initialState.currentCountry));
-                  setMenuOpen(false);
+                  dispatch(updateCurrentCountry(initialState.currentCountry))
+                  setMenuOpen(false)
                 }}
               >
                 {nav.label}
@@ -87,7 +88,7 @@ const Navigation = ({ menuOpen, setMenuOpen }) => {
         ))}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Navigation;
+export default Navigation

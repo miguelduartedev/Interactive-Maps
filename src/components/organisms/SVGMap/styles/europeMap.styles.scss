@@ -1,3 +1,5 @@
+@import '~bootstrap/scss/bootstrap-grid.scss';
+
 .svg-container {
   border-radius: 25px;
   background-color: #102946;
@@ -9,6 +11,14 @@
   */
   touch-action: none;
   user-select: none;
+  &.-mobile-version {
+    @include media-breakpoint-down(md) { 
+      background-color: #0a253b;
+    }
+      @include media-breakpoint-down(md) { 
+      height: calc(100dvh - 80px);
+    }
+  }
 }
 
 #europe,
@@ -27,5 +37,16 @@
 
   path {
     cursor: pointer;
+  }
+
+  &.-mobile-version {
+    @include media-breakpoint-down(md) {
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      width: 100%;
+    }
   }
 }

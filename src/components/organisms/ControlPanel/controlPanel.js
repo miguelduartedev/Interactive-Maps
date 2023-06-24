@@ -1,24 +1,31 @@
 import { useDispatch, useSelector } from "react-redux"
 import { saveSvgAsPng } from "save-svg-as-png"
-import { mapStore } from "../../../redux/mapSlice"
+import { mapStore, updateTitle } from "../../../redux/mapSlice"
 import ColorLegend from "../../molecules/ColorLegend/colorLegend"
 import ColorPicker from "../../molecules/ColorPicker/colorPicker"
 import GroupSelectors from "../../molecules/GroupSelectors/groupSelectors"
 import { clearAll, selectAll, titleSetter } from "./utils"
 import { BrowserView } from "react-device-detect"
+import debounce from "lodash.debounce"
 
 const ControlPanel = () => {
   const mapState = useSelector(mapStore)
   const dispatch = useDispatch()
-  const { currentColor, currentMap } = mapState
+  const { currentColor, currentMap, mapTitle } = mapState
+
+  const handleTitleChange = debounce((text) => {
+    dispatch(updateTitle(text))
+    document.getElementById("map_title").innerHTML = text
+    // Perform desired action here after debounce delay
+  }, 20) // Adjust the debounce delay as needed (e.g., 300 milliseconds)
 
   return (
-    <div className="col-12 mt-4 col-lg-4 mt-lg-0">
+    <div className="col-12 mt-4 col-lg-4 mt-lg-0 d-lg-block">
       <div className="control-panel">
         <h3 className="control-panel__header--second text-center">
           Color Picker
         </h3>
-        {ColorPicker()}
+        <ColorPicker />
         <div className="control-panel__map-title">
           <h3 className="control-panel__header--second">Map Title</h3>
           <input
@@ -27,7 +34,8 @@ const ControlPanel = () => {
             className="form-control"
             placeholder="Insert map title"
             maxLength={27}
-            onInput={(e) => titleSetter(e?.target?.value)}
+            onInput={(e) => handleTitleChange(e?.target?.value)}
+            value={mapTitle}
           />
         </div>
         <ColorLegend dispatch={dispatch} />

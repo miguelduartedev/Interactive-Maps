@@ -1,3 +1,5 @@
+@import '~bootstrap/scss/bootstrap-grid.scss';
+
 .country__profile {
   border-radius: 25px;
   padding: 20px;
@@ -6,11 +8,24 @@
   background-color: #fbfbfb;
 
   &--header {
-    font-size: 20px;
+    font-size: 14px;
+    line-height: 28px;
     color: black;
     font-family: "Sora", Verdana;
     font-weight: 600;
-    line-height: 45px;
+  
+
+    @include media-breakpoint-up(lg) {
+      font-size: 20px;
+      line-height: 45px;
+    }
+  }
+
+  &--body {
+    font-size: 12px;
+    @include media-breakpoint-up(lg) {
+      font-size: 1rem;
+    }
   }
 
   &--flag {
