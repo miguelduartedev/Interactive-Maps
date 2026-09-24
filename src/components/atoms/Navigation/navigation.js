@@ -7,12 +7,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import clsx from "clsx"
 import Link from "next/link"
 import { useState } from "react"
-import { useDispatch } from "react-redux"
-import { initialState, updateCurrentCountry } from "../../../redux/mapSlice"
 
 const Navigation = () => {
   const [menuOpen, setMenuOpen] = useState(false)
-  const dispatch = useDispatch()
   const navData = [
     { route: "/world", label: "World" },
     { route: "/europe", label: "Europe" },
@@ -38,12 +35,7 @@ const Navigation = () => {
           {navData.map((nav, index) => (
             <div key={index} className="nav-item">
               <Link href={nav.route}>
-                <p
-                  className="nav-link"
-                  onClick={() =>
-                    dispatch(updateCurrentCountry(initialState.currentCountry))
-                  }
-                >
+                <p className="nav-link">
                   {nav.label}
                 </p>
               </Link>
@@ -72,10 +64,7 @@ const Navigation = () => {
             <Link href={nav.route}>
               <p
                 className="nav-link"
-                onClick={() => {
-                  dispatch(updateCurrentCountry(initialState.currentCountry))
-                  setMenuOpen(false)
-                }}
+                onClick={() => setMenuOpen(false)}
               >
                 {nav.label}
                 <FontAwesomeIcon

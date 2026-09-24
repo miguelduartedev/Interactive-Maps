@@ -7,17 +7,28 @@ import GroupSelectors from "../../molecules/GroupSelectors/groupSelectors"
 import { clearAll, selectAll, titleSetter } from "./utils"
 import { BrowserView } from "react-device-detect"
 import debounce from "lodash.debounce"
+import { useEffect, useMemo } from "react"
 
 const ControlPanel = () => {
   const mapState = useSelector(mapStore)
   const dispatch = useDispatch()
   const { currentColor, currentMap, mapTitle } = mapState
 
-  const handleTitleChange = debounce((text) => {
-    dispatch(updateTitle(text))
-    document.getElementById("map_title").innerHTML = text
-    // Perform desired action here after debounce delay
-  }, 20) // Adjust the debounce delay as needed (e.g., 300 milliseconds)
+  const handleTitleChange = useMemo(
+    () =>
+      debounce((text) => {
+        dispatch(updateTitle(text))
+        document.getElementById("map_title").textContent = text
+      }, 20),
+    [dispatch],
+  )
+
+  useEffect(
+    () => () => {
+      handleTitleChange.cancel()
+    },
+    [handleTitleChange],
+  )
 
   return (
     <div className="col-12 mt-4 col-lg-4 mt-lg-0 d-lg-block">

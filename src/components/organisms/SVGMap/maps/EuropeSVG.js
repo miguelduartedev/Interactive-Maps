@@ -1,15 +1,10 @@
 import panzoom from "panzoom"
-import { createRef, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import MapLegend from "../../../atoms/MapLegend/mapLegend"
-import useClick from "../hooks/useClick"
-import useContextMenu from "../hooks/useContextMenu"
-import useMouseOver from "../hooks/useMouseOver"
-import useTouchEnd from "../hooks/useTouchEnd"
-import {
-  useWindowSize,
-  useWindowWidth,
-  useWindowHeight,
-} from "@react-hook/window-size"
+import handleClick from "../hooks/useClick"
+import handleContextMenu from "../hooks/useContextMenu"
+import handleMouseOver from "../hooks/useMouseOver"
+import handleTouchEnd from "../hooks/useTouchEnd"
 import clsx from "clsx"
 
 function EuropeSVG({
@@ -18,15 +13,14 @@ function EuropeSVG({
   dispatch,
   updateUsedColors,
   removeCountryFromUsedColors,
-  setCountryID,
 }) {
   const [action, setAction] = useState("")
-  const timerRef = useRef
-  const mapRef = createRef()
+  const timerRef = useRef()
+  const mapRef = useRef(null)
   const isMobile = store.getState().deviceState.isMobile
 
   useEffect(() => {
-    panzoom(mapRef.current, {
+    const panzoomInstance = panzoom(mapRef.current, {
       onTouch: function () {
         return false // tells the library to not preventDefault.
       },
@@ -40,7 +34,12 @@ function EuropeSVG({
       // disables double click zoom
       zoomDoubleClickSpeed: !isMobile && 1,
     })
-  }, [])
+
+    return () => {
+      clearTimeout(timerRef.current)
+      panzoomInstance.dispose()
+    }
+  }, [isMobile])
 
   return (
     <svg
@@ -58,19 +57,18 @@ function EuropeSVG({
       viewBox="0 0 1000 684"
       xmlns="http://www.w3.org/2000/svg"
       onClick={(event) =>
-        useClick(
+        handleClick(
           event,
           currentMap,
           store,
           dispatch,
           updateUsedColors,
-          setCountryID,
         )
       }
       onContextMenu={(event) =>
-        useContextMenu(event, store, dispatch, removeCountryFromUsedColors)
+        handleContextMenu(event, store, dispatch, removeCountryFromUsedColors)
       }
-      onMouseOver={(event) => useMouseOver(event, currentMap)}
+      onMouseOver={(event) => handleMouseOver(event, currentMap)}
       onTouchStart={() => {
         setAction("touch")
         timerRef.current = setTimeout(() => {
@@ -79,7 +77,7 @@ function EuropeSVG({
       }}
       onTouchEnd={(event) => {
         clearTimeout(timerRef.current)
-        useTouchEnd(
+        handleTouchEnd(
           action,
           event,
           currentMap,
@@ -91,7 +89,7 @@ function EuropeSVG({
       }}
       ref={mapRef}
     >
-      <MapLegend />
+      <MapLegend currentMap={currentMap} />
       <path
         fill="#FFFFFF"
         d="M654.7 528.1l0.5 0.4 2 2.9 1.4 0.5 1.9 1.3 1.4 3.2 0.1 2.2-0.5 2.6 0.3 2.1-0.8 0.8 0.7 2 0.2 1.9 1.2 2.2 1.2 1.1 1.3 2.4 1.6-0.2 1.3 1.1 0 1.1 1.1 1.8-0.8 2.6-1.7 0.8-1.2 3.1-0.3 2-0.6 0.5-1.9 0.3-1.7 1.3 1 2.2-0.9 0.7-0.3 1.5-0.7 0.7-2.7-0.9-0.7-2.5-1.7-2.7-4.9-2.6-1.2-1.1 0.4-1.5-0.1-1.4-1.4-2.4 0.3-2.6 0.8-2.2-0.3-2.7 0.1-2.1-0.7-2.9 0.5-2.1 0.9-1.3-0.2-2.2-1.5-1.1-1.6-0.2 0-3.1-0.3-0.6 1.7 0-1.7-2.8 3.2-5.3 1.1 0.3 0.8 2.1 3.4-1.2z"

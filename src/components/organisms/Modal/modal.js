@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import {
   BottomNavigation,
@@ -10,7 +10,6 @@ import {
 } from "@mui/material"
 import { exists } from "../../_common"
 import { mapStore, updateTitle } from "../../../redux/mapSlice"
-import { isMobile } from "react-device-detect"
 import ColorPicker from "../../molecules/ColorPicker/colorPicker"
 import { saveSvgAsPng } from "save-svg-as-png"
 import { clearAll, selectAll } from "../ControlPanel/utils"
@@ -24,20 +23,24 @@ const Modal = ({ modalType, setModalType }) => {
   const mapState = useSelector(mapStore)
   const modalState = useSelector(modalStore)
   const dispatch = useDispatch()
-  const [isMobileReact, setisMobileReact] = useState(false)
   const { currentColor, currentMap, mapTitle } = mapState
   const { type } = modalState
-  const [inputValue, setInputValue] = useState("")
 
-  const handleTitleChange = debounce((text) => {
-    dispatch(updateTitle(text))
-    document.getElementById("map_title").innerHTML = text
-    // Perform desired action here after debounce delay
-  }, 20) // Adjust the debounce delay as needed (e.g., 300 milliseconds)
+  const handleTitleChange = useMemo(
+    () =>
+      debounce((text) => {
+        dispatch(updateTitle(text))
+        document.getElementById("map_title").textContent = text
+      }, 20),
+    [dispatch],
+  )
 
-  useEffect(() => {
-    setisMobileReact(isMobile)
-  }, [isMobile])
+  useEffect(
+    () => () => {
+      handleTitleChange.cancel()
+    },
+    [handleTitleChange],
+  )
 
   const style = {
     position: "absolute",
@@ -172,7 +175,7 @@ const Modal = ({ modalType, setModalType }) => {
                   way that describes your data;
                 </li>
                 <li>
-                  Once you're finished, you can proceed and{" "}
+                  Once you&apos;re finished, you can proceed and{" "}
                   <b>Export the Map</b>.
                 </li>
               </ul>

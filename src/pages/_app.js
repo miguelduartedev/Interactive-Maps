@@ -1,6 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import Script from "next/script"
-import { QueryClient, QueryClientProvider } from "react-query"
 import { Provider } from "react-redux"
 import "../components/atoms/Button/styles/button.styles.scss"
 import "../components/atoms/Footer/styles/footer.styles.scss"
@@ -8,7 +7,6 @@ import "../components/atoms/MapLegend/styles/mapLegend.styles.scss"
 import "../components/atoms/Navigation/styles/navigation.styles.scss"
 import "../components/molecules/ColorLegend/styles/colorLegend.styles.scss"
 import "../components/molecules/ColorPicker/styles/colorPicker.styles.scss"
-import "../components/molecules/CountryProfile/styles/countryProfile.styles.scss"
 import "../components/organisms/ControlPanel/styles/controlPanel.styles.scss"
 import "../components/organisms/Hero/styles/hero.styles.scss"
 import "../components/organisms/OptionsGrid/styles/OptionsGrid.styles.scss"
@@ -18,7 +16,6 @@ import "../components/_common/global.styles.scss"
 import { store } from "../redux/store"
 
 const MyApp = ({ Component, pageProps }) => {
-  const queryClient = new QueryClient()
   return (
     <>
       <Script
@@ -26,7 +23,7 @@ const MyApp = ({ Component, pageProps }) => {
         src={`https://www.googletagmanager.com/gtag/js?id=G-52R14XBQ18`}
       />
 
-      <Script strategy="lazyOnload">
+      <Script id="google-analytics" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
@@ -36,11 +33,9 @@ const MyApp = ({ Component, pageProps }) => {
           });
         `}
       </Script>
-      <QueryClientProvider client={queryClient}>
-        <Provider store={store}>
-          <Component {...pageProps} />
-        </Provider>
-      </QueryClientProvider>
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
     </>
   )
 }

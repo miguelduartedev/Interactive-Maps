@@ -1,10 +1,10 @@
 import panzoom from "panzoom"
-import { createRef, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import MapLegend from "../../../atoms/MapLegend/mapLegend"
-import useClick from "../hooks/useClick"
-import useContextMenu from "../hooks/useContextMenu"
-import useMouseOver from "../hooks/useMouseOver"
-import useTouchEnd from "../hooks/useTouchEnd"
+import handleClick from "../hooks/useClick"
+import handleContextMenu from "../hooks/useContextMenu"
+import handleMouseOver from "../hooks/useMouseOver"
+import handleTouchEnd from "../hooks/useTouchEnd"
 import clsx from "clsx"
 
 const NorthAmericaSVG = ({
@@ -13,15 +13,14 @@ const NorthAmericaSVG = ({
   dispatch,
   updateUsedColors,
   removeCountryFromUsedColors,
-  setCountryID,
 }) => {
   const [action, setAction] = useState("")
-  const timerRef = useRef
-  const mapRef = createRef()
+  const timerRef = useRef()
+  const mapRef = useRef(null)
   const isMobile = store.getState().deviceState.isMobile
 
   useEffect(() => {
-    panzoom(mapRef.current, {
+    const panzoomInstance = panzoom(mapRef.current, {
       onTouch: function () {
         return false // tells the library to not preventDefault.
       },
@@ -35,7 +34,12 @@ const NorthAmericaSVG = ({
       // disables double click zoom
       zoomDoubleClickSpeed: !isMobile && 1,
     })
-  }, [])
+
+    return () => {
+      clearTimeout(timerRef.current)
+      panzoomInstance.dispose()
+    }
+  }, [isMobile])
 
   return (
     <svg
@@ -53,19 +57,18 @@ const NorthAmericaSVG = ({
       viewBox="0 0 1000 684"
       xmlns="http://www.w3.org/2000/svg"
       onClick={(event) =>
-        useClick(
+        handleClick(
           event,
           currentMap,
           store,
           dispatch,
           updateUsedColors,
-          setCountryID,
         )
       }
       onContextMenu={(event) =>
-        useContextMenu(event, store, dispatch, removeCountryFromUsedColors)
+        handleContextMenu(event, store, dispatch, removeCountryFromUsedColors)
       }
-      onMouseOver={(event) => useMouseOver(event, currentMap)}
+      onMouseOver={(event) => handleMouseOver(event, currentMap)}
       onTouchStart={() => {
         setAction("touch")
         timerRef.current = setTimeout(() => {
@@ -74,7 +77,7 @@ const NorthAmericaSVG = ({
       }}
       onTouchEnd={(event) => {
         clearTimeout(timerRef.current)
-        useTouchEnd(
+        handleTouchEnd(
           action,
           event,
           currentMap,
@@ -86,7 +89,7 @@ const NorthAmericaSVG = ({
       }}
       ref={mapRef}
     >
-      {<MapLegend />}
+      {<MapLegend currentMap={currentMap} />}
       <path
         fill="#FFFFFF"
         d="m 531.13777,575.85705 h -2.42336 l 1.85314,-10.26363 0.99785,-7.27006 0.14255,-1.42549 0.99785,-0.42766 1.28295,1.14041 3.56377,-5.55948 1.56804,-0.14255 -0.14253,1.42552 h 1.42549 l -0.42765,2.56592 -1.85316,3.84882 0.57021,1.42552 -1.28295,3.27866 0.42764,0.8553 -1.42549,4.70415 -1.85318,2.42334 -1.56805,0.28511 z"

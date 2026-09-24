@@ -1,7 +1,4 @@
-import {
-  updateCurrentCountry,
-  updateUsedColors,
-} from "../../../../redux/mapSlice";
+import { updateUsedColors } from "../../../../redux/mapSlice";
 import { store } from "../../../../redux/store";
 import { clearAll } from "../../../organisms/ControlPanel/utils/index";
 import {
@@ -14,7 +11,6 @@ export const groupPicker = (
   currentMap,
   group,
   dispatch,
-  group_data,
   aggregateGroups = false
 ) => {
   !aggregateGroups && clearAll(currentMap, dispatch);
@@ -39,6 +35,4 @@ export const groupPicker = (
       );
     }
   });
-
-  group_data && dispatch(updateCurrentCountry(group_data));
 };

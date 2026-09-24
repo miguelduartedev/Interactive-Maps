@@ -30,7 +30,6 @@ Version 2.2
 
 Using public API "REST Countries":
 
-- https://restcountries.com/
 
 Using SVG maps from "simplemaps" (maps were slightly altered through the use of Inkscape and by changing the SVG code by hand)
 

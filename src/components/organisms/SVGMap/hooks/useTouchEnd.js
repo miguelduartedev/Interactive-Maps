@@ -1,12 +1,12 @@
-import useClick from "./useClick";
-import useContextMenu from "./useContextMenu";
+import handleClick from "./useClick";
+import handleContextMenu from "./useContextMenu";
 
 /**
- * useTouchEnd is a custom react hook that handles the user touch event on the map
- * * If the user did a long press then the useContextMenu will be triggered and country will be cleared out
- * * Otherwise the useClick hook will be triggered and the country will be selected
+ * Handles the user touch event on the map.
+ * * A long press clears the country through the context-menu handler.
+ * * Otherwise the click handler selects the country.
  *  */
-const useTouchEnd = (
+const handleTouchEnd = (
   action,
   event,
   currentMap,
@@ -16,8 +16,14 @@ const useTouchEnd = (
   removeCountryFromUsedColors
 ) => {
   action === "longpress"
-    ? useContextMenu(event, store, dispatch, removeCountryFromUsedColors)
-    : useClick(event, currentMap, store, dispatch, updateUsedColors);
+    ? handleContextMenu(event, store, dispatch, removeCountryFromUsedColors)
+    : handleClick(
+        event,
+        currentMap,
+        store,
+        dispatch,
+        updateUsedColors
+      );
 };
 
-export default useTouchEnd;
+export default handleTouchEnd;

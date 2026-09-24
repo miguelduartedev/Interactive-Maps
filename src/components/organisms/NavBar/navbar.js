@@ -8,9 +8,7 @@ import TextFieldsIcon from "@mui/icons-material/TextFields"
 import BrushIcon from "@mui/icons-material/Brush"
 import InfoIcon from "@mui/icons-material/Info"
 import LayersIcon from "@mui/icons-material/Layers"
-import { useRouter } from "next/router"
 import { useDispatch } from "react-redux"
-import { useEffect, useState } from "react"
 import { updateModal } from "../../../redux/modalSlice"
 
 const NavBar = () => {

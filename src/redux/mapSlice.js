@@ -5,19 +5,6 @@ export const initialState = {
   currentMap: "",
   mapTitle: "",
   currentColor: "#388E3C",
-  currentCountry: {
-    name: {
-      common: "Select a country",
-      official: "",
-    },
-    borders: "",
-    capital: "",
-    currencies: {},
-    flags: {},
-    languages: "",
-    population: "",
-    timezones: "",
-  },
   usedColors: {},
 }
 
@@ -37,9 +24,6 @@ export const mapState = createSlice({
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
       state.currentColor = action.payload
-    },
-    updateCurrentCountry: (state, action) => {
-      state.currentCountry = action.payload
     },
     updateUsedColors: (state, action) => {
       const color = Object.keys(action.payload)[0]
@@ -119,7 +103,6 @@ export const {
   updateCurrentMap,
   updateColor,
   updateTitle,
-  updateCurrentCountry,
   resetUsedColors,
   updateUsedColors,
   updateUsedColorsLegend,

@@ -1,10 +1,10 @@
 import panzoom from "panzoom"
-import { createRef, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import MapLegend from "../../../atoms/MapLegend/mapLegend"
-import useClick from "../hooks/useClick"
-import useContextMenu from "../hooks/useContextMenu"
-import useMouseOver from "../hooks/useMouseOver"
-import useTouchEnd from "../hooks/useTouchEnd"
+import handleClick from "../hooks/useClick"
+import handleContextMenu from "../hooks/useContextMenu"
+import handleMouseOver from "../hooks/useMouseOver"
+import handleTouchEnd from "../hooks/useTouchEnd"
 import clsx from "clsx"
 
 const AfricaSVG = ({
@@ -13,15 +13,14 @@ const AfricaSVG = ({
   dispatch,
   updateUsedColors,
   removeCountryFromUsedColors,
-  setCountryID,
 }) => {
   const [action, setAction] = useState("")
-  const timerRef = useRef
-  const mapRef = createRef()
+  const timerRef = useRef()
+  const mapRef = useRef(null)
   const isMobile = store.getState().deviceState.isMobile
 
   useEffect(() => {
-    panzoom(mapRef.current, {
+    const panzoomInstance = panzoom(mapRef.current, {
       onTouch: function () {
         return false // tells the library to not preventDefault.
       },
@@ -35,7 +34,12 @@ const AfricaSVG = ({
       // disables double click zoom
       zoomDoubleClickSpeed: !isMobile && 1,
     })
-  }, [])
+
+    return () => {
+      clearTimeout(timerRef.current)
+      panzoomInstance.dispose()
+    }
+  }, [isMobile])
 
   return (
     <svg
@@ -53,19 +57,18 @@ const AfricaSVG = ({
       viewBox="0 0 1000 684"
       xmlns="http://www.w3.org/2000/svg"
       onClick={(event) =>
-        useClick(
+        handleClick(
           event,
           currentMap,
           store,
           dispatch,
           updateUsedColors,
-          setCountryID,
         )
       }
       onContextMenu={(event) =>
-        useContextMenu(event, store, dispatch, removeCountryFromUsedColors)
+        handleContextMenu(event, store, dispatch, removeCountryFromUsedColors)
       }
-      onMouseOver={(event) => useMouseOver(event, currentMap)}
+      onMouseOver={(event) => handleMouseOver(event, currentMap)}
       onTouchStart={() => {
         setAction("touch")
         timerRef.current = setTimeout(() => {
@@ -74,7 +77,7 @@ const AfricaSVG = ({
       }}
       onTouchEnd={(event) => {
         clearTimeout(timerRef.current)
-        useTouchEnd(
+        handleTouchEnd(
           action,
           event,
           currentMap,
@@ -86,7 +89,7 @@ const AfricaSVG = ({
       }}
       ref={mapRef}
     >
-      {<MapLegend />}
+      {<MapLegend currentMap={currentMap} />}
       <path
         fill="#FFFFFF"
         className="AO"

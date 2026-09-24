@@ -44,10 +44,10 @@ const Panel = () => {
             </MobileView>
             <li>
               Fill the <b>Map Title</b> and <b>Color Legend</b> fields in a way
-              that describes the data you're showcasing;
+              that describes the data you&apos;re showcasing;
             </li>
             <li>
-              Once you're done, go ahead and generate your map as a free to use
+              Once you&apos;re done, go ahead and generate your map as a free to use
               PNG image!
             </li>
           </ul>

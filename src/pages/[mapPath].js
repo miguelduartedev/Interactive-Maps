@@ -25,21 +25,25 @@ import Modal from "../components/organisms/Modal/modal"
 import Navbar from "../components/organisms/NavBar/navbar"
 import { updateDevice } from "../redux/deviceSlice"
 
-const mapPath = () => {
+const MapPath = ({ initialMap }) => {
   const router = useRouter()
-  const currentMap = router.query.mapPath
+  const currentMap = router.query.mapPath ?? initialMap
   const dispatch = useDispatch()
 
   const [modalOpen, setModalOpen] = useState(false)
   const [modalType, setModalType] = useState("")
   const [isMobileReact, setisMobileReact] = useState(false)
 
-  dispatch(updateCurrentMap(currentMap))
+  useEffect(() => {
+    if (typeof currentMap === "string") {
+      dispatch(updateCurrentMap(currentMap))
+    }
+  }, [currentMap, dispatch])
 
   useEffect(() => {
     setisMobileReact(isMobile)
     dispatch(updateDevice(isMobile))
-  }, [, isMobile])
+  }, [dispatch])
 
   return (
     <Fragment>
@@ -55,7 +59,7 @@ const mapPath = () => {
         <Navigation />
         <div className={clsx(!isMobileReact && "container pt-5")}>
           <div className="row">
-            <SVGMap />
+            <SVGMap initialMap={initialMap} />
             {!isMobile && <ControlPanel />}
           </div>
         </div>
@@ -85,11 +89,11 @@ export async function getStaticPaths() {
   }
 }
 
-export const getStaticProps = async () => {
+export const getStaticProps = async ({ params }) => {
   return {
-    props: {},
+    props: { initialMap: params.mapPath },
     revalidate: 3600,
   }
 }
 
-export default mapPath
+export default MapPath

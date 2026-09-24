@@ -37,7 +37,7 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
           >
             <div className="accordion-body text-center">
               {politicalGroupings(currentMap)?.map(
-                ({ name, countries, data }, index) => (
+                ({ name, countries }, index) => (
                   <button
                     className="button"
                     key={index}
@@ -46,7 +46,6 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
                         currentMap,
                         countries,
                         dispatch,
-                        data,
                         aggregateGroups,
                       )
                     }
@@ -80,7 +79,7 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
           >
             <div className="accordion-body text-center">
               {geographicGroupings(currentMap)?.map(
-                ({ name, countries, data }, index) => (
+                ({ name, countries }, index) => (
                   <button
                     className="button"
                     key={index}
@@ -89,7 +88,6 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
                         currentMap,
                         countries,
                         dispatch,
-                        data,
                         aggregateGroups,
                       )
                     }
@@ -103,6 +101,7 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
                 <a
                   href="https://unstats.un.org/unsd/methodology/m49/"
                   target="_blank"
+                  rel="noreferrer"
                 >
                   UN Definition
                 </a>

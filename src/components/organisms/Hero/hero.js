@@ -19,7 +19,7 @@ const Hero = () => {
             </p>
             <p>
               Alternatively, you can use this tool to show us all the countries
-              you've been to! 🧭
+              you&apos;ve been to! 🧭
             </p>
             <p className="hero__credits">
               <span className="hero__credits--main">
