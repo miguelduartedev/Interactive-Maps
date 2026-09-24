@@ -211,6 +211,34 @@
   }
 }
 
+.hero__attribution {
+  margin: 0.8rem 0 0;
+  color: #64748b;
+  font-family: "Inter", "Helvetica Neue", sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.5;
+
+  a {
+    color: #94a3b8;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgb(56 189 248 / 32%);
+    text-underline-offset: 0.18em;
+    transition: color 180ms ease, text-decoration-color 180ms ease;
+
+    &:hover {
+      color: #7dd3fc;
+      text-decoration-color: currentColor;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgb(56 189 248 / 46%);
+      outline-offset: 3px;
+      border-radius: 0.15rem;
+    }
+  }
+}
+
 .hero-globe {
   --earth-size: clamp(23rem, 34vw, 32rem);
   position: relative;
@@ -513,6 +541,11 @@
     margin-top: 1.2rem;
   }
 
+  .hero__attribution {
+    margin-top: 0.7rem;
+    text-align: center;
+  }
+
   .hero-globe {
     --earth-size: clamp(16.5rem, 70vw, 21rem);
     width: min(100%, 23rem);
@@ -558,6 +591,11 @@
 
   .hero__coverage {
     display: none;
+  }
+
+  .hero__attribution {
+    margin-top: 1rem;
+    font-size: 0.7rem;
   }
 
   .hero-globe {

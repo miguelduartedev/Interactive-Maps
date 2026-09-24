@@ -60,6 +60,16 @@ export default function Hero() {
           <p className="hero__coverage">
             World <span /> Europe <span /> Americas <span /> Africa <span /> Asia
           </p>
+    <p className="hero__attribution">
+      Created by{" "}
+            <a
+              href="https://miguelduartedev.github.io/portfolio/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Miguel Duarte
+            </a>
+          </p>
         </div>
 
         <HeroGlobe />
