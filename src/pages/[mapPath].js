@@ -8,7 +8,7 @@ import ControlPanel from "../components/organisms/ControlPanel/controlPanel"
 import SVGMap from "../components/organisms/SVGMap/svgMap"
 import { updateCurrentMap } from "../redux/mapSlice"
 import clsx from "clsx"
-import { BrowserView, isMobile } from "react-device-detect"
+import { isMobile } from "react-device-detect"
 import Modal from "../components/organisms/Modal/modal"
 import Navbar from "../components/organisms/NavBar/navbar"
 import { updateDevice } from "../redux/deviceSlice"
@@ -47,15 +47,13 @@ const MapPath = ({ initialMap }) => {
         <div className={clsx(!isMobileReact && "container pt-5")}>
           <div className="row">
             <SVGMap initialMap={initialMap} />
-            {!isMobile && <ControlPanel />}
+            {!isMobileReact && <ControlPanel />}
           </div>
         </div>
-        {isMobile && <Navbar />}
+        {isMobileReact && <Navbar />}
       </div>
 
-      <BrowserView>
-        <Footer />
-      </BrowserView>
+      {!isMobileReact && <Footer />}
     </MapEditorProvider>
   )
 }
