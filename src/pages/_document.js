@@ -220,7 +220,7 @@ export default function Document() {
       <meta name="theme-color" content="#000000" />
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Sora"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700&family=Sora&display=swap"
       />
       <body>
         <Main />
