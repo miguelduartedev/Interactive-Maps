@@ -1,34 +1,41 @@
+import clsx from "clsx"
+import type { GetStaticPaths, GetStaticProps } from "next"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { isMobile } from "react-device-detect"
 import Footer from "../components/atoms/Footer/footer"
 import Navigation from "../components/atoms/Navigation/navigation"
 import ControlPanel from "../components/organisms/ControlPanel/controlPanel"
+import { MapEditorProvider } from "../components/organisms/SVGMap/MapEditorContext"
 import SVGMap from "../components/organisms/SVGMap/svgMap"
-import { updateCurrentMap } from "../redux/mapSlice"
-import clsx from "clsx"
-import { isMobile } from "react-device-detect"
 import Modal from "../components/organisms/Modal/modal"
 import Navbar from "../components/organisms/NavBar/navbar"
 import { updateDevice } from "../redux/deviceSlice"
-import { MapEditorProvider } from "../components/organisms/SVGMap/MapEditorContext"
+import { useAppDispatch } from "../redux/hooks"
+import { updateCurrentMap } from "../redux/mapSlice"
+import { isMapRoute, MAP_ROUTES, type MapRoute } from "../types/editor"
 
-const MapPath = ({ initialMap }) => {
+interface MapPathProps {
+  initialMap: MapRoute
+}
+
+interface MapPathParams extends Record<string, string> {
+  mapPath: string
+}
+
+export default function MapPath({ initialMap }: MapPathProps) {
   const router = useRouter()
-  const currentMap = router.query.mapPath ?? initialMap
-  const dispatch = useDispatch()
-
-  const [isMobileReact, setisMobileReact] = useState(false)
+  const currentMap = isMapRoute(router.query.mapPath) ? router.query.mapPath : initialMap
+  const dispatch = useAppDispatch()
+  const [isMobileReact, setIsMobileReact] = useState(false)
 
   useEffect(() => {
-    if (typeof currentMap === "string") {
-      dispatch(updateCurrentMap(currentMap))
-    }
+    dispatch(updateCurrentMap(currentMap))
   }, [currentMap, dispatch])
 
   useEffect(() => {
-    setisMobileReact(isMobile)
+    setIsMobileReact(isMobile)
     dispatch(updateDevice(isMobile))
   }, [dispatch])
 
@@ -52,33 +59,20 @@ const MapPath = ({ initialMap }) => {
         </div>
         {isMobileReact && <Navbar />}
       </div>
-
       {!isMobileReact && <Footer />}
     </MapEditorProvider>
   )
 }
 
-// If the file was named [...mapPath] getStaticPaths would require mapPath to be an array
+export const getStaticPaths: GetStaticPaths<MapPathParams> = async () => ({
+  paths: MAP_ROUTES.map((mapPath) => ({ params: { mapPath } })),
+  fallback: false,
+})
 
-export async function getStaticPaths() {
-  return {
-    paths: [
-      { params: { mapPath: "europe" } },
-      { params: { mapPath: "world" } },
-      { params: { mapPath: "africa" } },
-      { params: { mapPath: "asia" } },
-      { params: { mapPath: "north-america" } },
-      { params: { mapPath: "south-america" } },
-    ],
-    fallback: false,
-  }
-}
-
-export const getStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<MapPathProps, MapPathParams> = async ({ params }) => {
+  if (!isMapRoute(params?.mapPath)) return { notFound: true }
   return {
     props: { initialMap: params.mapPath },
     revalidate: 3600,
   }
 }
-
-export default MapPath
