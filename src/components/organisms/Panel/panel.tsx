@@ -53,6 +53,15 @@ function WorkflowPlaceholder() {
   )
 }
 
+function KeyboardIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3.5" y="6.5" width="17" height="11" rx="1.5" />
+      <path d="M7 10h.01M10 10h.01M13 10h.01M16 10h.01M7 13h.01M10 13h.01M13 13h4" />
+    </svg>
+  )
+}
+
 export default function Panel() {
   return (
     <section
@@ -90,7 +99,7 @@ export default function Panel() {
 
             <aside className="workflow-tip" aria-label="Map editing tips">
               <div className="workflow-tip__icon" aria-hidden="true">
-                ⌨
+                <KeyboardIcon />
               </div>
               <div>
                 <h3>Map Navigation &amp; Color Removal Tips:</h3>
