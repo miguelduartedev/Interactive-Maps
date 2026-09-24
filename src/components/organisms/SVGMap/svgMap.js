@@ -6,6 +6,7 @@ import {
   updateUsedColors,
 } from "../../../redux/mapSlice"
 import { store } from "../../../redux/store"
+import MapInstructions from "../../molecules/MapInstructions/mapInstructions"
 import AfricaSVG from "./maps/AfricaSVG"
 import AsiaSVG from "./maps/AsiaSVG"
 import EuropeSVG from "./maps/EuropeSVG"
@@ -46,6 +47,7 @@ function SVGMap({ initialMap }) {
         {currentMap === "south-america" && <SouthAmericaSVG {...SVGProps} />}
         {currentMap === "world" && <WorldSVG {...SVGProps} />}
       </div>
+      <MapInstructions />
     </div>
   )
 }
