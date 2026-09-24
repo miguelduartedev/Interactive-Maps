@@ -5,7 +5,7 @@ const Panel = () => {
   const [isMobileReact, setIsMobileReact] = useState(false)
   useEffect(() => setIsMobileReact(isMobile), [])
   return (
-    <div className="panel container d-flex justify-content-center align-items-center">
+    <div id="how-it-works" className="panel container d-flex justify-content-center align-items-center">
       <div className="row">
         <div className="col-12 col-lg panel__image">
           <img
