@@ -18,6 +18,7 @@ test("paint, replace and erase keep one assignment per country", () => {
 test("repeating an assignment preserves labels and order", () => {
   let state = paint(undefined, ["PT"], "#ff0000")
   state = reducer(state, updateUsedColorsLegend({ "#FF0000": "Visited" }))
+  expect(paint(state, ["PT"], "#ff0000")).toBe(state)
   state = paint(state, ["PT", "FI"], "#ff0000")
   expect(selectUsedColors({ mapState: state })).toEqual({ "#FF0000": { legend: "Visited", appliesTo: ["PT", "FI"] } })
   state = reducer(state, eraseCountries(["PT", "FI"]))

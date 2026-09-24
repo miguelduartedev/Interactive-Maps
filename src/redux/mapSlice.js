@@ -14,7 +14,9 @@ const validCountry = (country) => typeof country === "string" && /^[A-Z]{2}$/.te
 
 function pruneLegends(state) {
   const active = new Set(Object.values(state.countryColors))
-  state.colorOrder = state.colorOrder.filter((color) => active.has(color))
+  if (state.colorOrder.some((color) => !active.has(color))) {
+    state.colorOrder = state.colorOrder.filter((color) => active.has(color))
+  }
   Object.keys(state.legendLabels).forEach((color) => {
     if (!active.has(color)) delete state.legendLabels[color]
   })

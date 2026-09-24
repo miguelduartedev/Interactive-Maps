@@ -4,12 +4,13 @@ import {
   geographicGroupings,
   politicalGroupings,
 } from "../../organisms/ControlPanel/utils/globalVars"
-import { groupPicker } from "./utils"
+import { useEditorActions } from "../../organisms/SVGMap/useEditorActions"
 import Switch from "@mui/material/Switch"
 import { FormGroup } from "react-bootstrap"
 import { FormControlLabel } from "@mui/material"
 
 const GroupSelectors = ({ currentMap, dispatch }) => {
+  const actions = useEditorActions()
   const [accordionOneOpen, setAccordionOneOpen] = useState(false)
   const [accordionTwoOpen, setAccordionTwoOpen] = useState(false)
   const [aggregateGroups, setAggregateGroups] = useState(false)
@@ -42,12 +43,7 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
                     className="button"
                     key={index}
                     onClick={() =>
-                      groupPicker(
-                        currentMap,
-                        countries,
-                        dispatch,
-                        aggregateGroups,
-                      )
+                      actions.group(countries, aggregateGroups)
                     }
                   >
                     {name}
@@ -84,12 +80,7 @@ const GroupSelectors = ({ currentMap, dispatch }) => {
                     className="button"
                     key={index}
                     onClick={() =>
-                      groupPicker(
-                        currentMap,
-                        countries,
-                        dispatch,
-                        aggregateGroups,
-                      )
+                      actions.group(countries, aggregateGroups)
                     }
                   >
                     {name}

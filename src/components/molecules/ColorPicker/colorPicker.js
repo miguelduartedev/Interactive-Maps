@@ -8,7 +8,6 @@ import { modalStore, updateModal } from "../../../redux/modalSlice"
 // TODO: DECOUPLE FROM MODAL
 const ColorPicker = ({ inModal, setModalType }) => {
   const dispatch = useDispatch()
-  const [color, setColor] = useState("#039606")
   const [displayPicker, setDisplayPicker] = useState(false)
   const mapState = useSelector(mapStore)
   const modalState = useSelector(modalStore)
@@ -38,8 +37,8 @@ const ColorPicker = ({ inModal, setModalType }) => {
   return (
     <>
       <CirclePicker
-        color={color.hex}
-        onChange={setColor}
+        color={currentColor}
+        onChange={colorSetter}
         colors={[
           "#C8E6C9",
           "#81C784",
@@ -81,7 +80,6 @@ const ColorPicker = ({ inModal, setModalType }) => {
           "#F57F17",
           "#DB6C09",
         ]}
-        onClick={colorSetter(color)}
       />
       <div className="text-center">
         <button
@@ -96,9 +94,8 @@ const ColorPicker = ({ inModal, setModalType }) => {
 
       {displayPicker === true && (
         <SketchPicker
-          color={color.hex}
-          onChange={setColor}
-          onClick={colorSetter(color)}
+          color={currentColor}
+          onChange={colorSetter}
         />
       )}
     </>

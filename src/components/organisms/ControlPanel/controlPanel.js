@@ -1,34 +1,18 @@
+import { useEditorActions } from "../SVGMap/useEditorActions"
 import { useDispatch, useSelector } from "react-redux"
-import { saveSvgAsPng } from "save-svg-as-png"
 import { mapStore, updateTitle } from "../../../redux/mapSlice"
 import ColorLegend from "../../molecules/ColorLegend/colorLegend"
 import ColorPicker from "../../molecules/ColorPicker/colorPicker"
 import GroupSelectors from "../../molecules/GroupSelectors/groupSelectors"
-import { clearAll, selectAll, titleSetter } from "./utils"
 import { BrowserView } from "react-device-detect"
-import debounce from "lodash.debounce"
-import { useEffect, useMemo } from "react"
 
 const ControlPanel = () => {
   const mapState = useSelector(mapStore)
   const dispatch = useDispatch()
   const { currentColor, currentMap, mapTitle } = mapState
 
-  const handleTitleChange = useMemo(
-    () =>
-      debounce((text) => {
-        dispatch(updateTitle(text))
-        document.getElementById("map_title").textContent = text
-      }, 20),
-    [dispatch],
-  )
-
-  useEffect(
-    () => () => {
-      handleTitleChange.cancel()
-    },
-    [handleTitleChange],
-  )
+  const actions = useEditorActions()
+  const handleTitleChange = (text) => dispatch(updateTitle(text))
 
   return (
     <div className="col-12 mt-4 col-lg-4 mt-lg-0 d-lg-block">
@@ -60,35 +44,19 @@ const ControlPanel = () => {
           <p className="control-panel__header--second">General Tools:</p>
           <button
             className="button -negative"
-            onClick={() => clearAll(currentMap, dispatch)}
+            onClick={() => actions.clear()}
           >
             Clear All
           </button>
           <button
             className="button -positive"
-            onClick={() => selectAll(currentMap, currentColor, dispatch)}
+            onClick={() => actions.selectAll()}
           >
             Select All
           </button>
           <button
             className="button -neutral"
-            onClick={() =>
-              saveSvgAsPng(
-                document.querySelector(".interactive-map"),
-                "interactive_maps.png",
-                {
-                  encoderOptions: 1,
-                  scale: 3,
-                  backgroundColor: "#102946",
-                  /* 
-                  This ensures that the exported PNG doesn't have the 
-                  inline styles that the panzoom package injected on the SVG 
-                  */
-                  modifyCss: () =>
-                    ".interactive-map {transform: unset !important}",
-                },
-              )
-            }
+            onClick={actions.exportMap}
           >
             Export Map
           </button>

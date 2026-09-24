@@ -22,7 +22,7 @@ function SVGMap({ initialMap }) {
   const mapState = useSelector(mapStore)
   const { isMobile } = useSelector(deviceStore)
   const currentMap =
-    mapState.currentMap || router.query?.mapPath || initialMap
+    router.query?.mapPath || initialMap
 
   const SVGProps = {
     currentMap,

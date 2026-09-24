@@ -24,6 +24,7 @@ import { exists } from "../components/_common"
 import Modal from "../components/organisms/Modal/modal"
 import Navbar from "../components/organisms/NavBar/navbar"
 import { updateDevice } from "../redux/deviceSlice"
+import { MapEditorProvider } from "../components/organisms/SVGMap/MapEditorContext"
 
 const MapPath = ({ initialMap }) => {
   const router = useRouter()
@@ -46,7 +47,7 @@ const MapPath = ({ initialMap }) => {
   }, [dispatch])
 
   return (
-    <Fragment>
+    <MapEditorProvider key={currentMap}>
       <Head>
         <title>Interactive Maps: Map Creation Area</title>
         <meta
@@ -69,7 +70,7 @@ const MapPath = ({ initialMap }) => {
       <BrowserView>
         <Footer />
       </BrowserView>
-    </Fragment>
+    </MapEditorProvider>
   )
 }
 

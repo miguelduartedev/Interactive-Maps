@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react"
+import { useEditorActions } from "../SVGMap/useEditorActions"
 import { useDispatch, useSelector } from "react-redux"
 import {
   BottomNavigation,
@@ -11,13 +11,10 @@ import {
 import { exists } from "../../_common"
 import { mapStore, updateTitle } from "../../../redux/mapSlice"
 import ColorPicker from "../../molecules/ColorPicker/colorPicker"
-import { saveSvgAsPng } from "save-svg-as-png"
-import { clearAll, selectAll } from "../ControlPanel/utils"
 import GroupSelectors from "../../molecules/GroupSelectors/groupSelectors"
 import { modalStore, updateModal } from "../../../redux/modalSlice"
 import ColorLegend from "../../molecules/ColorLegend/colorLegend"
 import CloseIcon from "@mui/icons-material/Close"
-import debounce from "lodash.debounce"
 
 const Modal = ({ modalType, setModalType }) => {
   const mapState = useSelector(mapStore)
@@ -26,21 +23,8 @@ const Modal = ({ modalType, setModalType }) => {
   const { currentColor, currentMap, mapTitle } = mapState
   const { type } = modalState
 
-  const handleTitleChange = useMemo(
-    () =>
-      debounce((text) => {
-        dispatch(updateTitle(text))
-        document.getElementById("map_title").textContent = text
-      }, 20),
-    [dispatch],
-  )
-
-  useEffect(
-    () => () => {
-      handleTitleChange.cancel()
-    },
-    [handleTitleChange],
-  )
+  const actions = useEditorActions()
+  const handleTitleChange = (text) => dispatch(updateTitle(text))
 
   const style = {
     position: "absolute",
@@ -111,35 +95,19 @@ const Modal = ({ modalType, setModalType }) => {
                 <p className="control-panel__header--second">General Tools:</p>
                 <button
                   className="button -negative"
-                  onClick={() => clearAll(currentMap, dispatch)}
+                  onClick={() => actions.clear()}
                 >
                   Clear All
                 </button>
                 <button
                   className="button -positive"
-                  onClick={() => selectAll(currentMap, currentColor, dispatch)}
+                  onClick={() => actions.selectAll()}
                 >
                   Select All
                 </button>
                 <button
                   className="button -neutral"
-                  onClick={() =>
-                    saveSvgAsPng(
-                      document.querySelector(".interactive-map"),
-                      "interactive_maps.png",
-                      {
-                        encoderOptions: 1,
-                        scale: 3,
-                        backgroundColor: "#102946",
-                        /* 
-                  This ensures that the exported PNG doesn't have the 
-                  inline styles that the panzoom package injected on the SVG 
-                  */
-                        modifyCss: () =>
-                          ".interactive-map {transform: unset !important}",
-                      },
-                    )
-                  }
+                  onClick={actions.exportMap}
                 >
                   Export Map
                 </button>
