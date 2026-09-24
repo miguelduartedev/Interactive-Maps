@@ -1,5 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css"
+import type { AppProps } from "next/app"
 import Script from "next/script"
+import { useState } from "react"
 import { Provider } from "react-redux"
 import "../components/atoms/Button/styles/button.styles.scss"
 import "../components/atoms/Footer/styles/footer.styles.scss"
@@ -10,23 +12,22 @@ import "../components/molecules/ColorPicker/styles/colorPicker.styles.scss"
 import "../components/molecules/MapInstructions/styles/mapInstructions.styles.scss"
 import "../components/organisms/ControlPanel/styles/controlPanel.styles.scss"
 import "../components/organisms/Hero/styles/hero.styles.scss"
+import "../components/organisms/Modal/tutorial.styles.scss"
 import "../components/organisms/OptionsGrid/styles/OptionsGrid.styles.scss"
 import "../components/organisms/Panel/styles/Panel.styles.scss"
-import "../components/organisms/Modal/tutorial.styles.scss"
 import "../components/organisms/SVGMap/styles/europeMap.styles.scss"
 import "../components/_common/global.styles.scss"
-import { useState } from "react"
 import { createAppStore } from "../redux/store"
 
-const MyApp = ({ Component, pageProps }) => {
+export default function MyApp({ Component, pageProps }: AppProps) {
   const [store] = useState(() => createAppStore())
+
   return (
     <>
       <Script
         strategy="lazyOnload"
-        src={`https://www.googletagmanager.com/gtag/js?id=G-52R14XBQ18`}
+        src="https://www.googletagmanager.com/gtag/js?id=G-52R14XBQ18"
       />
-
       <Script id="google-analytics" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
@@ -43,5 +44,3 @@ const MyApp = ({ Component, pageProps }) => {
     </>
   )
 }
-
-export default MyApp
