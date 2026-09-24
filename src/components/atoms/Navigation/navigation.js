@@ -26,7 +26,7 @@ const Navigation = () => {
           <div className="logo">
             <img
               className="logo-img"
-              src="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/src/public/used_assets/logo_white.svg"
+              src="/used_assets/logo_white.svg"
               alt="logo"
             />
           </div>

@@ -194,24 +194,24 @@ export default function Document() {
         <meta name="theme-color" content="#000000" />
         <link
           rel="shortcut icon"
-          href="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/src/public/icons/favicon.ico"
+          href="/icons/favicon.ico"
         />
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/src/public/icons/apple-touch-icon.png"
+          href="/icons/apple-touch-icon.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/src/public/icons/favicon-32x32.png"
+          href="/icons/favicon-32x32.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href="https://raw.githubusercontent.com/luisconceicaodev/Interactive-Maps/master/src/public/icons/favicon-16x16.png"
+          href="/icons/favicon-16x16.png"
         />
       </Head>
       <meta charSet="utf-8" />
