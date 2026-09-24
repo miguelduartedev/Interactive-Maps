@@ -39,10 +39,14 @@ function WorkflowPlaceholder() {
         <circle cx="110" cy="110" r="74" />
         <path d="M36 110h148M110 36c25 21 38 46 38 74s-13 53-38 74M110 36c-25 21-38 46-38 74s13 53 38 74M49 75h122M49 145h122" />
       </svg>
-      <span className="workflow-visual__marker workflow-visual__marker--one" aria-hidden="true" />
-      <span className="workflow-visual__marker workflow-visual__marker--two" aria-hidden="true" />
-      <p>Map creation visual</p>
-      <span>Placeholder</span>
+      <span
+        className="workflow-visual__marker workflow-visual__marker--one"
+        aria-hidden="true"
+      />
+      <span
+        className="workflow-visual__marker workflow-visual__marker--two"
+        aria-hidden="true"
+      />
     </div>
   )
 }
@@ -90,8 +94,8 @@ export default function Panel() {
                 <h3>Map editing tips</h3>
                 <p>
                   Hold Alt or Option while scrolling or dragging to navigate on
-                  desktop. Right-click a country—or long-press on mobile—to remove
-                  its color.
+                  desktop. Right-click a country—or long-press on mobile—to
+                  remove its color.
                 </p>
               </div>
             </aside>
