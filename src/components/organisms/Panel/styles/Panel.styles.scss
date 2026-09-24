@@ -203,12 +203,17 @@
     font-weight: 650;
   }
 
-  p {
-    margin: 0;
+  ul {
+    margin: 0.5rem 0 0;
+    padding-left: 1.05rem;
     color: #8291a5;
     font-family: "Inter", "Helvetica Neue", sans-serif;
     font-size: 0.77rem;
     line-height: 1.6;
+  }
+
+  li + li {
+    margin-top: 0.35rem;
   }
 }
 
@@ -222,7 +227,7 @@
   color: #07131d;
   background: #38bdf8;
   font-family: "Inter", "Helvetica Neue", sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-weight: 800;
 }
 

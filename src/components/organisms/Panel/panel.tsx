@@ -1,25 +1,27 @@
 const WORKFLOW_STEPS = [
   {
     number: "01",
-    title: "Choose your map",
+    title: "Choose Your Canvas",
     description:
-      "Select World, Europe, North America, South America, Africa, or Asia.",
+      "Choose one of our available maps: World, Europe, North America, South America, Africa, or Asia.",
   },
   {
     number: "02",
-    title: "Color countries",
+    title: "Color Selection",
     description:
-      "Pick a color and apply it to individual countries or available groups.",
+      "Select a color through our Color Picker, from curated choropleth gradients to custom hex values.",
   },
   {
     number: "03",
-    title: "Add title and legend",
-    description: "Give the map context with a title and color legend.",
+    title: "Click or Block Select",
+    description:
+      "Click on the countries that you want to apply the color to, or alternatively select a Political Block or a Geographic Region.",
   },
   {
     number: "04",
-    title: "Export",
-    description: "Download the finished map as a PNG.",
+    title: "Title, Legend & Export",
+    description:
+      "Fill the Map Title and Color Legend fields in a way that describes the data you're showcasing. Once you're done, go ahead and generate your map as a free to use PNG image!",
   },
 ] as const
 
@@ -88,15 +90,24 @@ export default function Panel() {
 
             <aside className="workflow-tip" aria-label="Map editing tips">
               <div className="workflow-tip__icon" aria-hidden="true">
-                i
+                ⌨
               </div>
               <div>
-                <h3>Map editing tips</h3>
-                <p>
-                  Hold Alt or Option while scrolling or dragging to navigate on
-                  desktop. Right-click a country—or long-press on mobile—to
-                  remove its color.
-                </p>
+                <h3>Map Navigation &amp; Color Removal Tips:</h3>
+                <ul>
+                  <li>
+                    In order to <b>Zoom</b> and/or <b>Drag</b> the map, press and
+                    hold the <i>Alt</i> (Windows) or <i>Option</i> (Mac) key and
+                    simultaneously use your mouse/trackpad to scroll and drag.
+                    Alternatively, you can click on the map and use the + and -
+                    keys to zoom and the arrow keys to change the map position.
+                  </li>
+                  <li>
+                    You can remove the color that has been assigned to a country
+                    by right clicking on the country or by doing a long press on
+                    mobile.
+                  </li>
+                </ul>
               </div>
             </aside>
           </div>
