@@ -24,8 +24,62 @@ body {
   background-color: #0a253b;
 }
 
-.hero,
-.options-grid,
-.panel {
+.hero {
   height: 100vh;
+}
+
+.home-page {
+  min-height: 100vh;
+  overflow: hidden;
+  color: #f8fafc;
+  background: #0b0f19;
+}
+
+.home-section {
+  padding: clamp(6rem, 10vw, 9rem) clamp(1.25rem, 5vw, 5rem);
+}
+
+.home-section__shell {
+  width: min(100%, 1280px);
+  margin: 0 auto;
+}
+
+.home-section__heading {
+  max-width: 44rem;
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+
+  h2 {
+    margin: 0;
+    color: #f8fafc;
+    font-family: "Plus Jakarta Sans", "Sora", sans-serif;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+
+  > p:last-child {
+    max-width: 38rem;
+    margin: 1rem 0 0;
+    color: #94a3b8;
+    font-family: "Inter", "Helvetica Neue", sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+}
+
+.home-section__eyebrow {
+  margin: 0 0 0.85rem;
+  color: #5eead4;
+  font-family: "Inter", "Helvetica Neue", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 540px) {
+  .home-section {
+    padding: 5rem 1.1rem;
+  }
 }

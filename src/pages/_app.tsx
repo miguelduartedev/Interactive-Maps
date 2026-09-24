@@ -3,6 +3,8 @@ import type { AppProps } from "next/app"
 import Script from "next/script"
 import { useState } from "react"
 import { Provider } from "react-redux"
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import "../components/atoms/Button/styles/button.styles.scss"
 import "../components/atoms/Footer/styles/footer.styles.scss"
 import "../components/atoms/MapLegend/styles/mapLegend.styles.scss"
@@ -41,6 +43,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <Component {...pageProps} />
       </Provider>
+      <Analytics />
+      <SpeedInsights />
     </>
   )
 }
