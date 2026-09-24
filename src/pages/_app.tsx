@@ -18,6 +18,7 @@ import "../components/organisms/Modal/tutorial.styles.scss"
 import "../components/organisms/OptionsGrid/styles/OptionsGrid.styles.scss"
 import "../components/organisms/Panel/styles/Panel.styles.scss"
 import "../components/organisms/SVGMap/styles/europeMap.styles.scss"
+import "../components/organisms/StudioShell/styles/studio.styles.scss"
 import "../components/_common/global.styles.scss"
 import { createAppStore } from "../redux/store"
 

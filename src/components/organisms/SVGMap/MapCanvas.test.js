@@ -17,9 +17,13 @@ import { MapEditorProvider } from "./MapEditorContext"
 import { indexGeometry } from "./countryGeometry"
 import ColorPicker from "../../molecules/ColorPicker/colorPicker"
 import { geographicGroupings } from "../ControlPanel/utils/globalVars"
+import StudioHeader from "../StudioShell/StudioHeader"
+import StudioToolbar from "../StudioShell/StudioToolbar"
+import { useRouter } from "next/router"
 
 jest.mock("panzoom", () => jest.fn(() => ({ dispose: jest.fn() })))
 jest.mock("save-svg-as-png", () => ({ saveSvgAsPng: jest.fn() }))
+jest.mock("next/router", () => ({ useRouter: jest.fn() }))
 
 function mount(children, strict = false, route = "europe") {
   const store = createAppStore()
@@ -50,6 +54,39 @@ test("Europe paints consecutive countries, repaints, erases, and renders title a
   fireEvent.contextMenu(france)
   expect(france).toHaveAttribute("fill", "#FFFFFF")
   expect(screen.queryByText("Visited")).not.toBeInTheDocument()
+})
+
+test("Paint is the default tool; Paint, Erase, and Pan preserve state and enforce their modes", () => {
+  panzoom.mockClear()
+  const { container, store } = mount(<><StudioToolbar /><EuropeSVG currentMap="europe" /></>)
+  const france = container.querySelector("#FR")
+  const germany = container.querySelector("#DE")
+  const paintTool = screen.getByRole("button", { name: "Paint tool" })
+  const panTool = screen.getByRole("button", { name: "Pan tool" })
+  const eraseTool = screen.getByRole("button", { name: "Erase tool" })
+
+  expect(paintTool).toHaveAttribute("aria-pressed", "true")
+  fireEvent.click(france)
+  expect(store.getState().mapState.countryColors).toEqual({ FR: "#039606" })
+
+  fireEvent.click(panTool)
+  expect(store.getState().mapState.countryColors).toEqual({ FR: "#039606" })
+  fireEvent.click(france)
+  fireEvent.click(germany)
+  expect(store.getState().mapState.countryColors).toEqual({ FR: "#039606" })
+
+  const panzoomOptions = panzoom.mock.calls[0][1]
+  expect(panzoomOptions.beforeMouseDown({ altKey: false })).toBe(false)
+  expect(panzoomOptions.beforeWheel({ altKey: false })).toBe(false)
+
+  fireEvent.contextMenu(france)
+  expect(store.getState().mapState.countryColors).toEqual({})
+
+  fireEvent.click(paintTool)
+  fireEvent.click(germany)
+  fireEvent.click(eraseTool)
+  fireEvent.click(germany)
+  expect(store.getState().mapState.countryColors).toEqual({})
 })
 
 test("multipart identity is stable; decoration and definitions are excluded", () => {
@@ -180,4 +217,28 @@ test("moving or using multiple fingers cancels a pending paint", () => {
   fireEvent.touchEnd(france)
   fireEvent.click(france)
   expect(store.getState().mapState.countryColors).toEqual({})
+})
+
+test("Studio map selector uses every typed route and Export uses the active SVG", () => {
+  const push = jest.fn()
+  useRouter.mockReturnValue({ push })
+  const { container } = mount(<>
+    <StudioHeader currentMap="europe" />
+    <EuropeSVG currentMap="europe" />
+  </>)
+  const selector = screen.getByRole("combobox", { name: "Current map" })
+  const routes = ["world", "europe", "north-america", "south-america", "africa", "asia"]
+
+  expect([...selector.options].map((option) => option.value)).toEqual(routes)
+  routes.filter((route) => route !== "europe").forEach((route) => {
+    fireEvent.change(selector, { target: { value: route } })
+    expect(push).toHaveBeenLastCalledWith(`/${route}`)
+  })
+
+  fireEvent.click(screen.getByRole("button", { name: "Export" }))
+  expect(saveSvgAsPng).toHaveBeenLastCalledWith(
+    container.querySelector("svg.interactive-map"),
+    "interactive_maps.png",
+    expect.objectContaining({ scale: 3 }),
+  )
 })

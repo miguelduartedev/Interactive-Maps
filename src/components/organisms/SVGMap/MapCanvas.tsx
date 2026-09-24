@@ -82,21 +82,21 @@ interface MapCanvasProps extends SVGProps<SVGSVGElement> {
 
 export default function MapCanvas({ currentMap, children, ...svgProps }: MapCanvasProps) {
   const svgRef = useRef<SVGSVGElement>(null)
-  const editor = useMapEditor()
+  const { canvas, tool } = useMapEditor()
   const isMobile = useAppSelector((state) => state.deviceState.isMobile)
   const geometry = useMemo(() => indexGeometry(children), [children])
   const available = useMemo(() => new Set(geometry.countries), [geometry.countries])
-  const { handlers, hovered } = useMapInteractions(svgRef, available)
+  const { handlers, hovered } = useMapInteractions(svgRef, available, tool)
 
   useEffect(() => {
     const svg = svgRef.current
     if (!svg) return
     const registration = { svg, countries: geometry.countries, currentMap }
-    editor.canvas.current = registration
+    canvas.current = registration
     return () => {
-      if (editor.canvas.current === registration) editor.canvas.current = null
+      if (canvas.current === registration) canvas.current = null
     }
-  }, [currentMap, editor, geometry.countries])
+  }, [canvas, currentMap, geometry.countries])
 
   return (
     <svg
@@ -104,7 +104,11 @@ export default function MapCanvas({ currentMap, children, ...svgProps }: MapCanv
       {...handlers}
       id={currentMap}
       ref={svgRef}
-      className={clsx("interactive-map", isMobile && "-mobile-version")}
+      className={clsx(
+        "interactive-map",
+        `interactive-map--${tool}`,
+        isMobile && "-mobile-version",
+      )}
     >
       <MapLegend currentMap={currentMap} />
       <Geometry tree={geometry.tree} hovered={hovered} currentMap={currentMap} />

@@ -10,7 +10,7 @@ import {
 import panzoom from "panzoom"
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 import { eraseCountries, paintCountries } from "../../../redux/mapSlice"
-import type { CountryId } from "../../../types/editor"
+import type { CountryId, EditorTool } from "../../../types/editor"
 import { countryFromTarget } from "./countryGeometry"
 
 interface ActiveTouch {
@@ -18,6 +18,7 @@ interface ActiveTouch {
   clientX: number
   clientY: number
   long: boolean
+  tool: EditorTool
 }
 
 type MapInteractionHandlers = Pick<SVGProps<SVGSVGElement>,
@@ -28,6 +29,7 @@ type MapInteractionHandlers = Pick<SVGProps<SVGSVGElement>,
 export function useMapInteractions(
   svgRef: RefObject<SVGSVGElement>,
   available: ReadonlySet<CountryId>,
+  tool: EditorTool,
 ): { hovered: CountryId | null; handlers: MapInteractionHandlers } {
   const dispatch = useAppDispatch()
   const isMobile = useAppSelector((state) => state.deviceState.isMobile)
@@ -35,6 +37,11 @@ export function useMapInteractions(
   const touch = useRef<ActiveTouch | null>(null)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const suppressClickUntil = useRef(0)
+  const toolRef = useRef(tool)
+
+  useEffect(() => {
+    toolRef.current = tool
+  }, [tool])
 
   const clearTimer = () => {
     if (timer.current !== null) clearTimeout(timer.current)
@@ -47,7 +54,8 @@ export function useMapInteractions(
 
     const instance = panzoom(svg, {
       onTouch: () => false,
-      beforeWheel: (event) => !isMobile && !event.altKey,
+      beforeWheel: (event) => toolRef.current !== "pan" && !event.altKey,
+      beforeMouseDown: (event) => toolRef.current !== "pan" && !event.altKey,
       zoomDoubleClickSpeed: !isMobile ? 1 : 0,
     })
 
@@ -71,7 +79,10 @@ export function useMapInteractions(
     hovered,
     handlers: {
       onClick: (event) => {
-        if (Date.now() >= suppressClickUntil.current) paint(identify(event))
+        if (Date.now() < suppressClickUntil.current) return
+        const country = identify(event)
+        if (tool === "paint") paint(country)
+        if (tool === "erase") erase(country)
       },
       onContextMenu: (event) => {
         event.preventDefault()
@@ -82,16 +93,22 @@ export function useMapInteractions(
       onTouchStart: (event) => {
         clearTimer()
         suppressClickUntil.current = Date.now() + 1000
+        if (tool === "pan") {
+          touch.current = null
+          return
+        }
         const country = identify(event)
         if (event.touches.length !== 1 || !country) {
           touch.current = null
           return
         }
         const { clientX, clientY } = event.touches[0]
-        touch.current = { country, clientX, clientY, long: false }
-        timer.current = setTimeout(() => {
-          if (touch.current) touch.current.long = true
-        }, 500)
+        touch.current = { country, clientX, clientY, long: false, tool }
+        if (tool === "paint") {
+          timer.current = setTimeout(() => {
+            if (touch.current) touch.current.long = true
+          }, 500)
+        }
       },
       onTouchMove: (event) => {
         const active = touch.current
@@ -111,7 +128,9 @@ export function useMapInteractions(
         suppressClickUntil.current = Date.now() + 800
         const active = touch.current
         touch.current = null
-        if (active) (active.long ? erase : paint)(active.country)
+        if (!active) return
+        if (active.tool === "erase" || active.long) erase(active.country)
+        else paint(active.country)
       },
       onTouchCancel: () => {
         clearTimer()
