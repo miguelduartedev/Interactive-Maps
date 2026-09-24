@@ -17,7 +17,7 @@ const ColorLegend = ({ dispatch }) => {
         {exists(currentUsedColors) ? (
           currentUsedColors.map((color, index) => {
             return (
-              <div key={index} className="row colorLegend__colors__row">
+              <div key={color} className="row colorLegend__colors__row">
                 <div className="col-2 position-relative p-0 m-0">
                   <div
                     className="colorLegend__colors__circle"
@@ -32,7 +32,7 @@ const ColorLegend = ({ dispatch }) => {
                     className="form-control -legend"
                     placeholder="Insert color legend"
                     maxLength="45"
-                    defaultValue={mapState.usedColors[color].legend}
+                    value={mapState.usedColors[color].legend}
                     onInput={(e) => ColorSetter(color, e)}
                   />
                 </div>

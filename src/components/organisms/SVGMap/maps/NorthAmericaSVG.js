@@ -1,95 +1,7 @@
-import panzoom from "panzoom"
-import { useEffect, useRef, useState } from "react"
-import MapLegend from "../../../atoms/MapLegend/mapLegend"
-import handleClick from "../hooks/useClick"
-import handleContextMenu from "../hooks/useContextMenu"
-import handleMouseOver from "../hooks/useMouseOver"
-import handleTouchEnd from "../hooks/useTouchEnd"
-import clsx from "clsx"
+import MapCanvas from "../MapCanvas"
 
-const NorthAmericaSVG = ({
-  currentMap,
-  store,
-  dispatch,
-  updateUsedColors,
-  removeCountryFromUsedColors,
-}) => {
-  const [action, setAction] = useState("")
-  const timerRef = useRef()
-  const mapRef = useRef(null)
-  const isMobile = store.getState().deviceState.isMobile
-
-  useEffect(() => {
-    const panzoomInstance = panzoom(mapRef.current, {
-      onTouch: function () {
-        return false // tells the library to not preventDefault.
-      },
-      beforeWheel: function (e) {
-        if (!isMobile) {
-          // allow wheel-zoom only if altKey is pressed. Otherwise - ignore
-          const shouldIgnore = !e.altKey
-          return shouldIgnore
-        }
-      },
-      // disables double click zoom
-      zoomDoubleClickSpeed: !isMobile && 1,
-    })
-
-    return () => {
-      clearTimeout(timerRef.current)
-      panzoomInstance.dispose()
-    }
-  }, [isMobile])
-
-  return (
-    <svg
-      id="north-america"
-      className={clsx(
-        isMobile ? "interactive-map -mobile-version" : "interactive-map",
-      )}
-      baseProfile="tiny"
-      fill="#ececec"
-      stroke="black"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth=".2"
-      version="1.2"
-      viewBox="0 0 1000 684"
-      xmlns="http://www.w3.org/2000/svg"
-      onClick={(event) =>
-        handleClick(
-          event,
-          currentMap,
-          store,
-          dispatch,
-          updateUsedColors,
-        )
-      }
-      onContextMenu={(event) =>
-        handleContextMenu(event, store, dispatch, removeCountryFromUsedColors)
-      }
-      onMouseOver={(event) => handleMouseOver(event, currentMap)}
-      onTouchStart={() => {
-        setAction("touch")
-        timerRef.current = setTimeout(() => {
-          setAction("longpress")
-        }, 500)
-      }}
-      onTouchEnd={(event) => {
-        clearTimeout(timerRef.current)
-        handleTouchEnd(
-          action,
-          event,
-          currentMap,
-          store,
-          dispatch,
-          updateUsedColors,
-          removeCountryFromUsedColors,
-        )
-      }}
-      ref={mapRef}
-    >
-      {<MapLegend currentMap={currentMap} />}
+const geometry = (
+  <>
       <path
         fill="#FFFFFF"
         d="m 531.13777,575.85705 h -2.42336 l 1.85314,-10.26363 0.99785,-7.27006 0.14255,-1.42549 0.99785,-0.42766 1.28295,1.14041 3.56377,-5.55948 1.56804,-0.14255 -0.14253,1.42552 h 1.42549 l -0.42765,2.56592 -1.85316,3.84882 0.57021,1.42552 -1.28295,3.27866 0.42764,0.8553 -1.42549,4.70415 -1.85318,2.42334 -1.56805,0.28511 z"
@@ -605,18 +517,21 @@ const NorthAmericaSVG = ({
       />
       <path
         fill="#FFFFFF"
+        className="BQ"
         d="m 693.93012,611.20951 h -0.28509 l -0.14255,-0.71276 0.14255,-0.42764 -0.14255,-0.42764 -0.57022,-0.14256 -0.42764,-0.42765 0.14256,-0.42769 1.7106,0.85534 -0.14255,0.28509 v 0.5702 l -0.28511,0.2851 z"
         id="BQBO"
         name="Netherlands"
       />
       <path
         fill="#FFFFFF"
+        className="BQ"
         d="m 739.97386,561.31693 -0.28512,0.14256 v -0.28512 l 0.1426,-0.14254 z"
         id="BQSE"
         name="St. Eustatius (Netherlands)"
       />
       <path
         fill="#FFFFFF"
+        className="BQ"
         d="m 737.83561,560.03396 h -0.14256 l 0.14256,-0.28511 0.14255,0.14258 z"
         id="BQSA"
         name="Saba (Netherlands)"
@@ -692,8 +607,15 @@ const NorthAmericaSVG = ({
         className="FJ"
         d="M 1994.4 606 1994 606.4 1993.2 607.5 1992.9 607.6 1992.2 608 1992 608.6 1991.6 608.8 1991.4 609.1 1991.3 609.3 1991.6 609.4 1992.2 609.1 1992.3 609 1992.6 608.7 1992.8 608.4 1993.4 608.1 1993.7 607.8 1994.3 607.5 1994.3 607.8 1993.8 608.5 1993.6 608.6 1993.7 609.2 1993.4 609.5 1993.1 609.2 1992.7 609.2 1992.2 609.3 1991.8 609.6 1991.1 609.7 1990.1 609.7 1990.6 609.2 1990.2 609 1989.6 609.2 1989.2 609.4 1989.2 609.6 1988.9 609.7 1988.7 609.8 1988.6 610.2 1988.4 610.5 1988.1 610.4 1988.1 610.2 1987.7 610.1 1987.3 610.3 1987.1 610.8 1986.8 611 1986.5 611 1986.5 610.7 1986.5 610.3 1986.3 609.9 1986.4 609.7 1986.3 609.6 1985.7 609.8 1985.7 609.4 1986.1 609.1 1986.2 609.1 1986.1 608.6 1986.4 608.5 1986.9 608.8 1987.5 608.4 1987.7 608.4 1988 608.1 1988.2 608.1 1988.5 607.8 1988.5 607.6 1989.3 607.5 1990.2 607.2 1990.5 607.1 1990.9 607.2 1991.4 607 1991.6 606.6 1991.8 606.6 1992 606.2 1992.4 606.3 1992.5 606.1 1992.7 606.2 1993.7 605.7 1993.8 606 1994 605.9 1994.2 606 1994.5 605.7 1995 605.5 1995.1 605.6 1994.6 606 1994.4 606 Z"
       />
-    </svg>
+  </>
+)
+
+export default function NorthAmericaSVG({ currentMap }) {
+  return (
+    <MapCanvas currentMap={currentMap} baseProfile="tiny" fill="#ececec"
+      stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth=".2"
+      version="1.2" viewBox="0 0 1000 684" xmlns="http://www.w3.org/2000/svg">
+      {geometry}
+    </MapCanvas>
   )
 }
-
-export default NorthAmericaSVG

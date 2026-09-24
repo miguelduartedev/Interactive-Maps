@@ -1,95 +1,7 @@
-import panzoom from "panzoom"
-import { useEffect, useRef, useState } from "react"
-import MapLegend from "../../../atoms/MapLegend/mapLegend"
-import handleClick from "../hooks/useClick"
-import handleContextMenu from "../hooks/useContextMenu"
-import handleMouseOver from "../hooks/useMouseOver"
-import handleTouchEnd from "../hooks/useTouchEnd"
-import clsx from "clsx"
+import MapCanvas from "../MapCanvas"
 
-const SouthAmericaSVG = ({
-  currentMap,
-  store,
-  dispatch,
-  updateUsedColors,
-  removeCountryFromUsedColors,
-}) => {
-  const [action, setAction] = useState("")
-  const timerRef = useRef()
-  const mapRef = useRef(null)
-  const isMobile = store.getState().deviceState.isMobile
-
-  useEffect(() => {
-    const panzoomInstance = panzoom(mapRef.current, {
-      onTouch: function () {
-        return false // tells the library to not preventDefault.
-      },
-      beforeWheel: function (e) {
-        if (!isMobile) {
-          // allow wheel-zoom only if altKey is pressed. Otherwise - ignore
-          const shouldIgnore = !e.altKey
-          return shouldIgnore
-        }
-      },
-      // disables double click zoom
-      zoomDoubleClickSpeed: !isMobile && 1,
-    })
-
-    return () => {
-      clearTimeout(timerRef.current)
-      panzoomInstance.dispose()
-    }
-  }, [isMobile])
-
-  return (
-    <svg
-      id="south-america"
-      className={clsx(
-        isMobile ? "interactive-map -mobile-version" : "interactive-map",
-      )}
-      baseProfile="tiny"
-      fill="#ececec"
-      stroke="black"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth=".2"
-      version="1.2"
-      viewBox="0 0 1000 684"
-      xmlns="http://www.w3.org/2000/svg"
-      onClick={(event) =>
-        handleClick(
-          event,
-          currentMap,
-          store,
-          dispatch,
-          updateUsedColors,
-        )
-      }
-      onContextMenu={(event) =>
-        handleContextMenu(event, store, dispatch, removeCountryFromUsedColors)
-      }
-      onMouseOver={(event) => handleMouseOver(event, currentMap)}
-      onTouchStart={() => {
-        setAction("touch")
-        timerRef.current = setTimeout(() => {
-          setAction("longpress")
-        }, 500)
-      }}
-      onTouchEnd={(event) => {
-        clearTimeout(timerRef.current)
-        handleTouchEnd(
-          action,
-          event,
-          currentMap,
-          store,
-          dispatch,
-          updateUsedColors,
-          removeCountryFromUsedColors,
-        )
-      }}
-      ref={mapRef}
-    >
-      {<MapLegend currentMap={currentMap} />}
+const geometry = (
+  <>
       <path
         fill="#FFFFFF"
         className="AR"
@@ -261,12 +173,20 @@ const SouthAmericaSVG = ({
       />
       <path
         fill="#FFFFFF"
+        className="BQ"
         d="m 439.67391,26.281856 h -0.29549 l -0.14775,-0.738737 0.14775,-0.443242 -0.14775,-0.443242 -0.59099,-0.147747 -0.44324,-0.443242 0.14775,-0.443242 1.77297,0.886484 -0.14775,0.295495 v 0.590989 l -0.2955,0.295495 z"
         id="BQBO"
         name="Netherlands"
       />
-    </svg>
+  </>
+)
+
+export default function SouthAmericaSVG({ currentMap }) {
+  return (
+    <MapCanvas currentMap={currentMap} baseProfile="tiny" fill="#ececec"
+      stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth=".2"
+      version="1.2" viewBox="0 0 1000 684" xmlns="http://www.w3.org/2000/svg">
+      {geometry}
+    </MapCanvas>
   )
 }
-
-export default SouthAmericaSVG

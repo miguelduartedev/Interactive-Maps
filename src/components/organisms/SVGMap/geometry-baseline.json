@@ -1,0 +1,26 @@
+{
+  "Europe": {
+    "count": 42,
+    "hash": "b27b37030f8a7e1617f2cd347e53ae8102a9138460e7641a82b91f197ab6b739"
+  },
+  "World": {
+    "count": 447,
+    "hash": "7f07d2d8f8b1546a81c5e3f252752f48242622ad6381abba182b766585de45ea"
+  },
+  "NorthAmerica": {
+    "count": 114,
+    "hash": "36fbd39cbbe2a655cc22b5c2999720cc26d47a4e049162b0c465f0dd80903bff"
+  },
+  "SouthAmerica": {
+    "count": 32,
+    "hash": "564df01b83eb6ff393d1b7afaca335451cdc4a03df4e2079eecd1b096879a552"
+  },
+  "Africa": {
+    "count": 72,
+    "hash": "b97268ad240a7742e7a8c6c6d1c30e58569984432c14753996eee13dc2975497"
+  },
+  "Asia": {
+    "count": 96,
+    "hash": "d2bd4b2437b271e25ff8d55a94a1aa23b53c20f90e9968163f961392e239e0ec"
+  }
+}

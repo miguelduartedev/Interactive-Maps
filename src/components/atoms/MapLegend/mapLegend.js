@@ -8,7 +8,8 @@ const MapLegend = ({ currentMap: currentMapProp }) => {
     mapTitle,
     currentMap: currentMapFromStore,
   } = useSelector(mapStore)
-  const currentMap = currentMapFromStore || currentMapProp
+  const currentMap = currentMapProp
+  const routeMatches = currentMap === currentMapFromStore
   const europeMapConfig = {
     titleYAxis: 85,
     titleXAxis: 51,
@@ -106,9 +107,9 @@ const MapLegend = ({ currentMap: currentMapProp }) => {
       0px 18px 23px rgba(0,0,0,0.1);"
         fontFamily="Helvetica, sans-serif"
       >
-        {mapTitle}
+        {routeMatches ? mapTitle : ""}
       </text>
-      {exists(usedColors) &&
+      {routeMatches && exists(usedColors) &&
         Object.keys(usedColors).map(
           (color, index) =>
             exists(usedColors[color].legend) && (
@@ -116,7 +117,7 @@ const MapLegend = ({ currentMap: currentMapProp }) => {
                 <circle
                   xmlns="http://www.w3.org/2000/svg"
                   style={{ fill: `${color}` }}
-                  id="path1132"
+                  id={`map-legend-swatch-${index}`}
                   cx={mapLegendConfig.legendXAxis}
                   cy={
                     mapLegendConfig.legendYAxis +

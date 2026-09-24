@@ -1,95 +1,7 @@
-import panzoom from "panzoom"
-import { useEffect, useRef, useState } from "react"
-import MapLegend from "../../../atoms/MapLegend/mapLegend"
-import handleClick from "../hooks/useClick"
-import handleContextMenu from "../hooks/useContextMenu"
-import handleMouseOver from "../hooks/useMouseOver"
-import handleTouchEnd from "../hooks/useTouchEnd"
-import clsx from "clsx"
+import MapCanvas from "../MapCanvas"
 
-const WorldSVG = ({
-  currentMap,
-  store,
-  dispatch,
-  updateUsedColors,
-  removeCountryFromUsedColors,
-}) => {
-  const [action, setAction] = useState("")
-  const timerRef = useRef()
-  const mapRef = useRef(null)
-  const isMobile = store.getState().deviceState.isMobile
-
-  useEffect(() => {
-    const panzoomInstance = panzoom(mapRef.current, {
-      onTouch: function () {
-        return false // tells the library to not preventDefault.
-      },
-      beforeWheel: function (e) {
-        if (!isMobile) {
-          // allow wheel-zoom only if altKey is pressed. Otherwise - ignore
-          const shouldIgnore = !e.altKey
-          return shouldIgnore
-        }
-      },
-      // disables double click zoom
-      zoomDoubleClickSpeed: !isMobile && 1,
-    })
-
-    return () => {
-      clearTimeout(timerRef.current)
-      panzoomInstance.dispose()
-    }
-  }, [isMobile])
-
-  return (
-    <svg
-      id="world"
-      className={clsx(
-        isMobile ? "interactive-map -mobile-version" : "interactive-map",
-      )}
-      baseProfile="tiny"
-      fill="#ececec"
-      stroke="black"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth=".2"
-      version="1.2"
-      viewBox="0 0 1300 684"
-      xmlns="http://www.w3.org/2000/svg"
-      onClick={(event) =>
-        handleClick(
-          event,
-          currentMap,
-          store,
-          dispatch,
-          updateUsedColors,
-        )
-      }
-      onContextMenu={(event) =>
-        handleContextMenu(event, store, dispatch, removeCountryFromUsedColors)
-      }
-      onMouseOver={(event) => handleMouseOver(event, currentMap)}
-      onTouchStart={() => {
-        setAction("touch")
-        timerRef.current = setTimeout(() => {
-          setAction("longpress")
-        }, 500)
-      }}
-      onTouchEnd={(event) => {
-        clearTimeout(timerRef.current)
-        handleTouchEnd(
-          action,
-          event,
-          currentMap,
-          store,
-          dispatch,
-          updateUsedColors,
-          removeCountryFromUsedColors,
-        )
-      }}
-      ref={mapRef}
-    >
-      {<MapLegend currentMap={currentMap} />}
+const geometry = (
+  <>
       <path
         fill="#FFFFFF"
         d="m 883.13481,232.36528 0.97719,1.1726 -1.88917,0.52116 -1.56349,0.71659 -3.84356,0.52116 -3.45267,0.84689 -1.56349,1.82403 1.23776,1.75891 0.91202,2.08465 -1.30289,1.7589 0.52116,1.62863 -0.5863,1.49831 -3.38754,-0.13027 2.01948,2.73607 -2.01948,1.10746 -0.91201,2.47551 0.71658,2.54066 -1.17261,1.1726 -1.36804,-0.39088 -2.60578,0.5863 -0.13029,1.10746 h -2.67094 l -1.49834,2.41036 0.52116,3.51782 -4.29954,1.75892 -2.54066,-0.39088 -0.58631,0.91202 -2.21491,-0.52114 -3.4527,0.65143 -6.25387,-2.14976 2.54065,-3.77841 -0.7166,-2.67093 -2.80122,-0.71659 -0.78174,-2.67094 -1.75891,-3.32237 1.0423,-2.28007 -1.62861,-0.65146 0.32572,-3.06182 0.39088,-5.21158 3.84353,1.62864 2.54065,-0.58631 0.26058,-1.8892 2.60581,-0.5863 1.69375,-1.30289 -0.1303,-3.32239 2.73609,-0.8469 0.19544,-1.43317 1.8892,1.10747 1.04232,0.13029 h 1.95433 l 2.80123,0.91202 1.17261,0.45601 2.21492,-1.30288 1.36803,0.78172 0.5863,-1.8892 2.08465,0.0652 0.39085,-0.58631 -0.13028,-1.69376 1.10746,-1.43319 2.14979,0.91204 -0.0652,1.30289 1.10746,0.19544 0.58631,3.51781 1.75891,1.36805 0.97716,-0.91205 1.43318,-0.39085 1.62863,-1.8892 2.47551,0.32573 z"
@@ -2360,18 +2272,21 @@ const WorldSVG = ({
       />
       <path
         fill="#FFFFFF"
+        className="BQ"
         d="m 374.35403,338.55126 h -0.13029 l -0.0652,-0.32572 0.0652,-0.19542 -0.0652,-0.19543 -0.26058,-0.0652 -0.19545,-0.19542 0.0652,-0.19545 0.78176,0.39087 -0.0652,0.13029 v 0.26059 l -0.13029,0.13029 z"
         id="BQBO"
         name="Netherlands"
       />
       <path
         fill="#FFFFFF"
+        className="BQ"
         d="m 395.39579,315.75059 -0.13029,0.0652 v -0.13027 l 0.0652,-0.0652 z"
         id="BQSE"
         name="St. Eustatius (Netherlands)"
       />
       <path
         fill="#FFFFFF"
+        className="BQ"
         d="m 394.41863,315.1643 h -0.0652 l 0.0652,-0.13029 0.0652,0.0651 z"
         id="BQSA"
         name="Saba (Netherlands)"
@@ -2494,8 +2409,15 @@ const WorldSVG = ({
         className="FJ"
         d="m 1281.4302,456.72393 -0.2606,0.26057 -0.5213,0.71659 -0.1952,0.0651 -0.4562,0.26059 -0.1301,0.39087 -0.2606,0.13029 -0.1304,0.19544 -0.065,0.13027 0.1953,0.0651 0.3909,-0.19544 0.065,-0.0651 0.1952,-0.19542 0.1304,-0.19544 0.391,-0.19543 0.1953,-0.19544 0.3909,-0.19543 v 0.19543 l -0.3257,0.45602 -0.1303,0.0651 0.064,0.39087 -0.1956,0.19544 -0.1953,-0.19544 h -0.2606 l -0.3258,0.0651 -0.2606,0.19545 -0.4559,0.0652 h -0.6514 l 0.3255,-0.32571 -0.2605,-0.13029 -0.3908,0.13029 -0.2606,0.13029 v 0.13028 l -0.1955,0.0651 -0.1302,0.0652 -0.064,0.26056 -0.1305,0.19545 -0.1953,-0.0651 v -0.13031 l -0.2606,-0.0652 -0.2606,0.13029 -0.1304,0.32573 -0.1953,0.13029 h -0.1955 v -0.19544 -0.26058 l -0.1303,-0.26058 0.064,-0.1303 -0.064,-0.0652 -0.3908,0.13029 v -0.26058 l 0.2607,-0.19544 h 0.065 l -0.065,-0.32571 0.1953,-0.0652 0.3259,0.19544 0.3909,-0.26059 h 0.1301 l 0.1954,-0.19542 h 0.1304 l 0.1953,-0.19543 v -0.1303 l 0.5212,-0.0651 0.5864,-0.19542 0.1954,-0.0651 0.2605,0.0651 0.3258,-0.1303 0.1304,-0.26059 h 0.1301 l 0.1305,-0.26056 0.2606,0.0652 0.064,-0.13029 0.1303,0.0652 0.6515,-0.32573 0.065,0.19545 0.1302,-0.0651 0.1303,0.0651 0.1955,-0.19545 0.3257,-0.13029 0.065,0.0652 -0.3256,0.26058 z"
       />
-    </svg>
+  </>
+)
+
+export default function WorldSVG({ currentMap }) {
+  return (
+    <MapCanvas currentMap={currentMap} baseProfile="tiny" fill="#ececec"
+      stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth=".2"
+      version="1.2" viewBox="0 0 1300 684" xmlns="http://www.w3.org/2000/svg">
+      {geometry}
+    </MapCanvas>
   )
 }
-
-export default WorldSVG

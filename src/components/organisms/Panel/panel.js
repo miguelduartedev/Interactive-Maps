@@ -1,6 +1,9 @@
-import { BrowserView, MobileView } from "react-device-detect"
+import { useEffect, useState } from "react"
+import { isMobile } from "react-device-detect"
 
 const Panel = () => {
+  const [isMobileReact, setIsMobileReact] = useState(false)
+  useEffect(() => setIsMobileReact(isMobile), [])
   return (
     <div className="panel container d-flex justify-content-center align-items-center">
       <div className="row">
@@ -23,7 +26,7 @@ const Panel = () => {
               Alternatively select a <b>Political Block</b> or a{" "}
               <b>Geographic Region</b>;
             </li>
-            <BrowserView>
+            {!isMobileReact && <>
               <li>
                 In order to <b>Zoom</b> and/or <b>Drag</b> the map, press and
                 hold the <i>Alt</i> (Windows) or <i>Option</i> (Mac) key and
@@ -31,17 +34,17 @@ const Panel = () => {
                 Alternatively, you can click on the map and use the + and - keys
                 to zoom and the arrow keys to change the map position;
               </li>
-            </BrowserView>
+            </>}
             <li>
               You can remove the color that has been assigned to a country by
               right clicking on the country or by doing a long press on mobile;
             </li>
-            <MobileView>
+            {isMobileReact && <>
               <li>
                 And you can <b>Zoom</b> and <b>Drag</b> the map through
                 touchscreen gestures like pinching and tapping;
               </li>
-            </MobileView>
+            </>}
             <li>
               Fill the <b>Map Title</b> and <b>Color Legend</b> fields in a way
               that describes the data you&apos;re showcasing;
