@@ -1,12 +1,6 @@
 import { removeUsedColor } from "../../../../redux/mapSlice"
 import { exists } from "../../../_common"
 
-export const fetchData = (countryCODE) => {
-  return fetch("https://restcountries.com/v3.1/alpha/" + countryCODE).then(
-    (response) => response.json()
-  )
-}
-
 export const IDHoverHandler = (selected_country_code, currentMap) => {
   if (!selected_country_code.startsWith("map_")) {
     const isHoveringOutside = selected_country_code === currentMap

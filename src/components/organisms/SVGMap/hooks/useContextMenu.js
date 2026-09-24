@@ -2,11 +2,11 @@ import { eventContainsID } from "../../../_common";
 import { ClassContextHandler, IDContextHandler } from "../utils";
 
 /**
- * useContextMenu is a custom react hook that handles the user context menu event on the map
+ * Handles the user context menu event on the map.
  * If clicked path has an ID, removes the color of the selected country
  * Otherwise removes the color to all elements with the selected country's class
  *  */
-const useContextMenu = (
+const handleContextMenu = (
   event,
   store,
   dispatch,
@@ -28,4 +28,4 @@ const useContextMenu = (
       );
 };
 
-export default useContextMenu;
+export default handleContextMenu;

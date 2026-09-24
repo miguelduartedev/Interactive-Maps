@@ -3,27 +3,20 @@ import { eventContainsID } from "../../../_common"
 import { ClassClickHandler, IDClickHandler } from "../utils"
 
 /**
- * useClick is a custom react hook that handles the user click event on the map
+ * Handles the user click event on the map.
  * If clicked path has an ID, sets the color to the selected country
  * Otherwise sets the color to all elements with the selected country's class
  *  */
-const useClick = (
+const handleClick = (
   event,
   currentMap,
   store,
   dispatch,
   updateUsedColors,
-  setCountryID,
 ) => {
   const identifier = eventContainsID(event)
     ? event.target.id
     : event.target.classList[0]
-  try {
-    setCountryID(identifier)
-  } catch (e) {
-    console.log("Error: ", e)
-  }
-
   const usedColors = Object.keys(store.getState().mapState.usedColors)
   usedColors.map((color) => {
     const usedColorAppliesTo =
@@ -48,4 +41,4 @@ const useClick = (
       )
 }
 
-export default useClick
+export default handleClick

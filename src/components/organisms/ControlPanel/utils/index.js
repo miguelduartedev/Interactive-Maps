@@ -1,7 +1,5 @@
 import {
-  initialState,
   resetUsedColors,
-  updateCurrentCountry,
   updateTitle,
   updateUsedColors,
 } from "../../../../redux/mapSlice"
@@ -13,7 +11,6 @@ export const clearAll = (currentMap, dispatch) => {
   ]
   allCountries.map((countryID) => (countryID.style.fill = "#FFFFFF"))
   dispatch(updateTitle(""))
-  dispatch(updateCurrentCountry(initialState.currentCountry))
   dispatch(resetUsedColors())
 }
 

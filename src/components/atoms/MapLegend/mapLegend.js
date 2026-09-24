@@ -1,10 +1,14 @@
 import { useSelector } from "react-redux"
 import { mapStore } from "../../../redux/mapSlice"
 import { exists } from "../../_common"
-import { useEffect } from "react"
 
-const MapLegend = () => {
-  const { usedColors, mapTitle, currentMap } = useSelector(mapStore)
+const MapLegend = ({ currentMap: currentMapProp }) => {
+  const {
+    usedColors,
+    mapTitle,
+    currentMap: currentMapFromStore,
+  } = useSelector(mapStore)
+  const currentMap = currentMapFromStore || currentMapProp
   const europeMapConfig = {
     titleYAxis: 85,
     titleXAxis: 51,
@@ -108,7 +112,7 @@ const MapLegend = () => {
         Object.keys(usedColors).map(
           (color, index) =>
             exists(usedColors[color].legend) && (
-              <g>
+              <g key={color}>
                 <circle
                   xmlns="http://www.w3.org/2000/svg"
                   style={{ fill: `${color}` }}
