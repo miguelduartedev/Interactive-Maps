@@ -1,114 +1,105 @@
-import { createSlice } from "@reduxjs/toolkit"
-import { exists } from "../components/_common"
+import { createSelector, createSlice } from "@reduxjs/toolkit"
 
 export const initialState = {
   currentMap: "",
   mapTitle: "",
-  currentColor: "#388E3C",
-  usedColors: {},
+  currentColor: "#039606",
+  countryColors: {},
+  legendLabels: {},
+  colorOrder: [],
 }
 
-export const mapState = createSlice({
+const normalizeColor = (color) => color.toUpperCase()
+const validCountry = (country) => typeof country === "string" && /^[A-Z]{2}$/.test(country)
+
+function pruneLegends(state) {
+  const active = new Set(Object.values(state.countryColors))
+  state.colorOrder = state.colorOrder.filter((color) => active.has(color))
+  Object.keys(state.legendLabels).forEach((color) => {
+    if (!active.has(color)) delete state.legendLabels[color]
+  })
+}
+
+function assign(state, countries, color = state.currentColor) {
+  const normalized = normalizeColor(color)
+  countries.filter(validCountry).forEach((country) => {
+    state.countryColors[country] = normalized
+  })
+  if (Object.values(state.countryColors).includes(normalized) && !state.colorOrder.includes(normalized)) {
+    state.colorOrder.push(normalized)
+    state.legendLabels[normalized] = ""
+  }
+  pruneLegends(state)
+}
+
+function resetColors(state) {
+  state.countryColors = {}
+  state.legendLabels = {}
+  state.colorOrder = []
+}
+
+const slice = createSlice({
   name: "mapState",
   initialState,
   reducers: {
-    updateCurrentMap: (state, action) => {
-      return { ...state, ...initialState, currentMap: action.payload }
+    updateCurrentMap: (state, { payload }) => ({ ...initialState, currentMap: payload }),
+    updateTitle: (state, { payload }) => { state.mapTitle = payload },
+    updateColor: (state, { payload }) => { state.currentColor = normalizeColor(payload) },
+    paintCountries: (state, { payload }) => { assign(state, payload.countries, payload.color) },
+    eraseCountries: (state, { payload }) => {
+      payload.forEach((country) => { delete state.countryColors[country] })
+      pruneLegends(state)
     },
-    updateTitle: (state, action) => {
-      state.mapTitle = action.payload
-    },
-    updateColor: (state, action) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.currentColor = action.payload
-    },
-    updateUsedColors: (state, action) => {
-      const color = Object.keys(action.payload)[0]
-      if (exists(state.usedColors[color])) {
-        state.usedColors = {
-          ...state.usedColors,
-          [color]: {
-            legend: action.payload[color].legend,
-            appliesTo: [
-              ...state.usedColors[color].appliesTo,
-              action.payload[color].appliesTo,
-            ],
-          },
-        }
-      } else {
-        state.usedColors = {
-          ...state.usedColors,
-          [color]: {
-            legend: action.payload[color].legend,
-            appliesTo: Array.isArray(action.payload[color].appliesTo)
-              ? action.payload[color].appliesTo
-              : [action.payload[color].appliesTo],
-          },
-        }
+    applyGroup: (state, { payload }) => {
+      if (!payload.combine) {
+        resetColors(state)
+        state.mapTitle = ""
       }
+      const available = new Set(payload.availableCountries)
+      assign(state, payload.countries.filter((country) => available.has(country)))
     },
-    updateUsedColorsLegend: (state, action) => {
-      const color = Object.keys(action.payload)[0]
-      state.usedColors = {
-        ...state.usedColors,
-        [color]: {
-          legend: action.payload[color],
-          appliesTo: [...state.usedColors[color].appliesTo],
-        },
-      }
+    selectCountries: (state, { payload }) => {
+      state.countryColors = {}
+      assign(state, payload)
     },
-    removeUsedColor: (state, action) => {
-      const colorToRemove = action.payload
-      delete state.usedColors[colorToRemove]
+    clearMap: (state) => { resetColors(state); state.mapTitle = "" },
+    updateUsedColorsLegend: (state, { payload }) => {
+      const color = normalizeColor(Object.keys(payload)[0])
+      if (state.colorOrder.includes(color)) state.legendLabels[color] = Object.values(payload)[0]
     },
-    // If the Color is no longer applied to any country,
-    // removes it from the UsedColors state
-    removeCountryFromUsedColors: (state, action) => {
-      const countryToRemove = action.payload.country
-      const color = action.payload.color
-      const colorNotInUse =
-        [
-          ...state.usedColors[color].appliesTo.filter(
-            (country) => country !== countryToRemove,
-          ),
-        ].length === 0
-
-      if (colorNotInUse) {
-        delete state.usedColors[color]
-      } else {
-        state.usedColors = {
-          ...state.usedColors,
-          [color]: {
-            legend: state.usedColors[color].legend,
-            appliesTo: [
-              ...state.usedColors[color].appliesTo.filter(
-                (country) => country !== countryToRemove,
-              ),
-            ],
-          },
-        }
-      }
+    // Temporary legacy-map adapters: derived membership is never stored separately.
+    updateUsedColors: (state, { payload }) => {
+      const color = Object.keys(payload)[0]
+      assign(state, [payload[color].appliesTo].flat(), color)
     },
-    resetUsedColors: (state) => {
-      state.usedColors = {}
+    removeCountryFromUsedColors: (state, { payload }) => {
+      if (state.countryColors[payload.country] === payload.color) delete state.countryColors[payload.country]
+      pruneLegends(state)
     },
+    removeUsedColor: (state, { payload }) => {
+      Object.keys(state.countryColors).forEach((country) => {
+        if (state.countryColors[country] === payload) delete state.countryColors[country]
+      })
+      pruneLegends(state)
+    },
+    resetUsedColors: resetColors,
   },
 })
 
-// Action creators are generated for each case reducer function
 export const {
-  updateCurrentMap,
-  updateColor,
-  updateTitle,
-  resetUsedColors,
-  updateUsedColors,
-  updateUsedColorsLegend,
-  removeCountryFromUsedColors,
-  removeUsedColor,
-} = mapState.actions
-export const mapStore = (state) => state.mapState
+  updateCurrentMap, updateTitle, updateColor, paintCountries, eraseCountries,
+  applyGroup, selectCountries, clearMap, updateUsedColorsLegend,
+  updateUsedColors, removeCountryFromUsedColors, removeUsedColor, resetUsedColors,
+} = slice.actions
 
-export default mapState.reducer
+export const selectUsedColors = createSelector(
+  [(state) => state.mapState.countryColors, (state) => state.mapState.legendLabels, (state) => state.mapState.colorOrder],
+  (assignments, labels, order) => Object.fromEntries(order.map((color) => [color, {
+    legend: labels[color], appliesTo: Object.keys(assignments).filter((country) => assignments[country] === color),
+  }])),
+)
+export const mapStore = createSelector(
+  [(state) => state.mapState, selectUsedColors],
+  (state, usedColors) => ({ ...state, usedColors }),
+)
+export default slice.reducer

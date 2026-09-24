@@ -1,3 +1,4 @@
+import { mapStore } from "../../../../redux/mapSlice"
 import { removeUsedColor } from "../../../../redux/mapSlice"
 import { exists } from "../../../_common"
 
@@ -71,8 +72,8 @@ export const IDClickHandler = (
   updateUsedColors
 ) => {
   const color = store.getState().mapState.currentColor
-  const colorLegend = exists(store.getState().mapState.usedColors[color])
-    ? store.getState().mapState.usedColors[color].legend
+  const colorLegend = exists(mapStore(store.getState()).usedColors[color])
+    ? mapStore(store.getState()).usedColors[color].legend
     : ""
   if (selected_country_code !== currentMap) {
     const currentCountry = document.getElementById(selected_country_code)
@@ -97,8 +98,8 @@ export const ClassClickHandler = (
   updateUsedColors
 ) => {
   const color = store.getState().mapState.currentColor
-  const colorLegend = exists(store.getState().mapState.usedColors[color])
-    ? store.getState().mapState.usedColors[color].legend
+  const colorLegend = exists(mapStore(store.getState()).usedColors[color])
+    ? mapStore(store.getState()).usedColors[color].legend
     : ""
 
   if (selected_country_code !== currentMap) {
@@ -124,7 +125,7 @@ export const IDContextHandler = (
   dispatch,
   removeCountryFromUsedColors
 ) => {
-  const usedColors = store.getState().mapState.usedColors
+  const usedColors = mapStore(store.getState()).usedColors
   exists(usedColors) &&
     Object.keys(usedColors).map((color) => {
       usedColors[color].appliesTo.includes(selected_country_code) &&
@@ -149,7 +150,7 @@ export const ClassContextHandler = (
   const currentCountry = [
     ...document.querySelectorAll(`.${selected_country_code}`),
   ]
-  const usedColors = store.getState().mapState.usedColors
+  const usedColors = mapStore(store.getState()).usedColors
   exists(usedColors) &&
     Object.keys(usedColors).map((color) => {
       usedColors[color].appliesTo.includes(selected_country_code) &&

@@ -1,3 +1,4 @@
+import { mapStore } from "../../../../redux/mapSlice"
 import { removeCountryFromUsedColors } from "../../../../redux/mapSlice"
 import { eventContainsID } from "../../../_common"
 import { ClassClickHandler, IDClickHandler } from "../utils"
@@ -17,10 +18,10 @@ const handleClick = (
   const identifier = eventContainsID(event)
     ? event.target.id
     : event.target.classList[0]
-  const usedColors = Object.keys(store.getState().mapState.usedColors)
+  const usedColors = Object.keys(mapStore(store.getState()).usedColors)
   usedColors.map((color) => {
     const usedColorAppliesTo =
-      store.getState().mapState.usedColors[color].appliesTo
+      mapStore(store.getState()).usedColors[color].appliesTo
     // Checks if currently selected country already had a color applied to it
     // If so, removes the country from it's previous color
     if (usedColorAppliesTo.includes(identifier)) {
