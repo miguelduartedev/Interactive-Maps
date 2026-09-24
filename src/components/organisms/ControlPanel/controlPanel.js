@@ -4,12 +4,11 @@ import { mapStore, updateTitle } from "../../../redux/mapSlice"
 import ColorLegend from "../../molecules/ColorLegend/colorLegend"
 import ColorPicker from "../../molecules/ColorPicker/colorPicker"
 import GroupSelectors from "../../molecules/GroupSelectors/groupSelectors"
-import { BrowserView } from "react-device-detect"
 
 const ControlPanel = () => {
   const mapState = useSelector(mapStore)
   const dispatch = useDispatch()
-  const { currentColor, currentMap, mapTitle } = mapState
+  const { currentMap, mapTitle } = mapState
 
   const actions = useEditorActions()
   const handleTitleChange = (text) => dispatch(updateTitle(text))

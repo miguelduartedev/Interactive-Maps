@@ -11,6 +11,3 @@ export const createAppStore = (preloadedState) => configureStore({
     deviceState: deviceReducer,
   },
 })
-
-// Removed after legacy map adapters no longer import the singleton.
-export const store = createAppStore()

@@ -1,18 +1,13 @@
 import { useState } from "react"
 import { CirclePicker, SketchPicker } from "react-color"
 import { useDispatch, useSelector } from "react-redux"
-import { mapStore, updateColor } from "../../../redux/mapSlice"
+import { updateColor } from "../../../redux/mapSlice"
 import { exists } from "../../_common"
-import { modalStore, updateModal } from "../../../redux/modalSlice"
 
-// TODO: DECOUPLE FROM MODAL
-const ColorPicker = ({ inModal, setModalType }) => {
+const ColorPicker = () => {
   const dispatch = useDispatch()
   const [displayPicker, setDisplayPicker] = useState(false)
-  const mapState = useSelector(mapStore)
-  const modalState = useSelector(modalStore)
-  const currentColor = mapState.currentColor
-  const type = modalState.type
+  const currentColor = useSelector((state) => state.mapState.currentColor)
 
   const colorSetter = (color) => {
     if (exists(color.hex)) {

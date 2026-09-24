@@ -9,7 +9,7 @@ import Switch from "@mui/material/Switch"
 import { FormGroup } from "react-bootstrap"
 import { FormControlLabel } from "@mui/material"
 
-const GroupSelectors = ({ currentMap, dispatch }) => {
+const GroupSelectors = ({ currentMap }) => {
   const actions = useEditorActions()
   const [accordionOneOpen, setAccordionOneOpen] = useState(false)
   const [accordionTwoOpen, setAccordionTwoOpen] = useState(false)

@@ -1,11 +1,7 @@
 import { useEditorActions } from "../SVGMap/useEditorActions"
 import { useDispatch, useSelector } from "react-redux"
 import {
-  BottomNavigation,
-  BottomNavigationAction,
   Box,
-  Paper,
-  Typography,
   Modal as ModalUI,
 } from "@mui/material"
 import { exists } from "../../_common"
@@ -16,11 +12,11 @@ import { modalStore, updateModal } from "../../../redux/modalSlice"
 import ColorLegend from "../../molecules/ColorLegend/colorLegend"
 import CloseIcon from "@mui/icons-material/Close"
 
-const Modal = ({ modalType, setModalType }) => {
+const Modal = () => {
   const mapState = useSelector(mapStore)
   const modalState = useSelector(modalStore)
   const dispatch = useDispatch()
-  const { currentColor, currentMap, mapTitle } = mapState
+  const { currentMap, mapTitle } = mapState
   const { type } = modalState
 
   const actions = useEditorActions()
@@ -63,7 +59,7 @@ const Modal = ({ modalType, setModalType }) => {
               <h3 className="control-panel__header--second text-center">
                 Color Picker
               </h3>
-              <ColorPicker inModal={modalType} setModalType={setModalType} />
+              <ColorPicker />
             </>
           )}
           {type === "map-legend" && (

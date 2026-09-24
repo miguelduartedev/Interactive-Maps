@@ -1,95 +1,7 @@
-import panzoom from "panzoom"
-import { useEffect, useRef, useState } from "react"
-import MapLegend from "../../../atoms/MapLegend/mapLegend"
-import handleClick from "../hooks/useClick"
-import handleContextMenu from "../hooks/useContextMenu"
-import handleMouseOver from "../hooks/useMouseOver"
-import handleTouchEnd from "../hooks/useTouchEnd"
-import clsx from "clsx"
+import MapCanvas from "../MapCanvas"
 
-const AfricaSVG = ({
-  currentMap,
-  store,
-  dispatch,
-  updateUsedColors,
-  removeCountryFromUsedColors,
-}) => {
-  const [action, setAction] = useState("")
-  const timerRef = useRef()
-  const mapRef = useRef(null)
-  const isMobile = store.getState().deviceState.isMobile
-
-  useEffect(() => {
-    const panzoomInstance = panzoom(mapRef.current, {
-      onTouch: function () {
-        return false // tells the library to not preventDefault.
-      },
-      beforeWheel: function (e) {
-        if (!isMobile) {
-          // allow wheel-zoom only if altKey is pressed. Otherwise - ignore
-          const shouldIgnore = !e.altKey
-          return shouldIgnore
-        }
-      },
-      // disables double click zoom
-      zoomDoubleClickSpeed: !isMobile && 1,
-    })
-
-    return () => {
-      clearTimeout(timerRef.current)
-      panzoomInstance.dispose()
-    }
-  }, [isMobile])
-
-  return (
-    <svg
-      id="africa"
-      baseProfile="tiny"
-      className={clsx(
-        isMobile ? "interactive-map -mobile-version" : "interactive-map",
-      )}
-      fill="#ececec"
-      stroke="black"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth=".2"
-      version="1.2"
-      viewBox="0 0 1000 684"
-      xmlns="http://www.w3.org/2000/svg"
-      onClick={(event) =>
-        handleClick(
-          event,
-          currentMap,
-          store,
-          dispatch,
-          updateUsedColors,
-        )
-      }
-      onContextMenu={(event) =>
-        handleContextMenu(event, store, dispatch, removeCountryFromUsedColors)
-      }
-      onMouseOver={(event) => handleMouseOver(event, currentMap)}
-      onTouchStart={() => {
-        setAction("touch")
-        timerRef.current = setTimeout(() => {
-          setAction("longpress")
-        }, 500)
-      }}
-      onTouchEnd={(event) => {
-        clearTimeout(timerRef.current)
-        handleTouchEnd(
-          action,
-          event,
-          currentMap,
-          store,
-          dispatch,
-          updateUsedColors,
-          removeCountryFromUsedColors,
-        )
-      }}
-      ref={mapRef}
-    >
-      {<MapLegend currentMap={currentMap} />}
+const geometry = (
+  <>
       <path
         fill="#FFFFFF"
         className="AO"
@@ -501,8 +413,15 @@ const AfricaSVG = ({
         id="RE"
         name="Reunion"
       />
-    </svg>
+  </>
+)
+
+export default function AfricaSVG({ currentMap }) {
+  return (
+    <MapCanvas currentMap={currentMap} baseProfile="tiny" fill="#ececec"
+      stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth=".2"
+      version="1.2" viewBox="0 0 1000 684" xmlns="http://www.w3.org/2000/svg">
+      {geometry}
+    </MapCanvas>
   )
 }
-
-export default AfricaSVG

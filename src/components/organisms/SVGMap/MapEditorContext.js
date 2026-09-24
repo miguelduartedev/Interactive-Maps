@@ -8,8 +8,7 @@ export function MapEditorProvider({ children }) {
   const value = useMemo(() => ({
     canvas,
     exportMap: () => {
-      // Legacy fallback is removed when the remaining maps adopt MapCanvas.
-      const svg = canvas.current?.svg || document.querySelector(".interactive-map")
+      const svg = canvas.current?.svg
       if (!svg) return
       return saveSvgAsPng(svg, "interactive_maps.png", {
         encoderOptions: 1, scale: 3, backgroundColor: "#102946",

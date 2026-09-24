@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { Fragment, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import Footer from "../components/atoms/Footer/footer"
 import Navigation from "../components/atoms/Navigation/navigation"
@@ -8,19 +8,7 @@ import ControlPanel from "../components/organisms/ControlPanel/controlPanel"
 import SVGMap from "../components/organisms/SVGMap/svgMap"
 import { updateCurrentMap } from "../redux/mapSlice"
 import clsx from "clsx"
-import {
-  BottomNavigation,
-  BottomNavigationAction,
-  Box,
-  Paper,
-  Typography,
-} from "@mui/material"
-import TextFieldsIcon from "@mui/icons-material/TextFields"
-import BrushIcon from "@mui/icons-material/Brush"
-import InfoIcon from "@mui/icons-material/Info"
-import LayersIcon from "@mui/icons-material/Layers"
-import { BrowserView, isDesktop, isMobile } from "react-device-detect"
-import { exists } from "../components/_common"
+import { BrowserView, isMobile } from "react-device-detect"
 import Modal from "../components/organisms/Modal/modal"
 import Navbar from "../components/organisms/NavBar/navbar"
 import { updateDevice } from "../redux/deviceSlice"
@@ -31,8 +19,6 @@ const MapPath = ({ initialMap }) => {
   const currentMap = router.query.mapPath ?? initialMap
   const dispatch = useDispatch()
 
-  const [modalOpen, setModalOpen] = useState(false)
-  const [modalType, setModalType] = useState("")
   const [isMobileReact, setisMobileReact] = useState(false)
 
   useEffect(() => {
@@ -55,7 +41,7 @@ const MapPath = ({ initialMap }) => {
           content="Create custom maps to showcase your data! Illustrate your data through a map of the World, Europe, North America, South America, Africa or Asia."
         />
       </Head>
-      <Modal modalType={modalType} setModalType={setModalType} />
+      <Modal />
       <div className="main">
         <Navigation />
         <div className={clsx(!isMobileReact && "container pt-5")}>

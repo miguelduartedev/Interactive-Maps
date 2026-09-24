@@ -1,95 +1,7 @@
-import panzoom from "panzoom"
-import { useEffect, useRef, useState } from "react"
-import MapLegend from "../../../atoms/MapLegend/mapLegend"
-import handleClick from "../hooks/useClick"
-import handleContextMenu from "../hooks/useContextMenu"
-import handleMouseOver from "../hooks/useMouseOver"
-import handleTouchEnd from "../hooks/useTouchEnd"
-import clsx from "clsx"
+import MapCanvas from "../MapCanvas"
 
-function AsiaSVG({
-  currentMap,
-  store,
-  dispatch,
-  updateUsedColors,
-  removeCountryFromUsedColors,
-}) {
-  const [action, setAction] = useState("")
-  const timerRef = useRef()
-  const mapRef = useRef(null)
-  const isMobile = store.getState().deviceState.isMobile
-
-  useEffect(() => {
-    const panzoomInstance = panzoom(mapRef.current, {
-      onTouch: function () {
-        return false // tells the library to not preventDefault.
-      },
-      beforeWheel: function (e) {
-        if (!isMobile) {
-          // allow wheel-zoom only if altKey is pressed. Otherwise - ignore
-          const shouldIgnore = !e.altKey
-          return shouldIgnore
-        }
-      },
-      // disables double click zoom
-      zoomDoubleClickSpeed: !isMobile && 1,
-    })
-
-    return () => {
-      clearTimeout(timerRef.current)
-      panzoomInstance.dispose()
-    }
-  }, [isMobile])
-
-  return (
-    <svg
-      id="asia"
-      className={clsx(
-        isMobile ? "interactive-map -mobile-version" : "interactive-map",
-      )}
-      baseProfile="tiny"
-      fill="#ececec"
-      stroke="black"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth=".2"
-      version="1.2"
-      viewBox="0 0 1000 684"
-      xmlns="http://www.w3.org/2000/svg"
-      onClick={(event) =>
-        handleClick(
-          event,
-          currentMap,
-          store,
-          dispatch,
-          updateUsedColors,
-        )
-      }
-      onContextMenu={(event) =>
-        handleContextMenu(event, store, dispatch, removeCountryFromUsedColors)
-      }
-      onMouseOver={(event) => handleMouseOver(event, currentMap)}
-      onTouchStart={() => {
-        setAction("touch")
-        timerRef.current = setTimeout(() => {
-          setAction("longpress")
-        }, 500)
-      }}
-      onTouchEnd={(event) => {
-        clearTimeout(timerRef.current)
-        handleTouchEnd(
-          action,
-          event,
-          currentMap,
-          store,
-          dispatch,
-          updateUsedColors,
-          removeCountryFromUsedColors,
-        )
-      }}
-      ref={mapRef}
-    >
-      <MapLegend currentMap={currentMap} />
+const geometry = (
+  <>
       <path
         fill="#FFFFFF"
         d="m 505.62346,317.61655 1.6274,1.95287 -3.14631,0.86795 -2.60383,1.19342 -6.40108,0.86794 -5.75013,1.41041 -2.60384,3.03781 2.06137,2.92931 1.5189,3.47177 -2.16985,2.92932 0.86794,2.71232 -0.97644,2.49534 -5.64164,-0.21699 3.36329,4.55672 -3.36329,1.84437 -1.5189,4.12274 1.19342,4.23123 -1.95287,1.95287 -2.27835,-0.65096 -4.33972,0.97644 -0.21699,1.84438 h -4.44822 l -2.49533,4.01424 0.86794,5.85862 -7.16054,2.92931 -4.23122,-0.65096 -0.97644,1.51891 -3.68876,-0.86795 -5.75014,1.08493 -10.41532,-3.58026 4.23122,-6.2926 -1.19343,-4.44821 -4.66519,-1.19343 -1.30191,-4.4482 -2.92932,-5.53316 1.73589,-3.79725 -2.71233,-1.08493 0.54247,-5.09917 0.65096,-8.67944 6.40108,2.71233 4.23124,-0.97644 0.43396,-3.1463 4.33973,-0.97644 2.82082,-2.16985 -0.21699,-5.53315 4.5567,-1.41041 0.32548,-2.38685 3.1463,1.84438 1.73589,0.21699 h 3.25479 l 4.6652,1.5189 1.95288,0.75946 3.68876,-2.16987 2.27835,1.30193 0.97644,-3.14631 3.47177,0.1085 0.65096,-0.97644 -0.21698,-2.82082 1.84437,-2.38685 3.58027,1.51891 -0.10848,2.16985 1.84437,0.32548 0.97644,5.85863 2.92931,2.27836 1.62739,-1.51891 2.38685,-0.65096 2.71233,-3.14629 4.12273,0.54246 z"
@@ -613,8 +525,15 @@ function AsiaSVG({
         id="TV"
         name="Tuvalu"
       />
-    </svg>
+  </>
+)
+
+export default function AsiaSVG({ currentMap }) {
+  return (
+    <MapCanvas currentMap={currentMap} baseProfile="tiny" fill="#ececec"
+      stroke="black" strokeLinecap="round" strokeLinejoin="round" strokeWidth=".2"
+      version="1.2" viewBox="0 0 1000 684" xmlns="http://www.w3.org/2000/svg">
+      {geometry}
+    </MapCanvas>
   )
 }
-
-export default AsiaSVG

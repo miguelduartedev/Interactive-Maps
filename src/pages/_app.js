@@ -15,9 +15,11 @@ import "../components/organisms/Panel/styles/Panel.styles.scss"
 import "../components/organisms/Modal/tutorial.styles.scss"
 import "../components/organisms/SVGMap/styles/europeMap.styles.scss"
 import "../components/_common/global.styles.scss"
-import { store } from "../redux/store"
+import { useState } from "react"
+import { createAppStore } from "../redux/store"
 
 const MyApp = ({ Component, pageProps }) => {
+  const [store] = useState(() => createAppStore())
   return (
     <>
       <Script

@@ -5,6 +5,13 @@ import panzoom from "panzoom"
 import { createAppStore } from "../../../redux/store"
 import { updateCurrentMap, updateTitle, updateUsedColorsLegend, updateColor } from "../../../redux/mapSlice"
 import EuropeSVG from "./maps/EuropeSVG"
+import WorldSVG from "./maps/WorldSVG"
+import AfricaSVG from "./maps/AfricaSVG"
+import AsiaSVG from "./maps/AsiaSVG"
+import NorthAmericaSVG from "./maps/NorthAmericaSVG"
+import SouthAmericaSVG from "./maps/SouthAmericaSVG"
+import { useEditorActions } from "./useEditorActions"
+import { saveSvgAsPng } from "save-svg-as-png"
 import MapCanvas from "./MapCanvas"
 import { MapEditorProvider } from "./MapEditorContext"
 import { indexGeometry } from "./countryGeometry"
@@ -13,9 +20,9 @@ import ColorPicker from "../../molecules/ColorPicker/colorPicker"
 jest.mock("panzoom", () => jest.fn(() => ({ dispose: jest.fn() })))
 jest.mock("save-svg-as-png", () => ({ saveSvgAsPng: jest.fn() }))
 
-function mount(children, strict = false) {
+function mount(children, strict = false, route = "europe") {
   const store = createAppStore()
-  store.dispatch(updateCurrentMap("europe"))
+  store.dispatch(updateCurrentMap(route))
   const contents = <Provider store={store}><MapEditorProvider>{children}</MapEditorProvider></Provider>
   return { store, ...render(strict ? <StrictMode>{contents}</StrictMode> : contents) }
 }
@@ -97,4 +104,54 @@ test("color picker renders without dispatching a color change", () => {
   expect(store.getState().mapState.currentColor).toBe("#039606")
   fireEvent.click(screen.getByTitle("#F44336"))
   expect(store.getState().mapState.currentColor).toBe("#F44336")
+})
+
+function Commands() {
+  const actions = useEditorActions()
+  return <>
+    <button onClick={actions.selectAll}>Select</button>
+    <button onClick={actions.clear}>Clear</button>
+    <button onClick={actions.exportMap}>Export</button>
+  </>
+}
+
+test.each([
+  ["europe", EuropeSVG], ["world", WorldSVG], ["africa", AfricaSVG],
+  ["asia", AsiaSVG], ["north-america", NorthAmericaSVG], ["south-america", SouthAmericaSVG],
+])("%s supports consecutive assignments, controls, export ref, and route isolation", (route, Map) => {
+  const { container, store } = mount(<><Map currentMap={route} /><Commands /></>, false, route)
+  const countries = [...container.querySelectorAll("[data-country]")]
+  const ids = [...new Set(countries.map((el) => el.dataset.country))]
+  ids.slice(0, 5).forEach((id) => fireEvent.click(container.querySelector(`[data-country="${id}"]`)))
+  expect(Object.keys(store.getState().mapState.countryColors)).toHaveLength(5)
+  act(() => store.dispatch(updateColor("#FF0000")))
+  fireEvent.click(countries[0])
+  expect(countries[0]).toHaveAttribute("fill", "#FF0000")
+  fireEvent.contextMenu(countries[0])
+  expect(countries[0]).toHaveAttribute("fill", "#FFFFFF")
+  fireEvent.click(screen.getByText("Select"))
+  expect(Object.keys(store.getState().mapState.countryColors)).toHaveLength(ids.length)
+  countries.forEach((part) => expect(part).toHaveAttribute("fill", "#FF0000"))
+  fireEvent.click(screen.getByText("Export"))
+  expect(saveSvgAsPng).toHaveBeenLastCalledWith(container.querySelector("svg"), "interactive_maps.png", expect.objectContaining({ scale: 3 }))
+  fireEvent.click(screen.getByText("Clear"))
+  expect(store.getState().mapState.countryColors).toEqual({})
+  act(() => store.dispatch(updateCurrentMap("another-map")))
+  fireEvent.click(countries[0])
+  expect(countries[0]).toHaveAttribute("fill", "#FFFFFF")
+})
+
+test("moving or using multiple fingers cancels a pending paint", () => {
+  const { container, store } = mount(<EuropeSVG currentMap="europe" />)
+  const france = container.querySelector("#FR")
+  const finger = { clientX: 10, clientY: 10 }
+  fireEvent.touchStart(france, { touches: [finger] })
+  fireEvent.touchMove(france, { touches: [{ clientX: 30, clientY: 10 }] })
+  fireEvent.touchEnd(france)
+  expect(store.getState().mapState.countryColors).toEqual({})
+  fireEvent.touchStart(france, { touches: [finger] })
+  fireEvent.touchStart(france, { touches: [finger, finger] })
+  fireEvent.touchEnd(france)
+  fireEvent.click(france)
+  expect(store.getState().mapState.countryColors).toEqual({})
 })

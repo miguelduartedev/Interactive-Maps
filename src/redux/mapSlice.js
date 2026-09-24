@@ -69,29 +69,12 @@ const slice = createSlice({
       const color = normalizeColor(Object.keys(payload)[0])
       if (state.colorOrder.includes(color)) state.legendLabels[color] = Object.values(payload)[0]
     },
-    // Temporary legacy-map adapters: derived membership is never stored separately.
-    updateUsedColors: (state, { payload }) => {
-      const color = Object.keys(payload)[0]
-      assign(state, [payload[color].appliesTo].flat(), color)
-    },
-    removeCountryFromUsedColors: (state, { payload }) => {
-      if (state.countryColors[payload.country] === payload.color) delete state.countryColors[payload.country]
-      pruneLegends(state)
-    },
-    removeUsedColor: (state, { payload }) => {
-      Object.keys(state.countryColors).forEach((country) => {
-        if (state.countryColors[country] === payload) delete state.countryColors[country]
-      })
-      pruneLegends(state)
-    },
-    resetUsedColors: resetColors,
   },
 })
 
 export const {
   updateCurrentMap, updateTitle, updateColor, paintCountries, eraseCountries,
   applyGroup, selectCountries, clearMap, updateUsedColorsLegend,
-  updateUsedColors, removeCountryFromUsedColors, removeUsedColor, resetUsedColors,
 } = slice.actions
 
 export const selectUsedColors = createSelector(
