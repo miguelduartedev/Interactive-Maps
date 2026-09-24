@@ -16,6 +16,7 @@ import MapCanvas from "./MapCanvas"
 import { MapEditorProvider } from "./MapEditorContext"
 import { indexGeometry } from "./countryGeometry"
 import ColorPicker from "../../molecules/ColorPicker/colorPicker"
+import { geographicGroupings } from "../ControlPanel/utils/globalVars"
 
 jest.mock("panzoom", () => jest.fn(() => ({ dispose: jest.fn() })))
 jest.mock("save-svg-as-png", () => ({ saveSvgAsPng: jest.fn() }))
@@ -65,6 +66,31 @@ test("multipart identity is stable; decoration and definitions are excluded", ()
   expect(store.getState().mapState.countryColors).toEqual({ AO: "#039606" })
   fireEvent.contextMenu(parts[0])
   parts.forEach((part) => expect(part).toHaveAttribute("fill", "#FFFFFF"))
+})
+
+test("BQ is one multipart country and every territory path paints and erases the whole country", () => {
+  const { container, store } = mount(<NorthAmericaSVG currentMap="north-america" />, false, "north-america")
+  const territories = ["BQBO", "BQSE", "BQSA"].map((id) => container.querySelector(`#${id}`))
+
+  expect(territories).not.toContain(null)
+  expect(new Set(territories.map((territory) => territory.dataset.country))).toEqual(new Set(["BQ"]))
+  expect(store.getState().mapState.countryColors).toEqual({})
+
+  territories.forEach((territory) => {
+    fireEvent.click(territory)
+    territories.forEach((part) => expect(part).toHaveAttribute("fill", "#039606"))
+    expect(store.getState().mapState.countryColors).toEqual({ BQ: "#039606" })
+
+    fireEvent.contextMenu(territory)
+    territories.forEach((part) => expect(part).toHaveAttribute("fill", "#FFFFFF"))
+    expect(store.getState().mapState.countryColors).toEqual({})
+  })
+})
+
+test("Caribbean grouping uses the shared BQ country identity", () => {
+  const caribbean = geographicGroupings("north-america").find(({ name }) => name === "Caribbean")
+  expect(caribbean.countries).toContain("BQ")
+  expect(caribbean.countries).not.toContain("BQBO")
 })
 
 test("long press erases, suppresses synthetic click, and cancellation never paints", () => {

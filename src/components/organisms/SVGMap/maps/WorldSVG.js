@@ -2272,18 +2272,21 @@ const geometry = (
       />
       <path
         fill="#FFFFFF"
+        className="BQ"
         d="m 374.35403,338.55126 h -0.13029 l -0.0652,-0.32572 0.0652,-0.19542 -0.0652,-0.19543 -0.26058,-0.0652 -0.19545,-0.19542 0.0652,-0.19545 0.78176,0.39087 -0.0652,0.13029 v 0.26059 l -0.13029,0.13029 z"
         id="BQBO"
         name="Netherlands"
       />
       <path
         fill="#FFFFFF"
+        className="BQ"
         d="m 395.39579,315.75059 -0.13029,0.0652 v -0.13027 l 0.0652,-0.0652 z"
         id="BQSE"
         name="St. Eustatius (Netherlands)"
       />
       <path
         fill="#FFFFFF"
+        className="BQ"
         d="m 394.41863,315.1643 h -0.0652 l 0.0652,-0.13029 0.0652,0.0651 z"
         id="BQSA"
         name="Saba (Netherlands)"

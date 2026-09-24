@@ -384,7 +384,7 @@ export const caribbean = [
   "KY",
   "CW",
   "AW",
-  "BQBO",
+  "BQ",
   "VG",
   "MS",
 ];
