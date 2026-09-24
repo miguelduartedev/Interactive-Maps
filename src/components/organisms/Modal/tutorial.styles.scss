@@ -1,0 +1,23 @@
+// Restore the mobile tutorial typography formerly supplied by CountryProfile.
+.country__profile--header {
+  font-size: 14px;
+  line-height: 28px;
+  color: black;
+  font-family: "Sora", Verdana;
+  font-weight: 600;
+}
+
+.country__profile--body {
+  font-size: 12px;
+}
+
+@media (min-width: 992px) {
+  .country__profile--header {
+    font-size: 20px;
+    line-height: 45px;
+  }
+
+  .country__profile--body {
+    font-size: 1rem;
+  }
+}
