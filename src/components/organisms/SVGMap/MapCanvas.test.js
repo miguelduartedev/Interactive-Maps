@@ -15,8 +15,8 @@ import { saveSvgAsPng } from "save-svg-as-png"
 import MapCanvas, { DEFAULT_COUNTRY_FILL } from "./MapCanvas"
 import { MapEditorProvider } from "./MapEditorContext"
 import { indexGeometry } from "./countryGeometry"
-import ColorPicker from "../../molecules/ColorPicker/colorPicker"
-import { geographicGroupings } from "../ControlPanel/utils/globalVars"
+import AppearanceControl from "../StudioInspector/AppearanceControl"
+import { geographicGroupings } from "../../../data/mapGroupings"
 import StudioHeader from "../StudioShell/StudioHeader"
 import StudioToolbar from "../StudioShell/StudioToolbar"
 import ViewportControls from "../StudioShell/ViewportControls"
@@ -189,11 +189,11 @@ test("viewport controls call panzoom and never change country colors", () => {
   expect(france).toHaveAttribute("fill", "#039606")
 })
 
-test("color picker renders without dispatching a color change", () => {
-  const { store } = mount(<ColorPicker />)
+test("appearance control renders without dispatching a color change", () => {
+  const { store } = mount(<AppearanceControl />)
   expect(store.getState().mapState.currentColor).toBe("#039606")
-  fireEvent.click(screen.getByTitle("#F44336"))
-  expect(store.getState().mapState.currentColor).toBe("#F44336")
+  fireEvent.click(screen.getByRole("button", { name: "Use color #F43F5E" }))
+  expect(store.getState().mapState.currentColor).toBe("#F43F5E")
 })
 
 function Commands() {
@@ -266,6 +266,6 @@ test("Studio map selector uses every typed route and Export uses the active SVG"
   expect(saveSvgAsPng).toHaveBeenLastCalledWith(
     container.querySelector("svg.interactive-map"),
     "interactive_maps.png",
-    expect.objectContaining({ scale: 3 }),
+    expect.objectContaining({ scale: 3, backgroundColor: "#090E18" }),
   )
 })
