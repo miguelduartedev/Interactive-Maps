@@ -189,6 +189,58 @@ test("viewport controls call panzoom and never change country colors", () => {
   expect(france).toHaveAttribute("fill", "#039606")
 })
 
+test("Undo and Redo toolbar actions preserve tool and viewport state", () => {
+  panzoom.mockClear()
+  const { container, store } = mount(<>
+    <StudioToolbar />
+    <ViewportControls />
+    <EuropeSVG currentMap="europe" />
+  </>)
+  const france = container.querySelector("#FR")
+  const panTool = screen.getByRole("button", { name: "Pan tool" })
+  const undo = screen.getByRole("button", { name: "Undo" })
+  const redo = screen.getByRole("button", { name: "Redo" })
+  const instance = panzoom.mock.results[0].value
+
+  expect(undo).toBeDisabled()
+  expect(redo).toBeDisabled()
+  fireEvent.click(france)
+  fireEvent.click(panTool)
+  fireEvent.click(screen.getByRole("button", { name: "Zoom in" }))
+  expect(undo).toBeEnabled()
+
+  fireEvent.keyDown(document.body, { key: "z", ctrlKey: true })
+  expect(store.getState().mapState.countryColors).toEqual({})
+  expect(panTool).toHaveAttribute("aria-pressed", "true")
+  expect(instance.zoomAbs).not.toHaveBeenCalled()
+  expect(panzoom).toHaveBeenCalledTimes(1)
+  expect(redo).toBeEnabled()
+
+  fireEvent.keyDown(document.body, { key: "z", metaKey: true, shiftKey: true })
+  expect(store.getState().mapState.countryColors).toEqual({ FR: "#039606" })
+  expect(france).toHaveAttribute("fill", "#039606")
+
+  fireEvent.click(undo)
+  fireEvent.keyDown(document.body, { key: "y", ctrlKey: true })
+  expect(store.getState().mapState.countryColors).toEqual({ FR: "#039606" })
+})
+
+test("global history shortcuts leave native text editing shortcuts untouched", () => {
+  const { container, store } = mount(<>
+    <StudioToolbar />
+    <input aria-label="Test text field" />
+    <div contentEditable aria-label="Test editable content" />
+    <EuropeSVG currentMap="europe" />
+  </>)
+  fireEvent.click(container.querySelector("#FR"))
+
+  const input = screen.getByLabelText("Test text field")
+  const editable = screen.getByLabelText("Test editable content")
+  expect(fireEvent.keyDown(input, { key: "z", ctrlKey: true })).toBe(true)
+  expect(fireEvent.keyDown(editable, { key: "z", metaKey: true })).toBe(true)
+  expect(store.getState().mapState.countryColors).toEqual({ FR: "#039606" })
+})
+
 test("appearance control renders without dispatching a color change", () => {
   const { store } = mount(<AppearanceControl />)
   expect(store.getState().mapState.currentColor).toBe("#039606")
@@ -209,10 +261,14 @@ test.each([
   ["europe", EuropeSVG], ["world", WorldSVG], ["africa", AfricaSVG],
   ["asia", AsiaSVG], ["north-america", NorthAmericaSVG], ["south-america", SouthAmericaSVG],
 ])("%s supports consecutive assignments, controls, export ref, and route isolation", (route, Map) => {
-  const { container, store } = mount(<><Map currentMap={route} /><Commands /></>, false, route)
+  const { container, store } = mount(<><StudioToolbar /><Map currentMap={route} /><Commands /></>, false, route)
   const countries = [...container.querySelectorAll("[data-country]")]
   const ids = [...new Set(countries.map((el) => el.dataset.country))]
   ids.slice(0, 5).forEach((id) => fireEvent.click(container.querySelector(`[data-country="${id}"]`)))
+  expect(Object.keys(store.getState().mapState.countryColors)).toHaveLength(5)
+  fireEvent.click(screen.getByRole("button", { name: "Undo" }))
+  expect(Object.keys(store.getState().mapState.countryColors)).toHaveLength(4)
+  fireEvent.click(screen.getByRole("button", { name: "Redo" }))
   expect(Object.keys(store.getState().mapState.countryColors)).toHaveLength(5)
   act(() => store.dispatch(updateColor("#FF0000")))
   fireEvent.click(countries[0])
@@ -223,7 +279,7 @@ test.each([
   expect(Object.keys(store.getState().mapState.countryColors)).toHaveLength(ids.length)
   countries.forEach((part) => expect(part).toHaveAttribute("fill", "#FF0000"))
   fireEvent.click(screen.getByText("Export"))
-  expect(saveSvgAsPng).toHaveBeenLastCalledWith(container.querySelector("svg"), "interactive_maps.png", expect.objectContaining({ scale: 3 }))
+  expect(saveSvgAsPng).toHaveBeenLastCalledWith(container.querySelector("svg.interactive-map"), "interactive_maps.png", expect.objectContaining({ scale: 3 }))
   fireEvent.click(screen.getByText("Clear"))
   expect(store.getState().mapState.countryColors).toEqual({})
   act(() => store.dispatch(updateCurrentMap("another-map")))
@@ -267,5 +323,28 @@ test("Studio map selector uses every typed route and Export uses the active SVG"
     container.querySelector("svg.interactive-map"),
     "interactive_maps.png",
     expect.objectContaining({ scale: 3, backgroundColor: "#090E18" }),
+  )
+})
+
+test("export reflects the document restored by Undo", () => {
+  const { container, store } = mount(<>
+    <StudioToolbar />
+    <EuropeSVG currentMap="europe" />
+    <Commands />
+  </>)
+  const france = container.querySelector("#FR")
+  const germany = container.querySelector("#DE")
+  fireEvent.click(france)
+  act(() => store.dispatch(updateColor("#FF0000")))
+  fireEvent.click(germany)
+  fireEvent.click(screen.getByRole("button", { name: "Undo" }))
+
+  expect(france).toHaveAttribute("fill", "#039606")
+  expect(germany).toHaveAttribute("fill", DEFAULT_COUNTRY_FILL)
+  fireEvent.click(screen.getByText("Export"))
+  expect(saveSvgAsPng).toHaveBeenLastCalledWith(
+    container.querySelector("svg.interactive-map"),
+    "interactive_maps.png",
+    expect.objectContaining({ backgroundColor: "#090E18", scale: 3 }),
   )
 })

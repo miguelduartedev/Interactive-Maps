@@ -329,6 +329,25 @@
       border-color: rgba(56, 189, 248, 0.82);
       box-shadow: 0 0 18px -5px rgba(56, 189, 248, 0.58);
     }
+
+    &:disabled {
+      color: #475569;
+      background: transparent;
+      cursor: not-allowed;
+      opacity: 0.58;
+    }
+
+    &:disabled:hover {
+      color: #475569;
+      background: transparent;
+    }
+  }
+
+  &__separator {
+    width: 36px;
+    height: 1px;
+    margin: 1px 0;
+    background: #24324a;
   }
 }
 
