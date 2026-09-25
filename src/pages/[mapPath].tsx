@@ -4,7 +4,6 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { isMobile } from "react-device-detect"
-import Footer from "../components/atoms/Footer/footer"
 import ControlPanel from "../components/organisms/ControlPanel/controlPanel"
 import { MapEditorProvider } from "../components/organisms/SVGMap/MapEditorContext"
 import SVGMap from "../components/organisms/SVGMap/svgMap"
@@ -63,7 +62,6 @@ export default function MapPath({ initialMap }: MapPathProps) {
         </main>
         {isMobileReact && <Navbar />}
       </div>
-      {!isMobileReact && <Footer />}
     </MapEditorProvider>
   )
 }

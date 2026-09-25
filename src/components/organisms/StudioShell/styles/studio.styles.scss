@@ -1,5 +1,8 @@
 .studio-page {
-  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
   color: #dfe2f1;
   background: #0b0f19;
   font-family: "Inter", "Helvetica Neue", sans-serif;
@@ -173,7 +176,9 @@
 
 .studio-workspace {
   position: relative;
-  min-height: calc(100dvh - 64px);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
   padding: 32px 24px 48px 104px;
   background-color: #090e18;
   background-image:
@@ -185,6 +190,26 @@
   &__content {
     width: min(100%, 1440px);
     margin: 0 auto;
+  }
+}
+
+// Temporary compatibility boundary for the retained V1 inspector.
+// Remove this with the Phase 3 ControlPanel replacement.
+.studio-page .control-panel {
+  color: #111827;
+
+  p,
+  label,
+  .MuiTypography-root,
+  .accordion-button,
+  .accordion-body,
+  .form-control {
+    color: #111827;
+  }
+
+  .form-control::placeholder {
+    color: #6b7280;
+    opacity: 1;
   }
 }
 
@@ -343,7 +368,6 @@
   }
 
   .studio-workspace {
-    min-height: calc(100dvh - 58px);
     padding: 12px 0 80px;
   }
 
