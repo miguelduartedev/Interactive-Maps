@@ -1,36 +1,67 @@
-[Interactive Maps](https://interactive-maps.vercel.app/) is a tool for creating custom maps
+# Interactive Maps
 
-Decide what data you want your map to show, select the countries that fit the criteria, color code the countries and give your map a descriptive label. Once you're finished you can download the SVG Map as a PNG.
+Interactive Maps is a responsive browser-based map editor for creating custom geographic maps. Choose a regional or world canvas, color countries or predefined groups, add a title and legend, and export the active map as a PNG.
 
-- How to run:
-  - npm install
-  - npm run dev
+- [Live demo](https://interactive-maps.vercel.app/)
+- [Repository](https://github.com/miguelduartedev/Interactive-Maps)
 
-Version 2.2
+## Features
 
-- You can now access a demo of this tool through:
+- Six map canvases: World, Europe, North America, South America, Africa, and Asia
+- Paint individual countries with quick-palette or custom colors
+- Paint predefined political blocs and geographic regions, with an option to combine selections
+- Paint, Pan, and Erase editor modes, plus viewport zoom controls
+- Editable map title and legend labels for colors currently used on the map
+- Select all countries or clear the map
+- Export the active SVG map as a high-resolution PNG
+- Responsive V2 Studio UI with a desktop inspector and mobile bottom controls/sheets
+- Installable PWA with statically generated map routes
 
-  - https://interactive-maps.vercel.app/
+## Tech Stack
 
-- Features include:
+| Area | Tools |
+| --- | --- |
+| Framework | Next.js 15, React 18, TypeScript |
+| State | Redux Toolkit, React Redux |
+| Styling | Sass / SCSS |
+| Map interaction and export | panzoom, save-svg-as-png |
+| Testing | Jest, React Testing Library |
+| Delivery and observability | Serwist, Vercel Analytics, Vercel Speed Insights |
 
-  - Customizable maps for the World, Europe, North America, South America, Africa and Asia
-  - Color Picker (react-color)
-  - SVG Map zoom and drag (requires holding Alt or Option on Desktop)
-  - Filters for Political Unions and Geographic Positions (UN Definition)
-  - Customizable title/description/legend of your custom map
-  - General tools: Color Removal, Clear All, Select All, Export Map (save-svg-as-png)
-  - Fetch public API for displaying country data
+## Architecture
 
-- Upcoming features:
+Redux is the source of truth for editor state: country-color assignments, the current color, map title, and legend labels. The map canvas derives country fills declaratively from that state through React rather than mutating SVG fill styles directly.
 
-  - Map Title and Legend Font customization options
-  - File export options (scale, file format, etc.)
-  - Customizable background color for the map
+Typed editor context and hooks share map interactions, active-canvas registration, export, and viewport controls. Persistent map data stays separate from pan/zoom state, and the desktop inspector and mobile sheets share one control implementation instead of maintaining separate editors.
 
-Using public API "REST Countries":
+The large geographic SVG files intentionally remain JavaScript while surrounding editor logic is migrated to TypeScript. Multipart territories are handled as one logical country where needed; for example, Bonaire, Sint Eustatius, and Saba share the `BQ` identity. The six supported routes are statically generated.
 
+## Getting Started
 
-Using SVG maps from "simplemaps" (maps were slightly altered through the use of Inkscape and by changing the SVG code by hand)
+```bash
+npm install
+npm run dev
+```
 
-- https://simplemaps.com/
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+Useful checks:
+
+```bash
+npm run typecheck
+npm test
+npm run lint
+npm run build
+```
+
+No environment variables are required for local development.
+
+## Project Status
+
+Interactive Maps is actively evolving toward a fuller V2 Map Studio. Possible next steps include undo/redo, local saved maps, country search and selected-country workflows, richer export controls, data-driven/CSV map creation, and shareable maps or accounts.
+
+## Credits
+
+The SVG maps were adapted for this project from [SimpleMaps](https://simplemaps.com/).
+
+Created by [Miguel Duarte](https://miguelduartedev.github.io/portfolio/).
