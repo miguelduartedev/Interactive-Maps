@@ -105,8 +105,9 @@ export default function AppearanceControl() {
                     value={currentColor}
                     onChange={(event) => setColor(event.target.value)}
                   />
-                  <svg aria-hidden="true" viewBox="0 0 12 12">
-                    <path d="m3 4.5 3 3 3-3" />
+                  <svg aria-hidden="true" viewBox="0 0 16 16">
+                    <path d="m9.25 2.25 4.5 4.5-6.6 6.6-3.25.75.75-3.25 6.6-6.6Z" />
+                    <path d="m7.75 3.75 4.5 4.5" />
                   </svg>
                 </span>
                 <input
