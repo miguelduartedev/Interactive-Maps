@@ -3,6 +3,7 @@ import {
   useRef,
   useState,
   type MouseEvent as ReactMouseEvent,
+  type MutableRefObject,
   type RefObject,
   type SVGProps,
   type TouchEvent as ReactTouchEvent,
@@ -10,7 +11,11 @@ import {
 import panzoom from "panzoom"
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks"
 import { eraseCountries, paintCountries } from "../../../redux/mapSlice"
-import type { CountryId, EditorTool } from "../../../types/editor"
+import type {
+  CountryId,
+  EditorTool,
+  EditorViewportController,
+} from "../../../types/editor"
 import { countryFromTarget } from "./countryGeometry"
 
 interface ActiveTouch {
@@ -30,6 +35,7 @@ export function useMapInteractions(
   svgRef: RefObject<SVGSVGElement>,
   available: ReadonlySet<CountryId>,
   tool: EditorTool,
+  viewport: MutableRefObject<EditorViewportController | null>,
 ): { hovered: CountryId | null; handlers: MapInteractionHandlers } {
   const dispatch = useAppDispatch()
   const isMobile = useAppSelector((state) => state.deviceState.isMobile)
@@ -56,15 +62,36 @@ export function useMapInteractions(
       onTouch: () => false,
       beforeWheel: (event) => toolRef.current !== "pan" && !event.altKey,
       beforeMouseDown: (event) => toolRef.current !== "pan" && !event.altKey,
+      minZoom: 0.5,
+      maxZoom: 8,
       zoomDoubleClickSpeed: !isMobile ? 1 : 0,
     })
+
+    const zoomFromCenter = (multiplier: number) => {
+      const bounds = svg.getBoundingClientRect()
+      instance.zoomTo(
+        bounds.left + bounds.width / 2,
+        bounds.top + bounds.height / 2,
+        multiplier,
+      )
+    }
+    const controller: EditorViewportController = {
+      zoomIn: () => zoomFromCenter(1.25),
+      zoomOut: () => zoomFromCenter(0.8),
+      resetView: () => {
+        instance.zoomAbs(0, 0, 1)
+        instance.moveTo(0, 0)
+      },
+    }
+    viewport.current = controller
 
     return () => {
       clearTimer()
       touch.current = null
+      if (viewport.current === controller) viewport.current = null
       instance.dispose()
     }
-  }, [isMobile, svgRef])
+  }, [isMobile, svgRef, viewport])
 
   const identify = (event: ReactMouseEvent<SVGSVGElement> | ReactTouchEvent<SVGSVGElement>) =>
     countryFromTarget(event.target, svgRef.current, available)

@@ -1,24 +1,15 @@
-@import '~bootstrap/scss/bootstrap-grid.scss';
-
 .svg-container {
-  border-radius: 25px;
-  background-color: #102946;
-  /* 
-  On touchscreens the following proprieties avoid 
-  the zooming and dragging gestures to be interpreted 
-  as default browser gestures and avoids the long press
-  from being interpreted as text selection
-  */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: clamp(28px, 4vh, 52px) clamp(56px, 6vw, 96px) clamp(68px, 8vh, 96px) clamp(92px, 8vw, 124px);
+  overflow: hidden;
   touch-action: none;
   user-select: none;
-  &.-mobile-version {
-    @include media-breakpoint-down(md) { 
-      background-color: #0a253b;
-    }
-      @include media-breakpoint-down(md) { 
-      height: calc(100dvh - 80px);
-    }
-  }
 }
 
 #europe,
@@ -28,25 +19,48 @@
 #south-america,
 #world {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  height: 100%;
+  max-width: 1280px;
+  max-height: 900px;
+  margin: auto;
+  overflow: visible;
+  filter: drop-shadow(0 18px 32px rgba(0, 0, 0, 0.28));
 
-  .hovered-country {
-    stroke-width: 1px;
-  }
-
-  path {
+  [data-country] {
+    stroke: #334a63;
+    stroke-width: 0.42px;
+    vector-effect: non-scaling-stroke;
     cursor: pointer;
   }
 
-  &.-mobile-version {
-    @include media-breakpoint-down(md) {
-      margin: 0;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      translate: -50% -50%;
-      width: 100%;
-    }
+  .hovered-country {
+    stroke: #7dd3fc;
+    stroke-width: 1.15px;
+    filter: brightness(1.08);
+  }
+}
+
+// These two legacy geometries extend beyond their preserved viewBoxes.
+// Slightly smaller canvases keep the complete silhouettes inside the viewport.
+#north-america {
+  width: 82%;
+  height: 82%;
+}
+
+#asia {
+  width: 92%;
+  height: 92%;
+}
+
+@media screen and (max-width: 1024px) {
+  .svg-container {
+    padding: 24px 56px 70px 88px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .svg-container {
+    padding: 16px 12px 92px;
   }
 }

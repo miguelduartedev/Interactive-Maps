@@ -21,6 +21,8 @@ import {
 import { useMapEditor } from "./MapEditorContext"
 import { useMapInteractions } from "./useMapInteractions"
 
+export const DEFAULT_COUNTRY_FILL = "#D9E4EF"
+
 interface CountryShapeProps {
   element: ReactElement<GeometryElementProps>
   country: CountryId
@@ -39,7 +41,7 @@ const CountryShape = memo(function CountryShape({
     : undefined)
 
   return cloneElement(element, {
-    fill: color || element.props.fill || "#FFFFFF",
+    fill: color || DEFAULT_COUNTRY_FILL,
     "data-country": country,
     className: clsx(element.props.className, hovered && "hovered-country"),
   })
@@ -82,11 +84,11 @@ interface MapCanvasProps extends SVGProps<SVGSVGElement> {
 
 export default function MapCanvas({ currentMap, children, ...svgProps }: MapCanvasProps) {
   const svgRef = useRef<SVGSVGElement>(null)
-  const { canvas, tool } = useMapEditor()
+  const { canvas, tool, viewport } = useMapEditor()
   const isMobile = useAppSelector((state) => state.deviceState.isMobile)
   const geometry = useMemo(() => indexGeometry(children), [children])
   const available = useMemo(() => new Set(geometry.countries), [geometry.countries])
-  const { handlers, hovered } = useMapInteractions(svgRef, available, tool)
+  const { handlers, hovered } = useMapInteractions(svgRef, available, tool, viewport)
 
   useEffect(() => {
     const svg = svgRef.current
@@ -100,6 +102,7 @@ export default function MapCanvas({ currentMap, children, ...svgProps }: MapCanv
 
   return (
     <svg
+      preserveAspectRatio="xMidYMid meet"
       {...svgProps}
       {...handlers}
       id={currentMap}
