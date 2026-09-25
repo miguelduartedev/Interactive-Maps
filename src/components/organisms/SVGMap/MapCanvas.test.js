@@ -12,16 +12,22 @@ import NorthAmericaSVG from "./maps/NorthAmericaSVG"
 import SouthAmericaSVG from "./maps/SouthAmericaSVG"
 import { useEditorActions } from "./useEditorActions"
 import { saveSvgAsPng } from "save-svg-as-png"
-import MapCanvas from "./MapCanvas"
+import MapCanvas, { DEFAULT_COUNTRY_FILL } from "./MapCanvas"
 import { MapEditorProvider } from "./MapEditorContext"
 import { indexGeometry } from "./countryGeometry"
 import ColorPicker from "../../molecules/ColorPicker/colorPicker"
 import { geographicGroupings } from "../ControlPanel/utils/globalVars"
 import StudioHeader from "../StudioShell/StudioHeader"
 import StudioToolbar from "../StudioShell/StudioToolbar"
+import ViewportControls from "../StudioShell/ViewportControls"
 import { useRouter } from "next/router"
 
-jest.mock("panzoom", () => jest.fn(() => ({ dispose: jest.fn() })))
+jest.mock("panzoom", () => jest.fn(() => ({
+  dispose: jest.fn(),
+  moveTo: jest.fn(),
+  zoomAbs: jest.fn(),
+  zoomTo: jest.fn(),
+})))
 jest.mock("save-svg-as-png", () => ({ saveSvgAsPng: jest.fn() }))
 jest.mock("next/router", () => ({ useRouter: jest.fn() }))
 
@@ -52,7 +58,7 @@ test("Europe paints consecutive countries, repaints, erases, and renders title a
   fireEvent.click(screen.getByText("Visited"))
   expect(Object.keys(store.getState().mapState.countryColors)).toEqual(["FR", "DE"])
   fireEvent.contextMenu(france)
-  expect(france).toHaveAttribute("fill", "#FFFFFF")
+  expect(france).toHaveAttribute("fill", DEFAULT_COUNTRY_FILL)
   expect(screen.queryByText("Visited")).not.toBeInTheDocument()
 })
 
@@ -102,7 +108,7 @@ test("multipart identity is stable; decoration and definitions are excluded", ()
   fireEvent.click(container.querySelector("#decoration"))
   expect(store.getState().mapState.countryColors).toEqual({ AO: "#039606" })
   fireEvent.contextMenu(parts[0])
-  parts.forEach((part) => expect(part).toHaveAttribute("fill", "#FFFFFF"))
+  parts.forEach((part) => expect(part).toHaveAttribute("fill", DEFAULT_COUNTRY_FILL))
 })
 
 test("BQ is one multipart country and every territory path paints and erases the whole country", () => {
@@ -119,7 +125,7 @@ test("BQ is one multipart country and every territory path paints and erases the
     expect(store.getState().mapState.countryColors).toEqual({ BQ: "#039606" })
 
     fireEvent.contextMenu(territory)
-    territories.forEach((part) => expect(part).toHaveAttribute("fill", "#FFFFFF"))
+    territories.forEach((part) => expect(part).toHaveAttribute("fill", DEFAULT_COUNTRY_FILL))
     expect(store.getState().mapState.countryColors).toEqual({})
   })
 })
@@ -162,6 +168,27 @@ test("panzoom instances are disposed under StrictMode; title edits do not restar
   instances.forEach((instance) => expect(instance.dispose).toHaveBeenCalledTimes(1))
 })
 
+test("viewport controls call panzoom and never change country colors", () => {
+  panzoom.mockClear()
+  const { container, store } = mount(<><ViewportControls /><EuropeSVG currentMap="europe" /></>)
+  const instance = panzoom.mock.results[0].value
+  const france = container.querySelector("#FR")
+
+  fireEvent.click(france)
+  expect(store.getState().mapState.countryColors).toEqual({ FR: "#039606" })
+
+  fireEvent.click(screen.getByRole("button", { name: "Zoom in" }))
+  expect(instance.zoomTo).toHaveBeenLastCalledWith(0, 0, 1.25)
+  fireEvent.click(screen.getByRole("button", { name: "Zoom out" }))
+  expect(instance.zoomTo).toHaveBeenLastCalledWith(0, 0, 0.8)
+  fireEvent.click(screen.getByRole("button", { name: "Fit map to viewport" }))
+  expect(instance.zoomAbs).toHaveBeenCalledWith(0, 0, 1)
+  expect(instance.moveTo).toHaveBeenCalledWith(0, 0)
+
+  expect(store.getState().mapState.countryColors).toEqual({ FR: "#039606" })
+  expect(france).toHaveAttribute("fill", "#039606")
+})
+
 test("color picker renders without dispatching a color change", () => {
   const { store } = mount(<ColorPicker />)
   expect(store.getState().mapState.currentColor).toBe("#039606")
@@ -191,7 +218,7 @@ test.each([
   fireEvent.click(countries[0])
   expect(countries[0]).toHaveAttribute("fill", "#FF0000")
   fireEvent.contextMenu(countries[0])
-  expect(countries[0]).toHaveAttribute("fill", "#FFFFFF")
+  expect(countries[0]).toHaveAttribute("fill", DEFAULT_COUNTRY_FILL)
   fireEvent.click(screen.getByText("Select"))
   expect(Object.keys(store.getState().mapState.countryColors)).toHaveLength(ids.length)
   countries.forEach((part) => expect(part).toHaveAttribute("fill", "#FF0000"))
@@ -201,7 +228,7 @@ test.each([
   expect(store.getState().mapState.countryColors).toEqual({})
   act(() => store.dispatch(updateCurrentMap("another-map")))
   fireEvent.click(countries[0])
-  expect(countries[0]).toHaveAttribute("fill", "#FFFFFF")
+  expect(countries[0]).toHaveAttribute("fill", DEFAULT_COUNTRY_FILL)
 })
 
 test("moving or using multiple fingers cancels a pending paint", () => {

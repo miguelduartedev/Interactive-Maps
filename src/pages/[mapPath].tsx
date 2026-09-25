@@ -1,4 +1,3 @@
-import clsx from "clsx"
 import type { GetStaticPaths, GetStaticProps } from "next"
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -6,9 +5,9 @@ import { useEffect, useState } from "react"
 import { isMobile } from "react-device-detect"
 import ControlPanel from "../components/organisms/ControlPanel/controlPanel"
 import { MapEditorProvider } from "../components/organisms/SVGMap/MapEditorContext"
-import SVGMap from "../components/organisms/SVGMap/svgMap"
 import Modal from "../components/organisms/Modal/modal"
 import Navbar from "../components/organisms/NavBar/navbar"
+import StudioCanvas from "../components/organisms/StudioShell/StudioCanvas"
 import StudioHeader from "../components/organisms/StudioShell/StudioHeader"
 import StudioToolbar from "../components/organisms/StudioShell/StudioToolbar"
 import { updateDevice } from "../redux/deviceSlice"
@@ -53,11 +52,13 @@ export default function MapPath({ initialMap }: MapPathProps) {
         <StudioHeader currentMap={currentMap} />
         <main className="studio-workspace">
           <StudioToolbar />
-          <div className={clsx("studio-workspace__content", !isMobileReact && "container-fluid")}>
-            <div className="row">
-              <SVGMap initialMap={initialMap} />
-              {!isMobileReact && <ControlPanel />}
-            </div>
+          <div className="studio-workspace__content">
+            <StudioCanvas currentMap={currentMap} />
+            {!isMobileReact && (
+              <aside className="studio-legacy-inspector" aria-label="Map controls">
+                <ControlPanel />
+              </aside>
+            )}
           </div>
         </main>
         {isMobileReact && <Navbar />}

@@ -61,6 +61,12 @@ export interface EditorCanvasRegistration {
   currentMap: MapRoute
 }
 
+export interface EditorViewportController {
+  zoomIn: () => void
+  zoomOut: () => void
+  resetView: () => void
+}
+
 export interface EditorActions {
   clear: () => void
   selectAll: () => void
@@ -70,7 +76,11 @@ export interface EditorActions {
 
 export interface MapEditorContextValue {
   canvas: MutableRefObject<EditorCanvasRegistration | null>
+  viewport: MutableRefObject<EditorViewportController | null>
   tool: EditorTool
   setTool: (tool: EditorTool) => void
   exportMap: () => Promise<void> | undefined
+  zoomIn: () => void
+  zoomOut: () => void
+  resetView: () => void
 }
