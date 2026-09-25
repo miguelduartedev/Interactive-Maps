@@ -2,7 +2,6 @@ import clsx from "clsx"
 import { useRouter } from "next/router"
 import { useAppSelector } from "../../../redux/hooks"
 import { isMapRoute, type MapRoute } from "../../../types/editor"
-import MapInstructions from "../../molecules/MapInstructions/mapInstructions"
 import AfricaSVG from "./maps/AfricaSVG"
 import AsiaSVG from "./maps/AsiaSVG"
 import EuropeSVG from "./maps/EuropeSVG"
@@ -31,7 +30,6 @@ export default function SVGMap({ initialMap }: { initialMap: MapRoute }) {
         {currentMap === "south-america" && <SouthAmericaSVG {...svgProps} />}
         {currentMap === "world" && <WorldSVG {...svgProps} />}
       </div>
-      <MapInstructions />
     </div>
   )
 }

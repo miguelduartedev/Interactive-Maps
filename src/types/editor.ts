@@ -10,6 +10,7 @@ export const MAP_ROUTES = [
 ] as const
 
 export type MapRoute = (typeof MAP_ROUTES)[number]
+export type EditorTool = "paint" | "pan" | "erase"
 
 export function isMapRoute(value: unknown): value is MapRoute {
   return typeof value === "string" && MAP_ROUTES.some((route) => route === value)
@@ -69,5 +70,7 @@ export interface EditorActions {
 
 export interface MapEditorContextValue {
   canvas: MutableRefObject<EditorCanvasRegistration | null>
+  tool: EditorTool
+  setTool: (tool: EditorTool) => void
   exportMap: () => Promise<void> | undefined
 }

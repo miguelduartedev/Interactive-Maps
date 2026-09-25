@@ -4,13 +4,13 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import { isMobile } from "react-device-detect"
-import Footer from "../components/atoms/Footer/footer"
-import Navigation from "../components/atoms/Navigation/navigation"
 import ControlPanel from "../components/organisms/ControlPanel/controlPanel"
 import { MapEditorProvider } from "../components/organisms/SVGMap/MapEditorContext"
 import SVGMap from "../components/organisms/SVGMap/svgMap"
 import Modal from "../components/organisms/Modal/modal"
 import Navbar from "../components/organisms/NavBar/navbar"
+import StudioHeader from "../components/organisms/StudioShell/StudioHeader"
+import StudioToolbar from "../components/organisms/StudioShell/StudioToolbar"
 import { updateDevice } from "../redux/deviceSlice"
 import { useAppDispatch } from "../redux/hooks"
 import { updateCurrentMap } from "../redux/mapSlice"
@@ -49,17 +49,19 @@ export default function MapPath({ initialMap }: MapPathProps) {
         />
       </Head>
       <Modal />
-      <div className="main">
-        <Navigation />
-        <div className={clsx(!isMobileReact && "container pt-5")}>
-          <div className="row">
-            <SVGMap initialMap={initialMap} />
-            {!isMobileReact && <ControlPanel />}
+      <div className="studio-page">
+        <StudioHeader currentMap={currentMap} />
+        <main className="studio-workspace">
+          <StudioToolbar />
+          <div className={clsx("studio-workspace__content", !isMobileReact && "container-fluid")}>
+            <div className="row">
+              <SVGMap initialMap={initialMap} />
+              {!isMobileReact && <ControlPanel />}
+            </div>
           </div>
-        </div>
+        </main>
         {isMobileReact && <Navbar />}
       </div>
-      {!isMobileReact && <Footer />}
     </MapEditorProvider>
   )
 }
