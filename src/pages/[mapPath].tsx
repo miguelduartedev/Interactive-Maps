@@ -1,15 +1,13 @@
 import type { GetStaticPaths, GetStaticProps } from "next"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { isMobile } from "react-device-detect"
-import ControlPanel from "../components/organisms/ControlPanel/controlPanel"
 import { MapEditorProvider } from "../components/organisms/SVGMap/MapEditorContext"
-import Modal from "../components/organisms/Modal/modal"
-import Navbar from "../components/organisms/NavBar/navbar"
 import StudioCanvas from "../components/organisms/StudioShell/StudioCanvas"
 import StudioHeader from "../components/organisms/StudioShell/StudioHeader"
 import StudioToolbar from "../components/organisms/StudioShell/StudioToolbar"
+import StudioControls from "../components/organisms/StudioInspector/StudioControls"
 import { updateDevice } from "../redux/deviceSlice"
 import { useAppDispatch } from "../redux/hooks"
 import { updateCurrentMap } from "../redux/mapSlice"
@@ -27,14 +25,12 @@ export default function MapPath({ initialMap }: MapPathProps) {
   const router = useRouter()
   const currentMap = isMapRoute(router.query.mapPath) ? router.query.mapPath : initialMap
   const dispatch = useAppDispatch()
-  const [isMobileReact, setIsMobileReact] = useState(false)
 
   useEffect(() => {
     dispatch(updateCurrentMap(currentMap))
   }, [currentMap, dispatch])
 
   useEffect(() => {
-    setIsMobileReact(isMobile)
     dispatch(updateDevice(isMobile))
   }, [dispatch])
 
@@ -47,21 +43,15 @@ export default function MapPath({ initialMap }: MapPathProps) {
           content="Create custom maps to showcase your data! Illustrate your data through a map of the World, Europe, North America, South America, Africa or Asia."
         />
       </Head>
-      <Modal />
       <div className="studio-page">
         <StudioHeader currentMap={currentMap} />
         <main className="studio-workspace">
           <StudioToolbar />
           <div className="studio-workspace__content">
             <StudioCanvas currentMap={currentMap} />
-            {!isMobileReact && (
-              <aside className="studio-legacy-inspector" aria-label="Map controls">
-                <ControlPanel />
-              </aside>
-            )}
+            <StudioControls currentMap={currentMap} />
           </div>
         </main>
-        {isMobileReact && <Navbar />}
       </div>
     </MapEditorProvider>
   )

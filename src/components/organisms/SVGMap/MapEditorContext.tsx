@@ -27,7 +27,7 @@ export function MapEditorProvider({ children }: { children: ReactNode }) {
     return saveSvgAsPng(svg, "interactive_maps.png", {
       encoderOptions: 1,
       scale: 3,
-      backgroundColor: "#102946",
+      backgroundColor: "#090E18",
       modifyCss: () => ".interactive-map {transform: unset !important}",
     })
   }, [])

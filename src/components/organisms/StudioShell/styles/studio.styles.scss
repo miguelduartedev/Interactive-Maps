@@ -206,53 +206,6 @@
   background-size: 100% 100%, 48px 48px, 48px 48px;
 }
 
-.studio-legacy-inspector {
-  position: relative;
-  z-index: 10;
-  flex: 0 0 clamp(320px, 27vw, 400px);
-  min-width: 0;
-  overflow-y: auto;
-  padding: 24px;
-  background: #0d1526;
-  border-left: 1px solid #1a263d;
-  scrollbar-color: #334155 #0d1526;
-  scrollbar-width: thin;
-
-  > .col-12 {
-    width: 100%;
-    max-width: none;
-    height: auto;
-    padding: 0 !important;
-    margin: 0 !important;
-    flex: none;
-  }
-
-  .control-panel {
-    height: auto;
-    min-height: 100%;
-  }
-}
-
-// Temporary compatibility boundary for the retained V1 inspector.
-// Remove this with the Phase 3 ControlPanel replacement.
-.studio-page .control-panel {
-  color: #111827;
-
-  p,
-  label,
-  .MuiTypography-root,
-  .accordion-button,
-  .accordion-body,
-  .form-control {
-    color: #111827;
-  }
-
-  .form-control::placeholder {
-    color: #6b7280;
-    opacity: 1;
-  }
-}
-
 .viewport-controls {
   position: absolute;
   bottom: 24px;
@@ -399,12 +352,6 @@
 .interactive-map--pan:active path,
 .interactive-map--pan:active [data-country] {
   cursor: grabbing !important;
-}
-
-@media screen and (max-width: 900px) {
-  .studio-legacy-inspector {
-    display: none;
-  }
 }
 
 @media screen and (max-width: 767px) {

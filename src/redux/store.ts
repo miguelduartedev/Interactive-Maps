@@ -2,11 +2,9 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit"
 import type { PreloadedState } from "redux"
 import deviceReducer from "./deviceSlice"
 import mapReducer from "./mapSlice"
-import modalReducer from "./modalSlice"
 
 const rootReducer = combineReducers({
   mapState: mapReducer,
-  modalState: modalReducer,
   deviceState: deviceReducer,
 })
 
