@@ -94,15 +94,21 @@ export default function AppearanceControl() {
           </button>
           {customOpen ? (
             <div className="appearance-control__popover" role="dialog" aria-label="Custom color picker">
-              <label htmlFor="studio-custom-color">Custom color</label>
+              <span className="appearance-control__popover-label">Custom color</span>
               <div className="appearance-control__custom-fields">
-                <input
-                  id="studio-custom-color"
-                  type="color"
-                  aria-label="Custom color"
-                  value={currentColor}
-                  onChange={(event) => setColor(event.target.value)}
-                />
+                <span className="appearance-control__color-picker">
+                  <input
+                    id="studio-custom-color"
+                    type="color"
+                    aria-label="Choose color"
+                    title="Choose color"
+                    value={currentColor}
+                    onChange={(event) => setColor(event.target.value)}
+                  />
+                  <svg aria-hidden="true" viewBox="0 0 12 12">
+                    <path d="m3 4.5 3 3 3-3" />
+                  </svg>
+                </span>
                 <input
                   type="text"
                   aria-label="Custom hex color"

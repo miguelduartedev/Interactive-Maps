@@ -90,7 +90,10 @@ test("title, quick colors, custom colors, and derived legend labels update real 
   expect(screen.getByRole("button", { name: "Use color #F43F5E" })).toHaveAttribute("aria-pressed", "true")
 
   fireEvent.click(screen.getByRole("button", { name: "Choose a custom color" }))
-  fireEvent.change(screen.getByLabelText("Custom color"), { target: { value: "#123456" } })
+  const visualPicker = screen.getByLabelText("Choose color")
+  expect(visualPicker).toHaveAttribute("type", "color")
+  expect(visualPicker).toHaveAttribute("title", "Choose color")
+  fireEvent.change(visualPicker, { target: { value: "#123456" } })
   expect(store.getState().mapState.currentColor).toBe("#123456")
   expect(screen.getByRole("button", { name: "Choose a custom color" })).toHaveAttribute("data-custom-selected", "true")
 
