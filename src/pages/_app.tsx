@@ -41,7 +41,17 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <Provider store={store}>
         <Component {...pageProps} />
       </Provider>
-      <Analytics />
+      <Analytics
+        beforeSend={(event) => {
+          if (
+            typeof window !== "undefined" &&
+            window.localStorage.getItem("va-disable") !== null
+          ) {
+            return null
+          }
+          return event
+        }}
+      />
       <SpeedInsights />
     </>
   )
