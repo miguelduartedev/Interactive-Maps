@@ -1,5 +1,9 @@
 import type { EditorTool } from "../../../types/editor"
 import { useMapEditor } from "../SVGMap/MapEditorContext"
+import {
+  useEditorHistory,
+  useEditorHistoryShortcuts,
+} from "../SVGMap/useEditorHistory"
 
 const TOOLS: { id: EditorTool; label: string; icon: JSX.Element }[] = [
   {
@@ -33,6 +37,8 @@ const TOOLS: { id: EditorTool; label: string; icon: JSX.Element }[] = [
 
 export default function StudioToolbar() {
   const { tool, setTool } = useMapEditor()
+  const history = useEditorHistory()
+  useEditorHistoryShortcuts(history)
 
   return (
     <aside className="studio-toolbar" aria-label="Map tools">
@@ -50,6 +56,33 @@ export default function StudioToolbar() {
           <span>{label}</span>
         </button>
       ))}
+      <span className="studio-toolbar__separator" aria-hidden="true" />
+      <button
+        className="studio-toolbar__button studio-toolbar__button--action"
+        type="button"
+        aria-label="Undo"
+        title="Undo (Ctrl/Cmd+Z)"
+        disabled={!history.canUndo}
+        onClick={history.undo}
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M9 7 4 12l5 5M5 12h8a6 6 0 0 1 6 6" />
+        </svg>
+        <span>Undo</span>
+      </button>
+      <button
+        className="studio-toolbar__button studio-toolbar__button--action"
+        type="button"
+        aria-label="Redo"
+        title="Redo (Ctrl/Cmd+Shift+Z)"
+        disabled={!history.canRedo}
+        onClick={history.redo}
+      >
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="m15 7 5 5-5 5m4-5h-8a6 6 0 0 0-6 6" />
+        </svg>
+        <span>Redo</span>
+      </button>
     </aside>
   )
 }

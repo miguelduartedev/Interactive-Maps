@@ -104,6 +104,33 @@ test("title, quick colors, custom colors, and derived legend labels update real 
   expect(store.getState().mapState.legendLabels["#123456"]).toBe("Custom region")
 })
 
+test("title and legend typing sessions each create one Undo step", () => {
+  const { store } = mountStudio()
+  const title = screen.getByLabelText("Map title")
+
+  fireEvent.focus(title)
+  fireEvent.change(title, { target: { value: "E" } })
+  fireEvent.change(title, { target: { value: "Europe" } })
+  fireEvent.change(title, { target: { value: "European GDP" } })
+  expect(store.getState().editorHistory.past).toHaveLength(0)
+  expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled()
+  fireEvent.blur(title)
+  expect(store.getState().editorHistory.past).toHaveLength(1)
+
+  act(() => store.dispatch(paintCountries({ countries: ["FR"] })))
+  const legend = screen.getByLabelText("Legend label for #039606")
+  const stepsBeforeLegend = store.getState().editorHistory.past.length
+  fireEvent.focus(legend)
+  fireEvent.change(legend, { target: { value: "H" } })
+  fireEvent.change(legend, { target: { value: "High" } })
+  fireEvent.blur(legend)
+  expect(store.getState().editorHistory.past).toHaveLength(stepsBeforeLegend + 1)
+
+  fireEvent.click(screen.getByRole("button", { name: "Undo" }))
+  expect(store.getState().mapState.legendLabels["#039606"]).toBe("")
+  expect(store.getState().mapState.mapTitle).toBe("European GDP")
+})
+
 test("real groups preserve replacement and Combine Groups behavior", () => {
   const { store } = mountStudio()
 
@@ -154,6 +181,8 @@ test("mobile mounts only the requested shared surface and restores focus when it
   fireEvent.click(screen.getByRole("button", { name: "Map" }))
   expect(document.querySelectorAll("#studio-map-title")).toHaveLength(1)
   expect(screen.getByText("Color a country to create a legend item.")).toBeInTheDocument()
+  expect(screen.getAllByRole("button", { name: "Undo" })).toHaveLength(1)
+  expect(screen.getAllByRole("button", { name: "Redo" })).toHaveLength(1)
 })
 
 test("Combine Groups has one owner and survives responsive surface changes", () => {

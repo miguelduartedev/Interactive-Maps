@@ -5,6 +5,7 @@ import type {
   CountryId,
   EraseCountriesPayload,
   GroupCountriesPayload,
+  MapDocumentState,
   MapRoute,
   MapState,
   PaintCountriesPayload,
@@ -99,6 +100,12 @@ const slice = createSlice({
       resetColors(state)
       state.mapTitle = ""
     },
+    restoreDocumentState: (state, { payload }: PayloadAction<MapDocumentState>) => {
+      state.mapTitle = payload.mapTitle
+      state.countryColors = { ...payload.countryColors }
+      state.legendLabels = { ...payload.legendLabels }
+      state.colorOrder = [...payload.colorOrder]
+    },
     updateUsedColorsLegend: (state, { payload }: PayloadAction<UpdateLegendPayload>) => {
       const entry = Object.entries(payload)[0]
       if (!entry) return
@@ -118,6 +125,7 @@ export const {
   applyGroup,
   selectCountries,
   clearMap,
+  restoreDocumentState,
   updateUsedColorsLegend,
 } = slice.actions
 

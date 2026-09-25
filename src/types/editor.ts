@@ -37,6 +37,25 @@ export interface MapState {
   colorOrder: ColorValue[]
 }
 
+export interface MapDocumentState {
+  mapTitle: string
+  countryColors: CountryColors
+  legendLabels: LegendLabels
+  colorOrder: ColorValue[]
+}
+
+export interface ActiveTextEdit {
+  fieldId: string
+  currentMap: MapRoute
+  baseline: MapDocumentState
+}
+
+export interface EditorHistoryState {
+  past: MapDocumentState[]
+  future: MapDocumentState[]
+  activeTextEdit: ActiveTextEdit | null
+}
+
 export interface PaintCountriesPayload {
   countries: CountryId[]
   color?: ColorValue
