@@ -1,6 +1,8 @@
 import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit"
 import type { RootState } from "./store"
 import type {
+  AnnotationKind,
+  AnnotationPosition,
   ColorValue,
   CountryId,
   EraseCountriesPayload,
@@ -13,6 +15,13 @@ import type {
   UpdateLegendPayload,
   UsedColors,
 } from "../types/editor"
+import { getDefaultAnnotationPositions } from "../data/mapAnnotations"
+
+interface UpdateAnnotationPositionPayload {
+  currentMap: MapRoute
+  kind: AnnotationKind
+  position: AnnotationPosition
+}
 
 export const initialState: MapState = {
   currentMap: "",
@@ -21,6 +30,7 @@ export const initialState: MapState = {
   countryColors: {},
   legendLabels: {},
   colorOrder: [],
+  annotationPositions: null,
 }
 
 const normalizeColor = (color: ColorValue) => color.toUpperCase()
@@ -68,6 +78,7 @@ const slice = createSlice({
       countryColors: {},
       legendLabels: {},
       colorOrder: [],
+      annotationPositions: getDefaultAnnotationPositions(payload),
     }),
     updateTitle: (state, { payload }: PayloadAction<string>) => {
       state.mapTitle = payload
@@ -113,6 +124,13 @@ const slice = createSlice({
       const color = normalizeColor(rawColor)
       if (state.colorOrder.includes(color)) state.legendLabels[color] = legend
     },
+    updateAnnotationPosition: (
+      state,
+      { payload }: PayloadAction<UpdateAnnotationPositionPayload>,
+    ) => {
+      if (state.currentMap !== payload.currentMap || !state.annotationPositions) return
+      state.annotationPositions[payload.kind] = { ...payload.position }
+    },
   },
 })
 
@@ -127,6 +145,7 @@ export const {
   clearMap,
   restoreDocumentState,
   updateUsedColorsLegend,
+  updateAnnotationPosition,
 } = slice.actions
 
 export const selectUsedColors = createSelector(

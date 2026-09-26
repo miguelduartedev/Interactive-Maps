@@ -17,6 +17,15 @@ import type {
 
 const MapEditorContext = createContext<MapEditorContextValue | null>(null)
 
+export function createExportSvg(svg: SVGSVGElement): SVGSVGElement {
+  const clone = svg.cloneNode(true) as SVGSVGElement
+  clone.querySelectorAll("[data-editor-only]").forEach((element) => element.remove())
+  clone.querySelectorAll("[data-dragging]").forEach((element) => {
+    element.removeAttribute("data-dragging")
+  })
+  return clone
+}
+
 export function MapEditorProvider({ children }: { children: ReactNode }) {
   const canvas = useRef<EditorCanvasRegistration | null>(null)
   const viewport = useRef<EditorViewportController | null>(null)
@@ -24,7 +33,7 @@ export function MapEditorProvider({ children }: { children: ReactNode }) {
   const exportMap = useCallback(() => {
     const svg = canvas.current?.svg
     if (!svg) return
-    return saveSvgAsPng(svg, "interactive_maps.png", {
+    return saveSvgAsPng(createExportSvg(svg), "interactive_maps.png", {
       encoderOptions: 1,
       scale: 3,
       backgroundColor: "#090E18",

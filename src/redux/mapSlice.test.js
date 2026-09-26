@@ -1,7 +1,9 @@
 import reducer, {
   initialState, paintCountries, eraseCountries, applyGroup, selectCountries,
   clearMap, updateTitle, updateColor, updateCurrentMap, updateUsedColorsLegend, selectUsedColors,
+  updateAnnotationPosition,
 } from "./mapSlice"
+import { MAP_ANNOTATION_CONFIGS } from "../data/mapAnnotations"
 
 const paint = (state, countries, color) => reducer(state, paintCountries({ countries, color }))
 
@@ -44,5 +46,45 @@ test("select all replaces assignments; clear resets title and legends but not ch
   state = reducer(state, updateTitle("Title"))
   state = reducer(state, clearMap())
   expect(state).toEqual({ ...initialState, currentColor: "#0000FF" })
-  expect(reducer(state, updateCurrentMap("europe"))).toEqual({ ...initialState, currentMap: "europe" })
+  expect(reducer(state, updateCurrentMap("europe"))).toEqual({
+    ...initialState,
+    currentMap: "europe",
+    annotationPositions: {
+      title: { x: 48, y: 76 },
+      legend: { x: 48, y: 114 },
+    },
+  })
+})
+
+test.each(Object.entries(MAP_ANNOTATION_CONFIGS))(
+  "%s initializes independent route-specific annotation positions",
+  (route, config) => {
+    const state = reducer(undefined, updateCurrentMap(route))
+    expect(state.annotationPositions).toEqual(config.defaultPositions)
+    expect(state.annotationPositions.title).not.toBe(state.annotationPositions.legend)
+  },
+)
+
+test("annotation positions are route guarded and survive Clear All and document restoration", () => {
+  let state = reducer(undefined, updateCurrentMap("europe"))
+  state = reducer(state, updateAnnotationPosition({
+    currentMap: "europe",
+    kind: "title",
+    position: { x: 240, y: 180 },
+  }))
+  state = reducer(state, updateAnnotationPosition({
+    currentMap: "world",
+    kind: "legend",
+    position: { x: 700, y: 500 },
+  }))
+  expect(state.annotationPositions).toEqual({
+    title: { x: 240, y: 180 },
+    legend: { x: 48, y: 114 },
+  })
+
+  const positions = state.annotationPositions
+  state = reducer(state, clearMap())
+  expect(state.annotationPositions).toEqual(positions)
+  expect(reducer(state, updateCurrentMap("world")).annotationPositions)
+    .toEqual(MAP_ANNOTATION_CONFIGS.world.defaultPositions)
 })

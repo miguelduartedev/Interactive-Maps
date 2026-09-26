@@ -3,7 +3,13 @@ import { Provider } from "react-redux"
 import { act, fireEvent, render, screen } from "@testing-library/react"
 import panzoom from "panzoom"
 import { createAppStore } from "../../../redux/store"
-import { updateCurrentMap, updateTitle, updateUsedColorsLegend, updateColor } from "../../../redux/mapSlice"
+import {
+  updateAnnotationPosition,
+  updateCurrentMap,
+  updateTitle,
+  updateUsedColorsLegend,
+  updateColor,
+} from "../../../redux/mapSlice"
 import EuropeSVG from "./maps/EuropeSVG"
 import WorldSVG from "./maps/WorldSVG"
 import AfricaSVG from "./maps/AfricaSVG"
@@ -25,10 +31,16 @@ import {
   MAP_ANNOTATION_CONFIGS,
   MAP_ATTRIBUTION,
 } from "../../atoms/MapAnnotations/mapAnnotations"
+import {
+  clampAnnotationPosition,
+  clientPointToSvg,
+} from "../../atoms/MapAnnotations/useDraggableAnnotation"
 
 jest.mock("panzoom", () => jest.fn(() => ({
   dispose: jest.fn(),
   moveTo: jest.fn(),
+  pause: jest.fn(),
+  resume: jest.fn(),
   zoomAbs: jest.fn(),
   zoomTo: jest.fn(),
 })))
@@ -46,6 +58,35 @@ const MAP_FIXTURES = [
   ["europe", EuropeSVG], ["world", WorldSVG], ["africa", AfricaSVG],
   ["asia", AsiaSVG], ["north-america", NorthAmericaSVG], ["south-america", SouthAmericaSVG],
 ]
+
+function mockSvgCoordinates(svg, { scale = 1, x = 0, y = 0 } = {}) {
+  svg.getScreenCTM = jest.fn(() => ({ inverse: () => ({ scale, x, y }) }))
+  svg.createSVGPoint = jest.fn(() => ({
+    x: 0,
+    y: 0,
+    matrixTransform(matrix) {
+      return {
+        x: (this.x - matrix.x) / matrix.scale,
+        y: (this.y - matrix.y) / matrix.scale,
+      }
+    },
+  }))
+}
+
+function mockPointerCapture(element) {
+  let pointerId = null
+  element.setPointerCapture = jest.fn((nextPointerId) => { pointerId = nextPointerId })
+  element.hasPointerCapture = jest.fn((candidate) => candidate === pointerId)
+  element.releasePointerCapture = jest.fn(() => { pointerId = null })
+}
+
+function dispatchPointer(element, type, properties) {
+  const event = new Event(type, { bubbles: true, cancelable: true })
+  Object.entries(properties).forEach(([name, value]) => {
+    Object.defineProperty(event, name, { configurable: true, value })
+  })
+  fireEvent(element, event)
+}
 
 test("Europe paints consecutive countries, repaints, erases, and renders title and legend", () => {
   const { store, container } = mount(<EuropeSVG currentMap="europe" />)
@@ -93,14 +134,16 @@ test("map annotations preserve title casing, legend order, and render above non-
   const legendLabels = [...annotations.querySelectorAll(".map-annotations__legend-label")]
 
   expect(svg.lastElementChild).toBe(annotations)
-  expect(annotations).toHaveAttribute("pointer-events", "none")
+  expect(annotations).not.toHaveAttribute("pointer-events")
+  expect(annotations.querySelector(".map-annotations__attribution")).toHaveAttribute("pointer-events", "none")
   expect(title).toHaveTextContent("My Mixed-Case Map")
   expect(title).toHaveAttribute("font-size", "24")
   expect(title).toHaveAttribute("font-weight", "700")
   expect(title).toHaveAttribute("paint-order", "stroke")
   expect(title).not.toHaveAttribute("font-variant")
   expect(legendLabels.map((label) => label.textContent)).toEqual(["Visited", "Focus region"])
-  expect(annotations.querySelector("circle")).toHaveAttribute("stroke", "#CBD5E1")
+  expect(annotations.querySelector(".map-annotations__legend-content circle"))
+    .toHaveAttribute("stroke", "#CBD5E1")
 })
 
 test.each(MAP_FIXTURES)("%s renders restrained viewBox-aware attribution", (route, Map) => {
@@ -112,6 +155,94 @@ test.each(MAP_FIXTURES)("%s renders restrained viewBox-aware attribution", (rout
   expect(attribution).toHaveAttribute("y", String(config.viewBoxHeight - 18))
   expect(attribution).toHaveAttribute("text-anchor", "end")
   expect(container.querySelectorAll(".map-annotations__attribution")).toHaveLength(1)
+})
+
+test("SVG coordinate conversion and annotation clamping respect transforms and content bounds", () => {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg")
+  mockSvgCoordinates(svg, { scale: 2, x: 100, y: 50 })
+
+  expect(clientPointToSvg(svg, 500, 410)).toEqual({ x: 200, y: 180 })
+  expect(clampAnnotationPosition(
+    { x: 980, y: 680 },
+    { x: 0, y: -24, width: 200, height: 30 },
+    { width: 1000, height: 684 },
+  )).toEqual({ x: 784, y: 662 })
+})
+
+test("title and legend drag independently without affecting tools, countries, viewport, or history", () => {
+  panzoom.mockClear()
+  const { container, store } = mount(<>
+    <StudioToolbar />
+    <EuropeSVG currentMap="europe" />
+  </>)
+  const svg = container.querySelector("svg.interactive-map")
+  mockSvgCoordinates(svg, { scale: 2, x: 100, y: 50 })
+  const instance = panzoom.mock.results[0].value
+  const france = container.querySelector("#FR")
+  const germany = container.querySelector("#DE")
+
+  fireEvent.click(france)
+  act(() => {
+    store.dispatch(updateTitle("Movable map"))
+    store.dispatch(updateUsedColorsLegend({ "#039606": "Selected" }))
+  })
+
+  const titleGroup = screen.getByRole("group", { name: "Drag map title" })
+  const legendGroup = screen.getByRole("group", { name: "Drag map legend" })
+  titleGroup.querySelector("text").getBBox = jest.fn(() => ({ x: 0, y: -24, width: 180, height: 30 }))
+  legendGroup.querySelector(".map-annotations__legend-content").getBBox = jest.fn(() => ({ x: 0, y: -7, width: 140, height: 14 }))
+  mockPointerCapture(titleGroup)
+  mockPointerCapture(legendGroup)
+
+  // Grab 10 SVG units right and 4 units below the title anchor, then move it.
+  dispatchPointer(titleGroup, "pointerdown", {
+    button: 0, clientX: 216, clientY: 210, isPrimary: true, pointerId: 1,
+  })
+  dispatchPointer(titleGroup, "pointermove", { clientX: 500, clientY: 410, pointerId: 1 })
+  expect(titleGroup).toHaveAttribute("transform", "translate(190 176)")
+  expect(store.getState().mapState.annotationPositions.title).toEqual({ x: 48, y: 76 })
+  dispatchPointer(titleGroup, "pointerup", { clientX: 500, clientY: 410, pointerId: 1 })
+
+  expect(store.getState().mapState.annotationPositions).toEqual({
+    title: { x: 190, y: 176 },
+    legend: { x: 48, y: 114 },
+  })
+  expect(instance.pause).toHaveBeenCalledTimes(1)
+  expect(instance.resume).toHaveBeenCalledTimes(1)
+  expect(store.getState().editorHistory.past).toHaveLength(1)
+  expect(screen.getByRole("button", { name: "Paint tool" })).toHaveAttribute("aria-pressed", "true")
+  expect(store.getState().mapState.countryColors).toEqual({ FR: "#039606" })
+
+  fireEvent.click(screen.getByRole("button", { name: "Pan tool" }))
+  dispatchPointer(legendGroup, "pointerdown", {
+    button: 0, clientX: 210, clientY: 290, isPrimary: true, pointerId: 2,
+  })
+  dispatchPointer(legendGroup, "pointermove", { clientX: 700, clientY: 650, pointerId: 2 })
+  dispatchPointer(legendGroup, "pointerup", { clientX: 700, clientY: 650, pointerId: 2 })
+
+  expect(store.getState().mapState.annotationPositions).toEqual({
+    title: { x: 190, y: 176 },
+    legend: { x: 293, y: 294 },
+  })
+  expect(store.getState().editorHistory.past).toHaveLength(1)
+  expect(screen.getByRole("button", { name: "Pan tool" })).toHaveAttribute("aria-pressed", "true")
+
+  fireEvent.click(screen.getByRole("button", { name: "Erase tool" }))
+  dispatchPointer(titleGroup, "pointerdown", {
+    button: 0, clientX: 480, clientY: 402, isPrimary: true, pointerId: 3,
+  })
+  dispatchPointer(titleGroup, "pointerup", { clientX: 480, clientY: 402, pointerId: 3 })
+  expect(screen.getByRole("button", { name: "Erase tool" })).toHaveAttribute("aria-pressed", "true")
+  expect(store.getState().editorHistory.past).toHaveLength(1)
+
+  fireEvent.click(screen.getByRole("button", { name: "Paint tool" }))
+  fireEvent.click(germany)
+  fireEvent.click(screen.getByRole("button", { name: "Undo" }))
+  expect(store.getState().mapState.countryColors).toEqual({ FR: "#039606" })
+  expect(store.getState().mapState.annotationPositions).toEqual({
+    title: { x: 190, y: 176 },
+    legend: { x: 293, y: 294 },
+  })
 })
 
 test("Paint is the default tool; Paint, Erase, and Pan preserve state and enforce their modes", () => {
@@ -328,10 +459,14 @@ test.each(MAP_FIXTURES)("%s supports consecutive assignments, controls, export r
   expect(Object.keys(store.getState().mapState.countryColors)).toHaveLength(ids.length)
   countries.forEach((part) => expect(part).toHaveAttribute("fill", "#FF0000"))
   fireEvent.click(screen.getByText("Export"))
-  expect(saveSvgAsPng).toHaveBeenLastCalledWith(container.querySelector("svg.interactive-map"), "interactive_maps.png", expect.objectContaining({ scale: 3 }))
+  const liveSvg = container.querySelector("svg.interactive-map")
+  const exportedSvg = saveSvgAsPng.mock.calls.at(-1)[0]
+  expect(exportedSvg).not.toBe(liveSvg)
+  expect(exportedSvg).toHaveAttribute("id", route)
+  expect(saveSvgAsPng).toHaveBeenLastCalledWith(exportedSvg, "interactive_maps.png", expect.objectContaining({ scale: 3 }))
   fireEvent.click(screen.getByText("Clear"))
   expect(store.getState().mapState.countryColors).toEqual({})
-  act(() => store.dispatch(updateCurrentMap("another-map")))
+  act(() => store.dispatch(updateCurrentMap(route === "world" ? "europe" : "world")))
   fireEvent.click(countries[0])
   expect(countries[0]).toHaveAttribute("fill", DEFAULT_COUNTRY_FILL)
 })
@@ -354,7 +489,7 @@ test("moving or using multiple fingers cancels a pending paint", () => {
 test("Studio map selector uses every typed route and Export uses the active SVG", () => {
   const push = jest.fn()
   useRouter.mockReturnValue({ push })
-  const { container } = mount(<>
+  const { container, store } = mount(<>
     <StudioHeader currentMap="europe" />
     <EuropeSVG currentMap="europe" />
   </>)
@@ -367,14 +502,38 @@ test("Studio map selector uses every typed route and Export uses the active SVG"
     expect(push).toHaveBeenLastCalledWith(`/${route}`)
   })
 
+  fireEvent.click(container.querySelector("#FR"))
+  act(() => {
+    store.dispatch(updateTitle("Exported layout"))
+    store.dispatch(updateUsedColorsLegend({ "#039606": "Selected" }))
+    store.dispatch(updateAnnotationPosition({
+      currentMap: "europe",
+      kind: "title",
+      position: { x: 420, y: 96 },
+    }))
+    store.dispatch(updateAnnotationPosition({
+      currentMap: "europe",
+      kind: "legend",
+      position: { x: 80, y: 510 },
+    }))
+  })
+
   fireEvent.click(screen.getByRole("button", { name: "Export" }))
+  const liveSvg = container.querySelector("svg.interactive-map")
   const exportedSvg = saveSvgAsPng.mock.calls.at(-1)[0]
+  expect(exportedSvg).not.toBe(liveSvg)
+  expect(liveSvg.querySelectorAll("[data-editor-only]")).toHaveLength(4)
+  expect(exportedSvg.querySelectorAll("[data-editor-only]")).toHaveLength(0)
+  expect(exportedSvg.querySelector(".map-annotations__title-group"))
+    .toHaveAttribute("transform", "translate(420 96)")
+  expect(exportedSvg.querySelector(".map-annotations__legend-group"))
+    .toHaveAttribute("transform", "translate(80 510)")
   expect(exportedSvg.querySelector(".map-annotations")).toContainElement(
     exportedSvg.querySelector(".map-annotations__attribution"),
   )
   expect(exportedSvg.querySelector(".map-annotations__attribution")).toHaveTextContent(MAP_ATTRIBUTION)
   expect(saveSvgAsPng).toHaveBeenLastCalledWith(
-    container.querySelector("svg.interactive-map"),
+    exportedSvg,
     "interactive_maps.png",
     expect.objectContaining({ scale: 3, backgroundColor: "#090E18" }),
   )
@@ -396,8 +555,9 @@ test("export reflects the document restored by Undo", () => {
   expect(france).toHaveAttribute("fill", "#039606")
   expect(germany).toHaveAttribute("fill", DEFAULT_COUNTRY_FILL)
   fireEvent.click(screen.getByText("Export"))
+  const exportedSvg = saveSvgAsPng.mock.calls.at(-1)[0]
   expect(saveSvgAsPng).toHaveBeenLastCalledWith(
-    container.querySelector("svg.interactive-map"),
+    exportedSvg,
     "interactive_maps.png",
     expect.objectContaining({ backgroundColor: "#090E18", scale: 3 }),
   )

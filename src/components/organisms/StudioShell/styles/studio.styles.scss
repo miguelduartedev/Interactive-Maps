@@ -373,6 +373,52 @@
   cursor: grabbing !important;
 }
 
+.map-annotations__draggable {
+  cursor: grab !important;
+  touch-action: none;
+  user-select: none;
+
+  &:active,
+  &[data-dragging="true"] {
+    cursor: grabbing !important;
+  }
+}
+
+.map-annotations__drag-handle {
+  color: #7dd3fc;
+  opacity: 0;
+  transition: opacity 120ms ease;
+
+  circle {
+    fill: rgba(13, 21, 38, 0.92);
+    stroke: rgba(56, 189, 248, 0.72);
+    stroke-width: 1;
+  }
+
+  path {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.25;
+  }
+}
+
+.map-annotations__drag-target {
+  fill: transparent;
+  pointer-events: all;
+}
+
+.map-annotations__draggable[data-dragging="true"] .map-annotations__drag-handle {
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  .map-annotations__draggable:hover .map-annotations__drag-handle {
+    opacity: 0.82;
+  }
+}
+
 @media screen and (max-width: 767px) {
   .studio-header {
     height: 58px;
@@ -495,7 +541,8 @@
   .studio-toolbar__button,
   .studio-export,
   .studio-map-select,
-  .viewport-controls button {
+  .viewport-controls button,
+  .map-annotations__drag-handle {
     transition: none;
   }
 }
