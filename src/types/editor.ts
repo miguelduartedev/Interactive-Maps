@@ -11,6 +11,7 @@ export const MAP_ROUTES = [
 
 export type MapRoute = (typeof MAP_ROUTES)[number]
 export type EditorTool = "paint" | "pan" | "erase"
+export type AnnotationKind = "title" | "legend"
 
 export function isMapRoute(value: unknown): value is MapRoute {
   return typeof value === "string" && MAP_ROUTES.some((route) => route === value)
@@ -20,6 +21,13 @@ export type CountryId = string
 export type ColorValue = string
 export type CountryColors = Record<CountryId, ColorValue>
 export type LegendLabels = Record<ColorValue, string>
+
+export interface AnnotationPosition {
+  x: number
+  y: number
+}
+
+export type AnnotationPositions = Record<AnnotationKind, AnnotationPosition>
 
 export interface LegendEntry {
   legend: string
@@ -35,6 +43,7 @@ export interface MapState {
   countryColors: CountryColors
   legendLabels: LegendLabels
   colorOrder: ColorValue[]
+  annotationPositions: AnnotationPositions | null
 }
 
 export interface MapDocumentState {
@@ -84,6 +93,8 @@ export interface EditorViewportController {
   zoomIn: () => void
   zoomOut: () => void
   resetView: () => void
+  suspendInteractions: () => void
+  resumeInteractions: () => void
 }
 
 export interface EditorActions {

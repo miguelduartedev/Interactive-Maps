@@ -82,6 +82,8 @@ export function useMapInteractions(
         instance.zoomAbs(0, 0, 1)
         instance.moveTo(0, 0)
       },
+      suspendInteractions: () => instance.pause(),
+      resumeInteractions: () => instance.resume(),
     }
     viewport.current = controller
 

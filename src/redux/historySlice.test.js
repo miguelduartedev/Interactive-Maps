@@ -9,6 +9,7 @@ import {
   updateCurrentMap,
   updateTitle,
   updateUsedColorsLegend,
+  updateAnnotationPosition,
 } from "./mapSlice"
 import {
   beginDocumentTextEdit,
@@ -177,4 +178,37 @@ test("Undo restores documents without rewinding currentColor", () => {
 
   expect(store.getState().mapState.countryColors).toEqual({})
   expect(store.getState().mapState.currentColor).toBe("#0000FF")
+})
+
+test("annotation movement stays outside history and survives Clear All Undo", () => {
+  const store = createEuropeStore()
+  store.dispatch(paintCountries({ countries: ["FR"] }))
+  store.dispatch(updateAnnotationPosition({
+    currentMap: "europe",
+    kind: "title",
+    position: { x: 260, y: 160 },
+  }))
+  store.dispatch(updateAnnotationPosition({
+    currentMap: "europe",
+    kind: "legend",
+    position: { x: 510, y: 430 },
+  }))
+
+  expect(store.getState().editorHistory.past).toHaveLength(1)
+  store.dispatch(clearMap())
+  expect(store.getState().editorHistory.past).toHaveLength(2)
+  expect(store.getState().mapState.annotationPositions).toEqual({
+    title: { x: 260, y: 160 },
+    legend: { x: 510, y: 430 },
+  })
+
+  store.dispatch(undoDocument())
+  expect(store.getState().mapState.countryColors).toEqual({ FR: "#039606" })
+  expect(store.getState().mapState.annotationPositions).toEqual({
+    title: { x: 260, y: 160 },
+    legend: { x: 510, y: 430 },
+  })
+  store.dispatch(undoDocument())
+  expect(store.getState().mapState.countryColors).toEqual({})
+  expect(store.getState().mapState.annotationPositions.title).toEqual({ x: 260, y: 160 })
 })
