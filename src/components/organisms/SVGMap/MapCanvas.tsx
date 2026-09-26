@@ -12,7 +12,7 @@ import {
 import clsx from "clsx"
 import { useAppSelector } from "../../../redux/hooks"
 import type { CountryId, MapRoute } from "../../../types/editor"
-import MapLegend from "../../atoms/MapLegend/mapLegend"
+import MapAnnotations from "../../atoms/MapAnnotations/mapAnnotations"
 import {
   indexGeometry,
   type GeometryElementProps,
@@ -113,8 +113,8 @@ export default function MapCanvas({ currentMap, children, ...svgProps }: MapCanv
         isMobile && "-mobile-version",
       )}
     >
-      <MapLegend currentMap={currentMap} />
       <Geometry tree={geometry.tree} hovered={hovered} currentMap={currentMap} />
+      <MapAnnotations currentMap={currentMap} />
     </svg>
   )
 }
