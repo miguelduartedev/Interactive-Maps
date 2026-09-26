@@ -21,6 +21,10 @@ import StudioHeader from "../StudioShell/StudioHeader"
 import StudioToolbar from "../StudioShell/StudioToolbar"
 import ViewportControls from "../StudioShell/ViewportControls"
 import { useRouter } from "next/router"
+import {
+  MAP_ANNOTATION_CONFIGS,
+  MAP_ATTRIBUTION,
+} from "../../atoms/MapAnnotations/mapAnnotations"
 
 jest.mock("panzoom", () => jest.fn(() => ({
   dispose: jest.fn(),
@@ -37,6 +41,11 @@ function mount(children, strict = false, route = "europe") {
   const contents = <Provider store={store}><MapEditorProvider>{children}</MapEditorProvider></Provider>
   return { store, ...render(strict ? <StrictMode>{contents}</StrictMode> : contents) }
 }
+
+const MAP_FIXTURES = [
+  ["europe", EuropeSVG], ["world", WorldSVG], ["africa", AfricaSVG],
+  ["asia", AsiaSVG], ["north-america", NorthAmericaSVG], ["south-america", SouthAmericaSVG],
+]
 
 test("Europe paints consecutive countries, repaints, erases, and renders title and legend", () => {
   const { store, container } = mount(<EuropeSVG currentMap="europe" />)
@@ -60,6 +69,49 @@ test("Europe paints consecutive countries, repaints, erases, and renders title a
   fireEvent.contextMenu(france)
   expect(france).toHaveAttribute("fill", DEFAULT_COUNTRY_FILL)
   expect(screen.queryByText("Visited")).not.toBeInTheDocument()
+})
+
+test("map annotations preserve title casing, legend order, and render above non-interactive geometry", () => {
+  const { store, container } = mount(<EuropeSVG currentMap="europe" />)
+  const france = container.querySelector("#FR")
+  const germany = container.querySelector("#DE")
+
+  fireEvent.click(france)
+  act(() => {
+    store.dispatch(updateUsedColorsLegend({ "#039606": "Visited" }))
+    store.dispatch(updateColor("#FF0000"))
+  })
+  fireEvent.click(germany)
+  act(() => {
+    store.dispatch(updateUsedColorsLegend({ "#FF0000": "Focus region" }))
+    store.dispatch(updateTitle("My Mixed-Case Map"))
+  })
+
+  const svg = container.querySelector("svg.interactive-map")
+  const annotations = svg.querySelector(".map-annotations")
+  const title = annotations.querySelector("#map_title")
+  const legendLabels = [...annotations.querySelectorAll(".map-annotations__legend-label")]
+
+  expect(svg.lastElementChild).toBe(annotations)
+  expect(annotations).toHaveAttribute("pointer-events", "none")
+  expect(title).toHaveTextContent("My Mixed-Case Map")
+  expect(title).toHaveAttribute("font-size", "24")
+  expect(title).toHaveAttribute("font-weight", "700")
+  expect(title).toHaveAttribute("paint-order", "stroke")
+  expect(title).not.toHaveAttribute("font-variant")
+  expect(legendLabels.map((label) => label.textContent)).toEqual(["Visited", "Focus region"])
+  expect(annotations.querySelector("circle")).toHaveAttribute("stroke", "#CBD5E1")
+})
+
+test.each(MAP_FIXTURES)("%s renders restrained viewBox-aware attribution", (route, Map) => {
+  const { container } = mount(<Map currentMap={route} />, false, route)
+  const attribution = screen.getByText(MAP_ATTRIBUTION)
+  const config = MAP_ANNOTATION_CONFIGS[route]
+
+  expect(attribution).toHaveAttribute("x", String(config.viewBoxWidth - 22))
+  expect(attribution).toHaveAttribute("y", String(config.viewBoxHeight - 18))
+  expect(attribution).toHaveAttribute("text-anchor", "end")
+  expect(container.querySelectorAll(".map-annotations__attribution")).toHaveLength(1)
 })
 
 test("Paint is the default tool; Paint, Erase, and Pan preserve state and enforce their modes", () => {
@@ -257,10 +309,7 @@ function Commands() {
   </>
 }
 
-test.each([
-  ["europe", EuropeSVG], ["world", WorldSVG], ["africa", AfricaSVG],
-  ["asia", AsiaSVG], ["north-america", NorthAmericaSVG], ["south-america", SouthAmericaSVG],
-])("%s supports consecutive assignments, controls, export ref, and route isolation", (route, Map) => {
+test.each(MAP_FIXTURES)("%s supports consecutive assignments, controls, export ref, and route isolation", (route, Map) => {
   const { container, store } = mount(<><StudioToolbar /><Map currentMap={route} /><Commands /></>, false, route)
   const countries = [...container.querySelectorAll("[data-country]")]
   const ids = [...new Set(countries.map((el) => el.dataset.country))]
@@ -319,6 +368,11 @@ test("Studio map selector uses every typed route and Export uses the active SVG"
   })
 
   fireEvent.click(screen.getByRole("button", { name: "Export" }))
+  const exportedSvg = saveSvgAsPng.mock.calls.at(-1)[0]
+  expect(exportedSvg.querySelector(".map-annotations")).toContainElement(
+    exportedSvg.querySelector(".map-annotations__attribution"),
+  )
+  expect(exportedSvg.querySelector(".map-annotations__attribution")).toHaveTextContent(MAP_ATTRIBUTION)
   expect(saveSvgAsPng).toHaveBeenLastCalledWith(
     container.querySelector("svg.interactive-map"),
     "interactive_maps.png",
