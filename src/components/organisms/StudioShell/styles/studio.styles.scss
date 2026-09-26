@@ -404,6 +404,11 @@
   }
 }
 
+.map-annotations__drag-target {
+  fill: transparent;
+  pointer-events: all;
+}
+
 .map-annotations__draggable[data-dragging="true"] .map-annotations__drag-handle {
   opacity: 1;
 }

@@ -522,7 +522,7 @@ test("Studio map selector uses every typed route and Export uses the active SVG"
   const liveSvg = container.querySelector("svg.interactive-map")
   const exportedSvg = saveSvgAsPng.mock.calls.at(-1)[0]
   expect(exportedSvg).not.toBe(liveSvg)
-  expect(liveSvg.querySelectorAll("[data-editor-only]")).toHaveLength(2)
+  expect(liveSvg.querySelectorAll("[data-editor-only]")).toHaveLength(4)
   expect(exportedSvg.querySelectorAll("[data-editor-only]")).toHaveLength(0)
   expect(exportedSvg.querySelector(".map-annotations__title-group"))
     .toHaveAttribute("transform", "translate(420 96)")

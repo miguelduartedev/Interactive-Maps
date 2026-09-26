@@ -38,6 +38,7 @@ interface DraggableGroupProps {
   currentMap: MapRoute
   fallbackBounds: { x: number; y: number; width: number; height: number }
   handleY?: number
+  hitBounds: { x: number; y: number; width: number; height: number }
   kind: "title" | "legend"
   position: AnnotationPosition
   viewBox: { width: number; height: number }
@@ -50,6 +51,7 @@ function DraggableGroup({
   currentMap,
   fallbackBounds,
   handleY,
+  hitBounds,
   kind,
   position,
   viewBox,
@@ -73,6 +75,14 @@ function DraggableGroup({
       role="group"
       transform={`translate(${renderedPosition.x} ${renderedPosition.y})`}
     >
+      <rect
+        className="map-annotations__drag-target"
+        data-editor-only="true"
+        x={hitBounds.x}
+        y={hitBounds.y}
+        width={hitBounds.width}
+        height={hitBounds.height}
+      />
       {children}
       <MoveHandle y={handleY} />
     </g>
@@ -108,6 +118,7 @@ export default function MapAnnotations({ currentMap }: { currentMap: MapRoute })
           currentMap={currentMap}
           fallbackBounds={{ x: 0, y: -24, width: 320, height: 30 }}
           handleY={-8}
+          hitBounds={{ x: -4, y: -30, width: 180, height: 40 }}
           kind="title"
           position={positions.title}
           viewBox={viewBox}
@@ -143,6 +154,12 @@ export default function MapAnnotations({ currentMap }: { currentMap: MapRoute })
             y: -LEGEND_SWATCH_RADIUS,
             width: 320,
             height: (legendEntries.length - 1) * LEGEND_ROW_GAP + LEGEND_SWATCH_RADIUS * 2,
+          }}
+          hitBounds={{
+            x: -4,
+            y: -12,
+            width: 180,
+            height: (legendEntries.length - 1) * LEGEND_ROW_GAP + 24,
           }}
           kind="legend"
           position={positions.legend}
